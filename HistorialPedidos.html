@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Pedidos - Glide Logistics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2 family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060913;
+        }
+        /* Custom scrollbar to keep layout clean */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+        /* Active order glow border effect */
+        .glow-active {
+            position: relative;
+        }
+        .glow-active::after {
+            content: '';
+            position: absolute;
+            inset: -1.5px;
+            background: linear-gradient(90deg, #3b82f6, #10b981, #3b82f6);
+            border-radius: 1.5rem;
+            z-index: -1;
+            background-size: 200% 200%;
+            animation: border-glow 4s linear infinite;
+        }
+        @keyframes border-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="h-full text-slate-100 flex flex-col justify-between overflow-hidden">
+
+    <!-- ════════════════════════════════════════════
+           VISTA: VISUALIZAR PEDIDOS / HISTORIAL
+      ════════════════════════════════════════════ -->
+    <div id="view-visualizar-pedidos" class="w-full h-full flex flex-col overflow-hidden max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+        
+        <!-- CABECERA SUPERIOR -->
+        <div class="flex justify-between items-center shrink-0">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 bg-slate-900 border border-gray-800 rounded-xl flex items-center justify-center cursor-pointer hover:bg-slate-800 transition duration-200" onclick="navigateTo('inicio')">
+                    <i class="fa-solid fa-chevron-left text-sm text-slate-300"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-extrabold bg-gradient-to-r from-white via-slate-200 to-blue-400 bg-clip-text text-transparent uppercase tracking-wider">
+                        Mis Pedidos
+                    </h1>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Seguimiento e Historial</p>
+                </div>
+            </div>
+            
+            <div class="flex space-x-2">
+                <button onclick="refreshOrdersList()" class="w-11 h-11 bg-slate-900 border border-gray-800 rounded-xl flex items-center justify-center cursor-pointer hover:bg-slate-800 transition duration-200" title="Actualizar">
+                    <i class="fa-solid fa-rotate-right text-sm text-slate-300"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENIDO PRINCIPAL SCROLLABLE -->
+        <div class="flex-1 overflow-y-auto pr-1 space-y-6 pb-20">
+
+            <!-- SECCIÓN: PEDIDO ACTIVO (DESTACADO AL INICIO) -->
+            <div id="active-order-container" class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-ping"></span>
+                        Servicio en Curso
+                    </h3>
+                    <span id="active-eta-tag" class="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full font-bold">
+                        ETA: 14 min
+                    </span>
+                </div>
+
+                <!-- Tarjeta Premium Destacada -->
+                <div onclick="openOrderModal('act-101')" class="glow-active block cursor-pointer transition transform hover:scale-[1.01] duration-300">
+                    <div class="glass-panel p-5 rounded-3xl flex flex-col md:flex-row justify-between gap-4">
+                        
+                        <!-- Col Izquierda: Ruta y Progreso -->
+                        <div class="flex-1 space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-9 h-9 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400">
+                                    <i class="fa-solid fa-motorcycle text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Moto Veloz • ID #9410</h4>
+                                    <p class="text-[11px] text-gray-400">Destino: Av. Córdoba 1420, CABA</p>
+                                </div>
+                            </div>
+
+                            <!-- Barra de progreso estilizada -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-[10px] text-gray-400">
+                                    <span>Ruta de Envío</span>
+                                    <span id="active-progress-percent" class="font-extrabold text-blue-400">45%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-gray-800">
+                                    <div id="active-progress-bar" class="bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 h-full w-[45%] transition-all duration-1000"></div>
+                                </div>
+                            </div>
+
+                            <!-- Resumen rápido de direcciones -->
+                            <div class="grid grid-cols-2 gap-2 text-[11px] text-gray-400">
+                                <div class="truncate"><span class="text-emerald-400 font-extrabold mr-1">●</span> Origen: San Martín 540</div>
+                                <div class="truncate"><span class="text-rose-500 font-extrabold mr-1">■</span> Destino: Av. Córdoba 1420</div>
+                            </div>
+                        </div>
+
+                        <!-- Col Derecha: Estado de Chofer y Costo -->
+                        <div class="flex flex-col md:items-end justify-between border-t md:border-t-0 md:border-l border-gray-800/80 pt-4 md:pt-0 md:pl-6 shrink-0 md:w-56 space-y-3 md:space-y-0">
+                            <div class="flex items-center md:text-right space-x-3 md:space-x-0 md:flex-row-reverse">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" onerror="this.src='https://placehold.co/100x100/1e293b/ffffff?text=Driver'" class="w-10 h-10 rounded-full object-cover border border-blue-500/30" alt="Chofer">
+                                <div class="md:mr-3">
+                                    <p class="text-xs font-bold text-white">Milagros Herrera</p>
+                                    <p class="text-[10px] text-emerald-400 flex items-center md:justify-end">
+                                        <i class="fa-solid fa-star mr-1 text-[8px]"></i> 4.9 • AG-394-HL
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between md:justify-end w-full">
+                                <div class="text-left md:text-right">
+                                    <p class="text-[9px] text-gray-500 uppercase tracking-wider font-extrabold">Costo Final</p>
+                                    <p class="text-lg font-black text-white">$1,150.00</p>
+                                </div>
+                                <span class="md:hidden bg-blue-500 text-white font-bold text-[10px] px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow-lg shadow-blue-500/20">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                    <span>Ver Viaje</span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: FILTROS E HISTORIAL -->
+            <div class="space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center">
+                        <i class="fa-solid fa-clock-rotate-left mr-2 text-gray-500"></i>
+                        Historial de Envíos
+                    </h3>
+
+                    <!-- Filtros Rápidos -->
+                    <div class="flex space-x-1.5 overflow-x-auto bg-slate-900/60 p-1 rounded-xl border border-gray-900 shrink-0">
+                        <button onclick="filterHistory('todos', this)" class="filter-tab px-3.5 py-1.5 text-[11px] font-extrabold uppercase rounded-lg transition-all duration-200 bg-blue-600 text-white">
+                            Todos
+                        </button>
+                        <button onclick="filterHistory('completado', this)" class="filter-tab px-3.5 py-1.5 text-[11px] font-extrabold uppercase rounded-lg text-gray-400 hover:text-white transition-all duration-200">
+                            Entregados
+                        </button>
+                        <button onclick="filterHistory('activo', this)" class="filter-tab px-3.5 py-1.5 text-[11px] font-extrabold uppercase rounded-lg text-gray-400 hover:text-white transition-all duration-200">
+                            En viaje
+                        </button>
+                        <button onclick="filterHistory('cancelado', this)" class="filter-tab px-3.5 py-1.5 text-[11px] font-extrabold uppercase rounded-lg text-gray-400 hover:text-white transition-all duration-200">
+                            Cancelados
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LISTA DE PEDIDOS -->
+                <div id="orders-history-list" class="space-y-3">
+                    <!-- Los elementos se renderizan dinámicamente vía JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+           MODAL DE DETALLE DE PEDIDO (INMERSIVO)
+      ════════════════════════════════════════════ -->
+    <div id="order-detail-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[1000] flex items-center justify-center p-4">
+        <div class="bg-[#0b0f19] border border-gray-800 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <!-- Cabecera del Modal -->
+            <div class="p-6 border-b border-gray-900 flex justify-between items-center shrink-0">
+                <div>
+                    <span id="modal-status-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        ENTREGADO
+                    </span>
+                    <h3 id="modal-order-id" class="text-base font-extrabold text-white mt-2">Detalle de Pedido #1940</h3>
+                    <p id="modal-order-date" class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mt-0.5">Realizado el 28 May 2026, 14:15</p>
+                </div>
+                <button onclick="closeOrderModal()" class="w-10 h-10 bg-slate-900 hover:bg-slate-800 border border-gray-800 rounded-xl flex items-center justify-center text-gray-400 hover:text-white transition duration-200">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Cuerpo Scrollable -->
+            <div class="p-6 overflow-y-auto space-y-6 flex-1">
+                
+                <!-- SECCIÓN 1: MAPA / RUTA SIMULADA -->
+                <div class="h-36 bg-[#111827] rounded-2xl relative overflow-hidden border border-gray-800 flex items-center justify-center">
+                    <!-- Mapa decorativo con SVG para garantizar rendimiento estético e offline instantáneo -->
+                    <svg class="absolute inset-0 w-full h-full opacity-35" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <defs>
+                            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        <!-- Caminito -->
+                        <path id="modal-svg-path" d="M 20 80 Q 50 20 80 50" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4" class="animate-route-line"/>
+                    </svg>
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+
+                    <!-- Marcador de Origen y Destino -->
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 border border-white ring-4 ring-emerald-500/20"></span>
+                        <div class="text-left">
+                            <p class="text-[9px] text-gray-400 font-bold uppercase leading-none">Inicio</p>
+                            <p id="modal-route-start" class="text-xs font-bold text-slate-200 truncate max-w-[120px]">San Martín 540</p>
+                        </div>
+                    </div>
+
+                    <div class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+                        <div class="text-right">
+                            <p class="text-[9px] text-gray-400 font-bold uppercase leading-none">Fin</p>
+                            <p id="modal-route-end" class="text-xs font-bold text-slate-200 truncate max-w-[120px]">Av. Córdoba 1420</p>
+                        </div>
+                        <span class="w-3 h-3 rounded-full bg-rose-500 border border-white ring-4 ring-rose-500/20"></span>
+                    </div>
+
+                    <div class="absolute bottom-3 text-center w-full">
+                        <span id="modal-route-stats" class="text-[10px] font-bold text-blue-400 bg-blue-950/40 border border-blue-500/20 px-2.5 py-1 rounded-lg backdrop-blur-md">
+                            Distancia: 12.4 km • Est. 18 min
+                        </span>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: LÍNEA DE TIEMPO DEL VIAJE -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-extrabold text-gray-400 uppercase tracking-widest">Estado del Trayecto</h4>
+                    <div class="grid grid-cols-4 gap-2 relative">
+                        <div class="absolute top-[14px] left-8 right-8 h-[2px] bg-gray-800 z-0"></div>
+                        <div id="modal-timeline-bar" class="absolute top-[14px] left-8 h-[2px] bg-gradient-to-r from-blue-500 to-emerald-500 z-0 transition-all duration-500"></div>
+
+                        <!-- Hitos -->
+                        <div class="text-center z-10 space-y-1">
+                            <div id="step-1-dot" class="w-7 h-7 mx-auto rounded-full bg-blue-600 border border-blue-400 text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <p class="text-[9px] font-bold text-white leading-none">Creado</p>
+                            <p id="step-1-time" class="text-[8px] text-gray-500">14:15</p>
+                        </div>
+                        <div class="text-center z-10 space-y-1">
+                            <div id="step-2-dot" class="w-7 h-7 mx-auto rounded-full bg-blue-600 border border-blue-400 text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <p class="text-[9px] font-bold text-white leading-none">Asignado</p>
+                            <p id="step-2-time" class="text-[8px] text-gray-500">14:17</p>
+                        </div>
+                        <div class="text-center z-10 space-y-1">
+                            <div id="step-3-dot" class="w-7 h-7 mx-auto rounded-full bg-blue-600 border border-blue-400 text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <p class="text-[9px] font-bold text-white leading-none">En viaje</p>
+                            <p id="step-3-time" class="text-[8px] text-gray-500">14:21</p>
+                        </div>
+                        <div class="text-center z-10 space-y-1">
+                            <div id="step-4-dot" class="w-7 h-7 mx-auto rounded-full bg-gray-800 border border-gray-700 text-gray-500 flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                            <p class="text-[9px] font-bold text-gray-400 leading-none">Entregado</p>
+                            <p id="step-4-time" class="text-[8px] text-gray-500">14:32</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: CHOFER Y VEHÍCULO -->
+                <div class="bg-slate-900/40 border border-gray-800/80 p-4 rounded-2xl flex items-center justify-between">
+                    <div class="flex items-center space-x-3.5">
+                        <img id="modal-driver-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" onerror="this.src='https://placehold.co/100x100/1e293b/ffffff?text=Driver'" class="w-12 h-12 rounded-2xl object-cover border border-gray-800" alt="Chofer">
+                        <div>
+                            <p class="text-[8px] text-blue-400 font-extrabold uppercase tracking-wider leading-none">Transportista Asociado</p>
+                            <p id="modal-driver-name" class="text-sm font-bold text-white mt-1">Milagros Herrera</p>
+                            <div class="flex items-center space-x-2 mt-0.5">
+                                <span id="modal-driver-rating" class="text-[10px] text-emerald-400 font-bold flex items-center">
+                                    <i class="fa-solid fa-star mr-0.5 text-[8px]"></i> 4.9
+                                </span>
+                                <span class="text-gray-600">•</span>
+                                <span id="modal-driver-plate" class="text-[10px] font-bold text-slate-400">Patente AG-394-HL</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div id="modal-vehicle-icon" class="w-10 h-10 mx-auto bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 border border-blue-500/20">
+                            <i class="fa-solid fa-motorcycle"></i>
+                        </div>
+                        <p id="modal-vehicle-name" class="text-[10px] font-bold text-gray-400 mt-1">Moto Veloz</p>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: DETALLES DE CARGA Y DESCRIPCIÓN -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-900/40 border border-gray-800/80 p-4 rounded-2xl space-y-1">
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest font-extrabold">Especificaciones</p>
+                        <p id="modal-spec-weight" class="text-xs font-bold text-slate-200">Peso: 12 kg</p>
+                        <p id="modal-spec-vehicle" class="text-xs text-gray-400">Medio: Moto</p>
+                    </div>
+                    <div class="bg-slate-900/40 border border-gray-800/80 p-4 rounded-2xl space-y-1">
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest font-extrabold">Indicaciones</p>
+                        <p id="modal-spec-desc" class="text-xs text-gray-300 italic truncate">"Dejar en la recepción de la torre B..."</p>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 5: DESGLOSE DE TARIFA -->
+                <div class="bg-gradient-to-tr from-slate-950 via-[#0a0e1a] to-slate-950 border border-gray-850 p-4 rounded-2xl space-y-2.5">
+                    <div class="flex justify-between text-xs text-gray-400">
+                        <span>Tarifa Base por Distancia</span>
+                        <span id="modal-fee-base">$950.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-400 border-b border-gray-900 pb-2">
+                        <span>Recargo por Peso Excedente</span>
+                        <span id="modal-fee-weight">$200.00</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-1">
+                        <div>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-extrabold">Total Pagado</p>
+                            <p class="text-[8px] text-emerald-500 font-medium">Método: Cuenta Corriente Corporativa</p>
+                        </div>
+                        <p id="modal-fee-total" class="text-xl font-black text-white">$1,150.00</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="p-6 bg-slate-950 border-t border-gray-900 shrink-0 flex gap-3">
+                <button onclick="copyTrackingCode()" class="flex-1 py-3 bg-slate-900 hover:bg-slate-800 border border-gray-800 text-slate-300 rounded-xl text-xs font-extrabold uppercase transition duration-200 flex items-center justify-center space-x-1.5">
+                    <i class="fa-regular fa-clone"></i>
+                    <span>Copiar Tracking</span>
+                </button>
+                <button onclick="closeOrderModal()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-extrabold uppercase shadow-lg shadow-blue-500/20 transition duration-200 flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Entendido</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mensaje Toast de Copiado / Confirmaciones -->
+    <div id="toast-message" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-950 border border-emerald-500/30 text-emerald-400 px-5 py-3 rounded-2xl shadow-2xl z-[10000] flex items-center space-x-2.5">
+        <i class="fa-solid fa-circle-check text-base"></i>
+        <span id="toast-text" class="text-xs font-bold uppercase tracking-wider">Acción completada</span>
+    </div>
+
+    <script>
+        // Base de datos de prueba para pedidos simulados
+        const mockOrdersDB = [
+            {
+                id: "act-101",
+                orderNumber: "9410",
+                status: "activo", // activo | completado | cancelado
+                date: "Hoy, Hace 15 min",
+                vehicleId: "moto",
+                vehicleLabel: "Moto Veloz",
+                weight: "12 kg",
+                startPoint: "San Martín 540",
+                endPoint: "Av. Córdoba 1420",
+                distance: "8.4 km",
+                duration: "18 min",
+                progress: 45,
+                driverName: "Milagros Herrera",
+                driverRating: "4.9",
+                driverPlate: "AG-394-HL",
+                driverAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
+                description: "Por favor dejar en la recepción de la torre B a nombre de Marcos.",
+                feeBase: 950.00,
+                feeWeight: 200.00,
+                feeTotal: 1150.00,
+                timeline: {
+                    creado: "14:15",
+                    asignado: "14:17",
+                    transito: "14:21",
+                    entregado: "--:--"
+                },
+                svgPath: "M 20 80 Q 50 20 80 50"
+            },
+            {
+                id: "past-201",
+                orderNumber: "8950",
+                status: "completado",
+                date: "Ayer, 18:32",
+                vehicleId: "auto",
+                vehicleLabel: "Auto Estándar",
+                weight: "45 kg",
+                startPoint: "Mendoza 321",
+                endPoint: "Sarmiento 2210",
+                distance: "14.2 km",
+                duration: "25 min",
+                progress: 100,
+                driverName: "Esteban Juárez",
+                driverRating: "4.8",
+                driverPlate: "AA-203-ZX",
+                driverAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80",
+                description: "Caja mediana. Tocar timbre número 4 al llegar.",
+                feeBase: 1200.00,
+                feeWeight: 450.00,
+                feeTotal: 1650.00,
+                timeline: {
+                    creado: "18:05",
+                    asignado: "18:08",
+                    transito: "18:12",
+                    entregado: "18:32"
+                },
+                svgPath: "M 10 90 C 30 50, 70 30, 90 10"
+            },
+            {
+                id: "past-202",
+                orderNumber: "7841",
+                status: "completado",
+                date: "28 May 2026, 11:20",
+                vehicleId: "camioneta",
+                vehicleLabel: "Furgoneta",
+                weight: "180 kg",
+                startPoint: "Parque Industrial Sur",
+                endPoint: "Mitre 90",
+                distance: "28.1 km",
+                duration: "42 min",
+                progress: 100,
+                driverName: "Facundo Castro",
+                driverRating: "4.7",
+                driverPlate: "LK-309-WE",
+                driverAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80",
+                description: "Cajas selladas con palé. Requiere elevador o rampa de descarga.",
+                feeBase: 3500.00,
+                feeWeight: 1400.00,
+                feeTotal: 4900.00,
+                timeline: {
+                    creado: "10:35",
+                    asignado: "10:40",
+                    transito: "10:45",
+                    entregado: "11:20"
+                },
+                svgPath: "M 15 20 Q 80 80 85 90"
+            },
+            {
+                id: "past-203",
+                orderNumber: "6240",
+                status: "cancelado",
+                date: "14 May 2026, 09:12",
+                vehicleId: "auto",
+                vehicleLabel: "Auto Estándar",
+                weight: "8 kg",
+                startPoint: "Tucumán 430",
+                endPoint: "Alem 880",
+                distance: "3.2 km",
+                duration: "8 min",
+                progress: 0,
+                driverName: "Sofía Peralta",
+                driverRating: "4.9",
+                driverPlate: "OP-772-ML",
+                driverAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80",
+                description: "Sobre de documentación confidencial.",
+                feeBase: 650.00,
+                feeWeight: 0.00,
+                feeTotal: 650.00,
+                timeline: {
+                    creado: "09:10",
+                    asignado: "09:12",
+                    transito: "--:--",
+                    entregado: "--:--"
+                },
+                svgPath: "M 20 20 L 80 80"
+            }
+        ];
+
+        let currentActiveFilter = "todos";
+
+        // Inicializador principal
+        document.addEventListener("DOMContentLoaded", function() {
+            renderOrdersList("todos");
+            simulateActiveOrderProgression();
+        });
+
+        // Simular que el pedido activo progresa dinámicamente cada cierto tiempo
+        function simulateActiveOrderProgression() {
+            const activeOrder = mockOrdersDB.find(o => o.status === 'activo');
+            if (!activeOrder) return;
+
+            setInterval(() => {
+                if (activeOrder.progress < 99) {
+                    activeOrder.progress += 1;
+                    
+                    // Actualizar UI del pedido activo destacado
+                    const percentText = document.getElementById('active-progress-percent');
+                    const progressBar = document.getElementById('active-progress-bar');
+                    
+                    if (percentText) percentText.innerText = `${activeOrder.progress}%`;
+                    if (progressBar) progressBar.style.width = `${activeOrder.progress}%`;
+                    
+                    // Ajustar ETA de manera dinámica descendente
+                    const activeETATag = document.getElementById('active-eta-tag');
+                    if (activeETATag) {
+                        const remainingMinutes = Math.max(1, Math.round(18 * (1 - (activeOrder.progress / 100))));
+                        activeETATag.innerText = `ETA: ${remainingMinutes} min`;
+                    }
+                } else if (activeOrder.progress === 99) {
+                    activeOrder.progress = 100;
+                    activeOrder.status = "completado";
+                    activeOrder.timeline.entregado = "14:33";
+                    
+                    // Refrescar y ocultar panel de activos
+                    document.getElementById('active-order-container').classList.add('hidden');
+                    renderOrdersList(currentActiveFilter);
+                    showToast("¡Tu pedido activo ha sido entregado!");
+                }
+            }, 3500);
+        }
+
+        // Renderizar dinámicamente el listado de pedidos con transiciones y estilo
+        function renderOrdersList(filter) {
+            const container = document.getElementById('orders-history-list');
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            // Filtrar elementos
+            const filteredOrders = mockOrdersDB.filter(order => {
+                if (filter === "todos") return true;
+                return order.status === filter;
+            });
+
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-panel p-8 rounded-2xl text-center space-y-3">
+                        <div class="w-12 h-12 bg-slate-900 border border-gray-800 text-gray-600 rounded-full flex items-center justify-center mx-auto text-lg">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">No se encontraron pedidos en esta categoría</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Mapeo de iconos para cada vehículo
+            const vehicleIcons = {
+                moto: "motorcycle",
+                auto: "car",
+                camioneta: "truck-ramp-box",
+                camion: "truck"
+            };
+
+            filteredOrders.forEach(order => {
+                // Definir colores y textos del badge de estado
+                let statusBadgeClass = "";
+                let statusLabel = "";
+
+                if (order.status === 'activo') {
+                    statusBadgeClass = "bg-blue-500/10 text-blue-400 border border-blue-500/20";
+                    statusLabel = "En Viaje";
+                } else if (order.status === 'completado') {
+                    statusBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                    statusLabel = "Entregado";
+                } else if (order.status === 'cancelado') {
+                    statusBadgeClass = "bg-red-500/10 text-red-400 border border-red-500/20";
+                    statusLabel = "Cancelado";
+                }
+
+                const element = document.createElement('div');
+                element.className = "glass-panel p-4 rounded-2xl flex items-center justify-between hover:border-gray-700/80 cursor-pointer transition transform active:scale-98 duration-200 animate-in fade-in zoom-in-95";
+                element.onclick = () => openOrderModal(order.id);
+
+                element.innerHTML = `
+                    <div class="flex items-center space-x-3.5 min-w-0">
+                        <div class="w-10 h-10 bg-slate-900/80 border border-gray-800 rounded-xl flex items-center justify-center text-slate-300 flex-shrink-0">
+                            <i class="fa-solid fa-${vehicleIcons[order.vehicleId] || 'box'}"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold text-white truncate">Orden #${order.orderNumber} • ${order.vehicleLabel}</p>
+                            <p class="text-[10px] text-gray-500 font-bold mt-0.5">${order.date}</p>
+                            <div class="flex items-center space-x-2 mt-1 text-[11px] text-gray-400 truncate max-w-xs sm:max-w-md">
+                                <span class="truncate">De: ${order.startPoint}</span>
+                                <span class="text-gray-700">→</span>
+                                <span class="truncate">A: ${order.endPoint}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right flex-shrink-0 ml-4">
+                        <p class="text-xs font-black text-slate-100">$${order.feeTotal.toLocaleString('es-AR', {minimumFractionDigits: 2})}</p>
+                        <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold ${statusBadgeClass}">
+                            ${statusLabel}
+                        </span>
+                    </div>
+                `;
+
+                container.appendChild(element);
+            });
+        }
+
+        // Manejar clics de pestañas de filtros
+        function filterHistory(status, buttonElement) {
+            currentActiveFilter = status;
+
+            // Quitar clase activa a todos
+            document.querySelectorAll('.filter-tab').forEach(btn => {
+                btn.className = "filter-tab px-3.5 py-1.5 text-[11px] font-extrabold uppercase rounded-lg text-gray-400 hover:text-white transition-all duration-200";
+            });
+
+            // Añadir clase activa al seleccionado
+            buttonElement.className = "filter-tab px-3.5 py-1.5 text-[11px] font-extrabold uppercase rounded-lg transition-all duration-200 bg-blue-600 text-white";
+
+            renderOrdersList(status);
+        }
+
+        // Abrir y rellenar Modal Detallado de un pedido
+        function openOrderModal(orderId) {
+            const order = mockOrdersDB.find(o => o.id === orderId);
+            if (!order) return;
+
+            // 1. Rellenar ID y Fecha
+            document.getElementById('modal-order-id').innerText = `Detalle de Pedido #${order.orderNumber}`;
+            document.getElementById('modal-order-date').innerText = `Realizado el ${order.date}`;
+
+            // 2. Badges de estado en el modal
+            const badge = document.getElementById('modal-status-badge');
+            if (order.status === 'activo') {
+                badge.className = "px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20";
+                badge.innerText = "EN VIAJE";
+            } else if (order.status === 'completado') {
+                badge.className = "px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                badge.innerText = "ENTREGADO";
+            } else if (order.status === 'cancelado') {
+                badge.className = "px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20";
+                badge.innerText = "CANCELADO";
+            }
+
+            // 3. Puntos de ruta
+            document.getElementById('modal-route-start').innerText = order.startPoint;
+            document.getElementById('modal-route-end').innerText = order.endPoint;
+            document.getElementById('modal-route-stats').innerText = `Distancia: ${order.distance} • Est. ${order.duration}`;
+            
+            // Reajustar trayecto del SVG decorativo
+            document.getElementById('modal-svg-path').setAttribute('d', order.svgPath);
+
+            // 4. Chofer asignado
+            document.getElementById('modal-driver-avatar').src = order.driverAvatar;
+            document.getElementById('modal-driver-name').innerText = order.driverName;
+            document.getElementById('modal-driver-rating').innerHTML = `<i class="fa-solid fa-star mr-0.5 text-[8px]"></i> ${order.driverRating}`;
+            document.getElementById('modal-driver-plate').innerText = `Patente ${order.driverPlate}`;
+            document.getElementById('modal-vehicle-name').innerText = order.vehicleLabel;
+
+            const vIcons = { moto: "motorcycle", auto: "car", camioneta: "truck-ramp-box", camion: "truck" };
+            document.getElementById('modal-vehicle-icon').innerHTML = `<i class="fa-solid fa-${vIcons[order.vehicleId] || 'box'}"></i>`;
+
+            // 5. Especificaciones e Indicaciones
+            document.getElementById('modal-spec-weight').innerText = `Peso: ${order.weight}`;
+            document.getElementById('modal-spec-vehicle').innerText = `Medio: ${order.vehicleLabel}`;
+            document.getElementById('modal-spec-desc').innerText = order.description ? `"${order.description}"` : '"Sin comentarios adicionales."';
+
+            // 6. Desglose Financiero
+            document.getElementById('modal-fee-base').innerText = `$${order.feeBase.toLocaleString('es-AR', {minimumFractionDigits: 2})}`;
+            document.getElementById('modal-fee-weight').innerText = `$${order.feeWeight.toLocaleString('es-AR', {minimumFractionDigits: 2})}`;
+            document.getElementById('modal-fee-total').innerText = `$${order.feeTotal.toLocaleString('es-AR', {minimumFractionDigits: 2})}`;
+
+            // 7. Línea de tiempo
+            document.getElementById('step-1-time').innerText = order.timeline.creado;
+            document.getElementById('step-2-time').innerText = order.timeline.asignado;
+            document.getElementById('step-3-time').innerText = order.timeline.transito;
+            document.getElementById('step-4-time').innerText = order.timeline.entregado;
+
+            // Resetear estados visuales de los hitos en el timeline
+            updateTimelineSteps(order);
+
+            // Mostrar el modal
+            document.getElementById('order-detail-modal').classList.remove('hidden');
+        }
+
+        // Actualizar visualmente la barra y los círculos del timeline basado en el estado
+        function updateTimelineSteps(order) {
+            const bar = document.getElementById('modal-timeline-bar');
+            
+            const dot1 = document.getElementById('step-1-dot');
+            const dot2 = document.getElementById('step-2-dot');
+            const dot3 = document.getElementById('step-3-dot');
+            const dot4 = document.getElementById('step-4-dot');
+
+            // Resetear clases por defecto a grises
+            const inactiveDotClass = "w-7 h-7 mx-auto rounded-full bg-gray-800 border border-gray-700 text-gray-500 flex items-center justify-center text-[10px]";
+            const activeDotClass = "w-7 h-7 mx-auto rounded-full bg-blue-600 border border-blue-400 text-white flex items-center justify-center text-[10px] shadow-lg shadow-blue-500/10";
+            const completedDotClass = "w-7 h-7 mx-auto rounded-full bg-emerald-600 border border-emerald-400 text-white flex items-center justify-center text-[10px] shadow-lg shadow-emerald-500/10";
+
+            dot1.className = inactiveDotClass;
+            dot1.innerHTML = `<i class="fa-solid fa-plus"></i>`;
+            dot2.className = inactiveDotClass;
+            dot2.innerHTML = `<i class="fa-solid fa-id-card"></i>`;
+            dot3.className = inactiveDotClass;
+            dot3.innerHTML = `<i class="fa-solid fa-truck"></i>`;
+            dot4.className = inactiveDotClass;
+            dot4.innerHTML = `<i class="fa-solid fa-box-open"></i>`;
+
+            if (order.status === 'activo') {
+                bar.style.width = "50%";
+                
+                dot1.className = completedDotClass;
+                dot1.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                
+                dot2.className = completedDotClass;
+                dot2.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                
+                dot3.className = activeDotClass;
+                dot3.innerHTML = `<i class="fa-solid fa-route" class="animate-pulse"></i>`;
+            } else if (order.status === 'completado') {
+                bar.style.width = "100%";
+                
+                dot1.className = completedDotClass;
+                dot1.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                dot2.className = completedDotClass;
+                dot2.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                dot3.className = completedDotClass;
+                dot3.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                
+                dot4.className = completedDotClass;
+                dot4.innerHTML = `<i class="fa-solid fa-check"></i>`;
+            } else if (order.status === 'cancelado') {
+                bar.style.width = "25%";
+                
+                dot1.className = completedDotClass;
+                dot1.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                
+                dot2.className = "w-7 h-7 mx-auto rounded-full bg-red-600 border border-red-400 text-white flex items-center justify-center text-[10px]";
+                dot2.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+            }
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-detail-modal').classList.add('hidden');
+        }
+
+        // Copiar número de seguimiento con Toast elegante
+        function copyTrackingCode() {
+            const tempInput = document.createElement("input");
+            tempInput.value = "GL-TRACK-" + Math.floor(Math.random() * 90000 + 10000);
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast("Código de seguimiento copiado");
+        }
+
+        // Mostrar Toast elegante
+        function showToast(text) {
+            const toast = document.getElementById('toast-message');
+            const toastText = document.getElementById('toast-text');
+            
+            toastText.innerText = text;
+            toast.classList.remove('hidden');
+            toast.classList.add('animate-bounce');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('animate-bounce');
+            }, 3000);
+        }
+
+        // Simular regreso o navegación dentro del SPA
+        function navigateTo(target) {
+            showToast(`Navegando de regreso a: ${target}`);
+        }
+
+        // Actualizar lista simulada
+        function refreshOrdersList() {
+            showToast("Actualizando base de datos...");
+            renderOrdersList(currentActiveFilter);
+        }
+    </script>
+</body>
+</html>
