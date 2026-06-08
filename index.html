@@ -248,15 +248,21 @@
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, visibility 0.4s;
       z-index: 1000;
       display: flex;
       align-items: center;
       gap: 10px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .toast-notification.show {
       transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
     }
 
     /* ═══════════════════════════════════════════════
@@ -1683,6 +1689,36 @@
         opacity: 0;
       }
     }
+
+    /* Ajustes de Posicionamiento y Tamaño del Chat de Tracking */
+    .tracking-chat-container {
+      position: fixed;
+      bottom: 110px !important; /* Por encima de la barra de navegación (95px) */
+      right: 1.5rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    #tracking-chat-window {
+      width: 300px;
+      height: 400px;
+    }
+
+    @media (min-width: 640px) {
+      #tracking-chat-window {
+        width: 340px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      #tracking-chat-window {
+        width: 360px;
+        height: 480px;
+      }
+    }
   </style>
 </head>
 
@@ -1746,12 +1782,12 @@
         style="border-bottom: 1px solid rgba(255,255,255,0.05);">
         <div class="flex items-center space-x-3">
           <div class="p-2.5 rounded-xl shadow-lg"
-            style="background: linear-gradient(to top right, #2563eb, #6366f1); box-shadow: 0 10px 15px -3px rgba(99,102,241,0.2);">
+            style="background: linear-gradient(to top right, var(--accent-solid), #ff8a5b); box-shadow: 0 10px 15px -3px var(--accent-glow);">
             <i data-lucide="package" class="w-6 h-6 text-white"></i>
           </div>
           <div>
             <span class="text-xl font-extrabold tracking-tight text-transparent bg-clip-text"
-              style="background-image: linear-gradient(to right, #ffffff, #e2e8f0, #a5b4fc);">Todo Delivery</span>
+              style="background-image: linear-gradient(to right, #ffffff, #e2e8f0, #ff8a5b);">Todo Delivery</span>
           </div>
         </div>
 
@@ -1761,9 +1797,8 @@
             style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span class="text-xs font-medium text-slate-300">Cliente Activo: <strong id="header-user-name"
-                style="color: #818cf8;">Carlos Mendoza</strong></span>
+                style="color: var(--accent-solid);">Diana Administradora</strong></span>
           </div>
-
           <!-- Botón Tema -->
           <div class="w-12 h-12 neu-btn shrink-0" onclick="toggleTheme()" title="Cambiar Tema">
             <i data-lucide="sun-moon" class="w-5 h-5"></i>
@@ -1780,84 +1815,72 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-3"
-                  style="background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2);">
+                  style="background: var(--accent-soft); color: var(--accent-solid); border: 1px solid var(--accent-soft);">
                   <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                  Tu cuenta está lista para enviar
+                  
                 </div>
                 <h1
                   class="text-3xl md:text-5xl font-black tracking-tight text-white flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1">
                   <span>¡Hola,</span>
                   <span id="display-client-name" class="text-transparent bg-clip-text"
-                    style="background-image: linear-gradient(to right, #818cf8, #38bdf8, #34d399);">Carlos
-                    Mendoza</span>! 👋
+                    style="background-image: linear-gradient(to right, var(--accent-solid), #ff8a5b, #34d399);">Diana 
+                  Administradora</span>! 👋
                 </h1>
                 <p class="mt-3 text-base md:text-lg max-w-2xl font-light" style="color:var(--text-muted)">
                   Bienvenido de nuevo a tu portal logístico. A continuación tienes un resumen del estado de nuestra red
                   para que planifiques tus envíos hoy con total seguridad.
                 </p>
               </div>
-              <div class="flex justify-center md:justify-end">
-                <button onclick="openNameModal()"
-                  class="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium shadow-md hover:-translate-y-0.5 active:translate-y-0"
-                  style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">
-                  <i data-lucide="edit-3" class="w-4 h-4 text-slate-400"></i>
-                  <span>Editar nombre</span>
-                </button>
-              </div>
+             
             </div>
           </section>
 
           <!-- Sección Informativa Rapida -->
           <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             <div
-              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
-              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-              <div class="p-3 rounded-xl shrink-0" style="background: rgba(59,130,246,0.1); color: #60a5fa;">
+              class="soft-card p-4 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
+              <div class="p-3 rounded-xl shrink-0" style="background: var(--accent-soft); color: var(--accent-solid);">
                 <i data-lucide="clock" class="w-5 h-5"></i>
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Tiempos
                   de entrega</p>
-                <p class="text-base font-bold text-white leading-none">98.4% a tiempo</p>
+                <p class="text-base font-bold text-white leading-none">Altamente Precisos</p>
               </div>
             </div>
 
             <div
-              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
-              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              class="soft-card p-4 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
               <div class="p-3 rounded-xl shrink-0" style="background: rgba(16,185,129,0.1); color: #34d399;">
                 <i data-lucide="map-pin" class="w-5 h-5"></i>
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Cobertura
                 </p>
-                <p class="text-base font-bold text-white leading-none">Metropolitana</p>
+                <p class="text-base font-bold text-white leading-none">Todo Pico Truncado</p>
               </div>
             </div>
 
             <div
-              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
-              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              class="soft-card p-4 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
               <div class="p-3 rounded-xl shrink-0" style="background: rgba(245,158,11,0.1); color: #fbbf24;">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
               </div>
               <div>
-                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Garantía
+                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Gama de veiculos
                 </p>
-                <p class="text-base font-bold text-white leading-none">100% Protegido</p>
+                <p class="text-base font-bold text-white leading-none">disponibles a eleccion</p>
               </div>
             </div>
 
             <div
-              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
-              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-              <div class="p-3 rounded-xl shrink-0" style="background: rgba(99,102,241,0.1); color: #818cf8;">
+              class="soft-card p-4 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
+              <div class="p-3 rounded-xl shrink-0" style="background: var(--accent-soft); color: var(--accent-solid);">
                 <i data-lucide="zap" class="w-5 h-5"></i>
               </div>
               <div>
-                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Nivel
-                  Cuenta</p>
-                <p class="text-base font-bold text-white leading-none">Preferente</p>
+                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Todos los Precios</p>
+                <p class="text-base font-bold text-white leading-none">Calculados desde la app</p>
               </div>
             </div>
           </section>
@@ -1870,7 +1893,7 @@
               class="group relative rounded-3xl overflow-hidden flex flex-col h-[350px] md:h-[400px] shadow-2xl transition-all duration-500"
               style="border: 1px solid rgba(255,255,255,0.1);">
               <div class="absolute inset-0 w-full h-full overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80"
+                <img src=""
                   alt="Flota de Autos"
                   class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   style="filter: brightness(0.6);" />
@@ -1881,10 +1904,10 @@
               <div class="relative z-10 mt-auto p-6 md:p-8">
                 <div class="flex items-center space-x-2.5 mb-3">
                   <span class="p-2 rounded-lg"
-                    style="background: rgba(59,130,246,0.25); border: 1px solid rgba(96,165,250,0.3); color: #93c5fd;">
+                    style="background: var(--accent-soft); border: 1px solid rgba(255, 87, 34, 0.2); color: var(--accent-solid);">
                     <i data-lucide="truck" class="w-5 h-5"></i>
                   </span>
-                  <span class="text-xs font-bold uppercase tracking-widest" style="color: #60a5fa;">Tecnología de
+                  <span class="text-xs font-bold uppercase tracking-widest" style="color: var(--accent-solid);">Tecnología de
                     Desplazamiento</span>
                 </div>
                 <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Flota Eléctrica e Inteligente</h2>
@@ -1911,10 +1934,10 @@
               <div class="relative z-10 mt-auto p-6 md:p-8">
                 <div class="flex items-center space-x-2.5 mb-3">
                   <span class="p-2 rounded-lg"
-                    style="background: rgba(99,102,241,0.25); border: 1px solid rgba(129,140,248,0.3); color: #a5b4fc;">
+                    style="background: var(--accent-soft); border: 1px solid rgba(255, 87, 34, 0.2); color: var(--accent-solid);">
                     <i data-lucide="navigation" class="w-5 h-5"></i>
                   </span>
-                  <span class="text-xs font-bold uppercase tracking-widest" style="color: #818cf8;">Optimización de
+                  <span class="text-xs font-bold uppercase tracking-widest" style="color: var(--accent-solid);">Optimización de
                     Rutas</span>
                 </div>
                 <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Rutas Urbanas Optimizadas</h2>
@@ -1929,14 +1952,13 @@
 
           <!-- Indicador Amigable de Siguientes Pasos -->
           <section
-            class="rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden"
-            style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            class="soft-card p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -z-10"
-              style="background: rgba(99,102,241,0.05);"></div>
+              style="background: var(--accent-glow);"></div>
 
             <div class="flex items-center space-x-4">
               <div class="p-4 rounded-2xl hidden sm:block"
-                style="background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2);">
+                style="background: var(--accent-soft); color: var(--accent-solid); border: 1px solid var(--accent-soft);">
                 <i data-lucide="help-circle" class="w-7 h-7"></i>
               </div>
               <div class="text-center md:text-left">
@@ -1950,23 +1972,20 @@
 
             <div class="flex flex-wrap gap-2 justify-center md:justify-end shrink-0">
               <span
-                class="px-3.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white hover:bg-white/10"
-                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+                class="pill-btn pill-secondary text-xs py-2 px-3.5 font-medium cursor-pointer transition-colors"
                 onclick="navigateTo('realizar-pedido')">
-                <i data-lucide="plus-circle" class="w-3.5 h-3.5 inline mr-1.5" style="color: #818cf8;"></i> Realizar
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5 inline mr-1.5" style="color: var(--accent-solid);"></i> Realizar
                 Pedido
               </span>
               <span
-                class="px-3.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white hover:bg-white/10"
-                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+                class="pill-btn pill-secondary text-xs py-2 px-3.5 font-medium cursor-pointer transition-colors"
                 onclick="navigateTo('pedidos')">
-                <i data-lucide="history" class="w-3.5 h-3.5 inline mr-1.5" style="color: #34d399;"></i> Historial
+                <i data-lucide="history" class="w-3.5 h-3.5 inline mr-1.5" style="color: var(--ok);"></i> Historial
               </span>
               <span
-                class="px-3.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white hover:bg-white/10"
-                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+                class="pill-btn pill-secondary text-xs py-2 px-3.5 font-medium cursor-pointer transition-colors"
                 onclick="navigateTo('perfil')">
-                <i data-lucide="user" class="w-3.5 h-3.5 inline mr-1.5" style="color: #38bdf8;"></i> Perfil
+                <i data-lucide="user" class="w-3.5 h-3.5 inline mr-1.5" style="color: var(--accent-solid);"></i> Perfil
               </span>
             </div>
           </section>
@@ -1982,7 +2001,7 @@
       <div class="w-full max-w-md rounded-2xl p-6 shadow-2xl relative"
         style="background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);">
         <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-          <i data-lucide="user-cog" style="color: #818cf8;"></i>
+          <i data-lucide="user-cog" style="color: var(--accent-solid);"></i>
           Configurar tu Cuenta
         </h3>
         <p class="text-xs mb-5" style="color:var(--text-muted)">Ingresa tu nombre o el de tu empresa para personalizar
@@ -1992,21 +2011,18 @@
           <div>
             <label for="client-name-input" class="block text-xs font-semibold uppercase tracking-wider mb-2"
               style="color:var(--text-muted)">Nombre del Cliente / Empresa</label>
-            <input type="text" id="client-name-input" placeholder="Ej. Carlos Mendoza"
-              class="w-full rounded-xl px-4 py-3 text-white outline-none transition-all font-medium"
-              style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);" />
+            <input type="text" id="client-name-input" placeholder="Ej. Diana Administradora"
+              class="input-field" />
           </div>
         </div>
 
         <div class="flex items-center justify-end space-x-3 mt-6">
           <button onclick="closeNameModal()"
-            class="px-4 py-2.5 rounded-xl hover:text-white transition-all text-sm font-medium"
-            style="color:var(--text-muted)">
+            class="pill-btn pill-secondary text-sm">
             Cancelar
           </button>
           <button onclick="saveClientName()"
-            class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg text-white"
-            style="background: linear-gradient(to right, #4f46e5, #6366f1); box-shadow: 0 10px 15px -3px rgba(99,102,241,0.2);">
+            class="pill-btn pill-primary text-sm font-semibold">
             Guardar Cambios
           </button>
         </div>
@@ -2041,12 +2057,11 @@
 
           <!-- Tarjeta Entregado 1 -->
           <div
-            class="p-4 rounded-2xl flex items-center justify-between hover:border-gray-700/80 cursor-pointer transition transform active:scale-95 duration-200"
-            onclick="openOrderModal('2031')"
-            style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px);">
+            class="soft-card p-4 flex items-center justify-between hover:border-orange-500/40 cursor-pointer transition transform active:scale-95 duration-200"
+            onclick="openOrderModal('2031')">
             <div class="flex items-center gap-3.5 min-w-0">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 shrink-0"
-                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">
+                style="background: rgba(0,0,0,0.2); border: 1px solid var(--line-color);">
                 <i data-lucide="package" class="w-5 h-5 text-gray-300"></i>
               </div>
               <div class="min-w-0">
@@ -2071,12 +2086,11 @@
 
           <!-- Tarjeta Entregado 2 -->
           <div
-            class="p-4 rounded-2xl flex items-center justify-between hover:border-gray-700/80 cursor-pointer transition transform active:scale-95 duration-200"
-            onclick="openOrderModal('1940')"
-            style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px);">
+            class="soft-card p-4 flex items-center justify-between hover:border-orange-500/40 cursor-pointer transition transform active:scale-95 duration-200"
+            onclick="openOrderModal('1940')">
             <div class="flex items-center gap-3.5 min-w-0">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 shrink-0"
-                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">
+                style="background: rgba(0,0,0,0.2); border: 1px solid var(--line-color);">
                 <i data-lucide="package" class="w-5 h-5 text-gray-300"></i>
               </div>
               <div class="min-w-0">
@@ -2105,7 +2119,7 @@
       <!-- Modal Detalle Pedido Inmersivo -->
       <div id="order-detail-modal" class="modal-backdrop">
         <div
-          class="modal-panel modal-panel-wide bg-[#0b0f19] border border-gray-800 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+          class="modal-panel modal-panel-wide w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]"
           style="padding:0;">
 
           <!-- Cabecera del Modal -->
@@ -2141,7 +2155,7 @@
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 <!-- Caminito -->
-                <path d="M 20 80 Q 50 20 80 50" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                <path d="M 20 80 Q 50 20 80 50" fill="none" stroke="#ff6a2f" stroke-width="2" stroke-linecap="round"
                   stroke-dasharray="4 4" style="animation: dash 2s linear infinite;" />
               </svg>
 
@@ -2171,8 +2185,7 @@
             </div>
 
             <!-- SECCIÓN 3: CHOFER Y VEHÍCULO -->
-            <div class="p-4 rounded-2xl flex items-center justify-between"
-              style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.08);">
+            <div class="soft-card p-4 flex items-center justify-between">
               <div class="flex items-center space-x-3.5">
                 <img id="modal-driver-avatar"
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
@@ -2180,7 +2193,7 @@
                   class="w-12 h-12 rounded-2xl object-cover" style="border: 1px solid rgba(255,255,255,0.08);"
                   alt="Chofer">
                 <div>
-                  <p class="text-[8px] font-extrabold uppercase tracking-wider leading-none" style="color: #60a5fa;">
+                  <p class="text-[8px] font-extrabold uppercase tracking-wider leading-none" style="color: var(--accent-solid);">
                     Transportista Asociado</p>
                   <p id="modal-driver-name" class="text-sm font-bold text-white mt-1">Lucas Gómez</p>
                   <div class="flex items-center space-x-2 mt-0.5">
@@ -2195,8 +2208,8 @@
               </div>
               <div class="text-right">
                 <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center"
-                  style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);">
-                  <i data-lucide="package" class="w-5 h-5 text-blue-400"></i>
+                  style="background: var(--accent-soft); border: 1px solid var(--accent-soft);">
+                  <i data-lucide="package" class="w-5 h-5" style="color: var(--accent-solid);"></i>
                 </div>
                 <p id="modal-vehicle-name" class="text-[10px] font-bold mt-1" style="color:var(--text-muted)">Moto Honda
                   Wave</p>
@@ -2204,8 +2217,7 @@
             </div>
 
             <!-- SECCIÓN 5: DESGLOSE DE TARIFA -->
-            <div class="p-4 rounded-2xl space-y-2.5"
-              style="background: linear-gradient(to top right, #020617, #0f172a, #020617); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="soft-card p-4 space-y-2.5">
               <div class="flex justify-between items-center pt-1">
                 <div>
                   <p class="text-[10px] uppercase tracking-widest font-extrabold" style="color:var(--text-muted)">Total
@@ -2220,16 +2232,14 @@
 
           <!-- Botones de Acción -->
           <div class="p-6 border-t shrink-0 flex gap-3"
-            style="background: #020617; border-color: rgba(255,255,255,0.05);">
+            style="border-color: var(--line-color); background: transparent;">
             <button onclick="showToast('Tracking copiado al portapapeles')"
-              class="flex-1 py-3 rounded-xl text-xs font-extrabold uppercase transition duration-200 flex items-center justify-center gap-1.5"
-              style="background: #0f172a; border: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
+              class="pill-btn pill-secondary text-xs flex-1">
               <i data-lucide="copy" class="w-4 h-4"></i>
               <span>Copiar Tracking</span>
             </button>
             <button onclick="closeOrderModal()"
-              class="flex-1 py-3 rounded-xl text-xs font-extrabold uppercase transition duration-200 flex items-center justify-center gap-1.5"
-              style="background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.2);">
+              class="pill-btn pill-primary text-xs flex-1">
               <i data-lucide="check-circle" class="w-4 h-4"></i>
               <span>Entendido</span>
             </button>
@@ -2255,7 +2265,7 @@
               document.getElementById('modal-fee-total').innerText = '$8,500.00';
               document.getElementById('modal-route-start').innerText = 'Parque Industrial';
               document.getElementById('modal-route-end').innerText = 'Base B22';
-              document.getElementById('modal-driver-name').innerText = 'Martín Rossi';
+              document.getElementById('modal-driver-name').innerText = 'Lucas Gómez';
               document.getElementById('modal-driver-plate').innerText = 'Patente XZY-999';
               document.getElementById('modal-vehicle-name').innerText = 'Camioneta';
             }
@@ -2323,12 +2333,12 @@
                   <img
                     src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120"
                     class="w-14 h-14 rounded-2xl object-cover" style="border: 2px solid rgba(255,255,255,0.1);"
-                    alt="Carlos">
+                    alt="Lucas">
                   <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full"
                     style="border: 2px solid #0f172a;"></span>
                 </div>
                 <div>
-                  <h2 class="text-base font-bold text-white" id="cadete-nombre">Carlos Mendoza</h2>
+                  <h2 class="text-base font-bold text-white" id="cadete-nombre">Lucas Gómez</h2>
                   <div class="flex items-center gap-1 mt-0.5">
                     <i data-lucide="star" class="w-3.5 h-3.5" style="color: #fbbf24; fill: #fbbf24;"></i>
                     <span class="text-xs font-semibold text-white">4.9</span>
@@ -2346,15 +2356,14 @@
 
           <!-- Información Técnica del Envío -->
           <div class="p-6 space-y-4"
-            style="border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.1);">
+            style="border-bottom: 1px solid var(--line-color); background: var(--card-soft);">
             <h3 class="text-[10px] font-bold tracking-widest uppercase" style="color:var(--text-muted)">Transporte &
               Paquete</h3>
 
             <div class="grid grid-cols-2 gap-3">
               <!-- Vehículo -->
-              <div class="p-3.5 rounded-xl flex items-start gap-3"
-                style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-                <div class="p-2 rounded-lg" style="background: rgba(59,130,246,0.1); color: #60a5fa;">
+              <div class="soft-card p-3.5 flex items-start gap-3">
+                <div class="p-2 rounded-lg" style="background: var(--accent-soft); color: var(--accent-solid);">
                   <i data-lucide="car" class="w-4 h-4"></i>
                 </div>
                 <div>
@@ -2366,9 +2375,8 @@
                 </div>
               </div>
               <!-- Paquete -->
-              <div class="p-3.5 rounded-xl flex items-start gap-3"
-                style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-                <div class="p-2 rounded-lg" style="background: rgba(245,158,11,0.1); color: #fbbf24;">
+              <div class="soft-card p-3.5 flex items-start gap-3">
+                <div class="p-2 rounded-lg" style="background: var(--accent-soft); color: var(--accent-solid);">
                   <i data-lucide="package" class="w-4 h-4"></i>
                 </div>
                 <div>
@@ -2382,8 +2390,7 @@
             </div>
 
             <!-- Detalles de Ruta -->
-            <div class="p-4 rounded-xl space-y-3"
-              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="soft-card p-4 space-y-3">
               <div class="flex items-start gap-3">
                 <div class="mt-1 flex flex-col items-center">
                   <span class="w-3 h-3 rounded-full"
@@ -2418,7 +2425,7 @@
               <!-- Paso 1 -->
               <div class="flex items-start gap-4 relative">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 shrink-0"
-                  style="background: rgba(59,130,246,0.1); border: 2px solid #0f172a; color: #60a5fa;">
+                  style="background: var(--accent-soft); border: 2px solid var(--card-bg-strong); color: var(--accent-solid);">
                   <i data-lucide="check" class="w-4 h-4"></i>
                 </div>
                 <div class="pt-1">
@@ -2429,7 +2436,7 @@
               <!-- Paso 2 -->
               <div class="flex items-start gap-4 relative">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 shrink-0"
-                  style="background: rgba(59,130,246,0.1); border: 2px solid #0f172a; color: #60a5fa;">
+                  style="background: var(--accent-soft); border: 2px solid var(--card-bg-strong); color: var(--accent-solid);">
                   <i data-lucide="check" class="w-4 h-4"></i>
                 </div>
                 <div class="pt-1">
@@ -2440,12 +2447,12 @@
               <!-- Paso 3 -->
               <div class="flex items-start gap-4 relative">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 shrink-0"
-                  style="background: #3b82f6; border: 2px solid #0f172a; color: white;">
+                  style="background: var(--accent-solid); border: 2px solid var(--card-bg-strong); color: white;">
                   <i data-lucide="navigation" class="w-4 h-4 animate-bounce"></i>
                 </div>
                 <div class="pt-1">
-                  <h4 class="text-xs font-bold text-blue-400">En Camino</h4>
-                  <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">Carlos se dirige a tu ubicación</p>
+                  <h4 class="text-xs font-bold" style="color: var(--accent-solid);">En Camino</h4>
+                  <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">Lucas se dirige a tu ubicación</p>
                 </div>
               </div>
             </div>
@@ -2460,7 +2467,7 @@
           <div class="absolute top-4 left-4 z-[20] max-w-sm hidden sm:block">
             <div class="p-3 rounded-2xl flex items-center gap-3"
               style="background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);">
-              <div class="p-2 rounded-xl" style="background: rgba(59,130,246,0.15); color: #60a5fa;">
+              <div class="p-2 rounded-xl" style="background: var(--accent-soft); color: var(--accent-solid);">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
               </div>
               <div>
@@ -2499,27 +2506,27 @@
     </div>
 
     <!-- SISTEMA DE CHAT FLOTANTE (FUERA DEL NEU-CARD PARA EVITAR OVERFLOW-HIDDEN) -->
-    <div class="fixed bottom-[110px] right-6 z-[2000] flex flex-col items-end pointer-events-none">
+    <div class="tracking-chat-container">
 
       <!-- Ventana de Chat Flotante -->
       <div id="tracking-chat-window"
-        class="w-[300px] sm:w-[340px] md:w-[360px] h-[400px] md:h-[480px] rounded-3xl flex flex-col overflow-hidden mb-4 translate-y-10 opacity-0 transition-all duration-300 ease-out"
+        class="rounded-3xl flex flex-col overflow-hidden mb-4 translate-y-10 opacity-0 transition-all duration-300 ease-out"
         style="background: rgba(15,23,42,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); pointer-events: auto; display: none;">
 
         <!-- Encabezado del Chat -->
         <div class="p-4 flex items-center justify-between shrink-0"
-          style="background: linear-gradient(to right, #1e3a8a, #312e81); border-bottom: 1px solid rgba(255,255,255,0.1);">
+          style="background: linear-gradient(to right, var(--accent-solid), #ff8a5b); border-bottom: 1px solid rgba(255,255,255,0.1);">
           <div class="flex items-center space-x-3">
             <div class="relative">
               <img
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120"
-                class="w-10 h-10 rounded-xl object-cover" style="border: 1px solid rgba(255,255,255,0.2);" alt="Carlos">
+                class="w-10 h-10 rounded-xl object-cover" style="border: 1px solid rgba(255,255,255,0.2);" alt="Lucas">
               <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 rounded-full"
-                style="border-color: #312e81;"></span>
+                style="border-color: var(--accent-solid);"></span>
             </div>
             <div>
-              <h4 class="text-sm font-bold text-white leading-tight">Carlos Mendoza</h4>
-              <span class="text-[10px] font-semibold block" style="color: #a5b4fc;">Conductor asignado</span>
+              <h4 class="text-sm font-bold text-white leading-tight">Lucas Gómez</h4>
+              <span class="text-[10px] font-semibold block" style="color: #ffd8c0;">Conductor asignado</span>
             </div>
           </div>
           <button onclick="toggleTrackingChat()" class="p-2 rounded-xl transition"
@@ -2558,7 +2565,7 @@
             <span class="w-1.5 h-1.5 rounded-full animate-bounce"
               style="background: #94a3b8; animation-delay: 0.3s"></span>
           </span>
-          Carlos está escribiendo...
+          Lucas está escribiendo...
         </div>
 
         <!-- Barra de Escritura -->
@@ -2569,7 +2576,7 @@
             style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
             onkeypress="handleTrackingKeyPress(event)">
           <button onclick="enviarMensajeTracking()" class="p-2.5 rounded-2xl transition shrink-0"
-            style="background: #2563eb; color: white;">
+            style="background: var(--accent-solid); color: white;">
             <i data-lucide="send-horizontal" class="w-4 h-4"></i>
           </button>
         </div>
@@ -2577,13 +2584,13 @@
 
       <!-- Botón Principal del Chat -->
       <button onclick="toggleTrackingChat()"
-        class="px-4 py-3 md:py-3.5 rounded-2xl font-bold flex items-center gap-3 transition transform hover:-translate-y-0.5 active:translate-y-0 relative shadow-lg"
-        style="background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.3); pointer-events: auto;">
+        class="w-14 h-14 rounded-full font-bold flex items-center justify-center transition transform hover:-translate-y-0.5 active:translate-y-0 relative shadow-lg shrink-0"
+        style="background: var(--accent-solid); color: white; box-shadow: 0 10px 15px -3px var(--accent-glow); pointer-events: auto;"
+        title="Chat con Lucas">
         <span id="tracking-unread-badge"
-          class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-[9px] font-black flex items-center justify-center animate-bounce"
+          class="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[9px] font-black flex items-center justify-center animate-bounce"
           style="background: #f43f5e; border: 2px solid #0f172a;">1</span>
-        <i data-lucide="message-square" class="w-5 h-5"></i>
-        <span class="text-sm">Chat con Carlos</span>
+        <i data-lucide="message-square" class="w-6 h-6 text-white"></i>
       </button>
     </div>
 
@@ -2795,82 +2802,185 @@
         <button id="open-card-modal" class="hidden"></button>
         <div id="payment-list" class="hidden"></div>
 
-        <!-- Contenedor único de perfil -->
-        <div class="w-full max-w-[420px] p-4 rounded-[32px] mt-4" style="background: transparent; border: none;">
+        <!-- Contenedor único de perfil (Rediseño Dashboard Premium) -->
+        <div class="w-full max-w-[850px] p-4 mt-4 flex flex-col gap-6" style="background: transparent; border: none;">
 
-          <!-- Cabecera / Avatar -->
-          <div class="flex flex-col items-center mb-6 mt-2">
-            <div class="relative w-[80px] h-[80px] mb-4">
-              <div class="w-full h-full rounded-full overflow-hidden border-[3px]"
-                style="border-color: rgba(255,255,255,0.08);">
-                <img
+          <!-- Tarjeta de Cabecera con Portada y Avatar -->
+          <div class="soft-card overflow-hidden relative w-full flex flex-col items-center">
+            <!-- Portada Degradada -->
+            <div class="h-24 w-full border-b" style="background: radial-gradient(circle at top right, var(--accent-soft), transparent 45%), linear-gradient(135deg, var(--card-bg-strong) 0%, rgba(255,255,255,0.01) 100%); border-color: var(--line-color);"></div>
+            
+            <!-- Avatar Flotante con Hover de Carga -->
+            <div class="flex flex-col items-center -mt-12 pb-6 relative z-10 px-4 w-full">
+              <div onclick="document.getElementById('photo-input').click()" 
+                class="relative w-[96px] h-[96px] rounded-full overflow-hidden border-[3px] group cursor-pointer shadow-lg transition-transform active:scale-95"
+                style="border-color: var(--card-bg); background: var(--card-bg-strong);"
+                title="Cambiar foto de perfil">
+                <img id="visible-profile-avatar"
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
-                  alt="María López" class="w-full h-full object-cover">
+                  alt="Diana Administradora" class="w-full h-full object-cover">
+                <!-- Overlay de Hover -->
+                <div class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <i data-lucide="camera" class="w-5 h-5 text-white"></i>
+                  <span class="text-[8px] text-white font-bold uppercase mt-1">Editar</span>
+                </div>
               </div>
+              
               <!-- Status dot -->
-              <div class="absolute bottom-1 right-1 w-[18px] h-[18px] rounded-full border-[3px]"
-                style="background: #10b981; border-color: var(--card-bg-strong);"></div>
+              <div class="absolute top-[68px] right-[calc(50%-44px)] w-[18px] h-[18px] rounded-full border-[3px] bg-emerald-500"
+                style="border-color: var(--card-bg);"></div>
+                
+              <h2 class="text-2xl font-extrabold mt-3.5 mb-1.5 tracking-tight text-center" id="display-profile-name">Diana Administradora</h2>
+              <span class="px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest text-center"
+                style="background: var(--accent-soft); color: var(--accent-solid);">CLIENTE CORPORATIVO VERIFICADO</span>
             </div>
-            <h2 class="text-2xl font-extrabold mb-2 tracking-tight text-center">María López</h2>
-            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest text-center"
-              style="background: rgba(245,158,11,0.15); color: #f59e0b;">CLIENTE CORPORATIVO VERIFICADO</span>
           </div>
 
-          <div class="w-full h-px mb-7 mt-2" style="background: rgba(255,255,255,0.06);"></div>
+          <!-- Cuadrícula Principal de 2 Columnas -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
 
-          <!-- Datos en Contenedores Organizadores -->
-          <div class="flex flex-col gap-4 w-full">
+            <!-- Columna 1: Información de Cuenta -->
+            <div class="space-y-4">
+              <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1 flex items-center gap-1.5">
+                <i data-lucide="user" class="w-3.5 h-3.5" style="color: var(--accent-solid);"></i>Información de Perfil
+              </h3>
 
-            <!-- Card: Correo Electrónico -->
-            <div class="soft-card p-4 flex items-center gap-4">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
-                <i data-lucide="mail" class="w-5 h-5 text-gray-300"></i>
+              <!-- Card: Correo Electrónico -->
+              <div class="soft-card p-4 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                  <i data-lucide="mail" class="w-5 h-5 text-gray-300"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Correo Electrónico</p>
+                  <p id="display-profile-email" class="font-semibold text-[14px] truncate">diana.admin@tododelivery.com</p>
+                </div>
               </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Correo
-                  Electrónico</p>
-                <p class="font-semibold text-[14px] truncate">maria.lopez@tododelivery.com</p>
+
+              <!-- Card: Número de Teléfono -->
+              <div class="soft-card p-4 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                  <i data-lucide="phone" class="w-5 h-5 text-gray-300"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Número de Teléfono</p>
+                  <p id="display-profile-phone" class="font-semibold text-[14px]">+54 297 555-1212</p>
+                </div>
+                <button onclick="document.getElementById('phone-number-input').value = document.getElementById('display-profile-phone').textContent.trim(); document.getElementById('phone-modal').classList.add('is-open')"
+                  class="w-8 h-8 rounded-full flex items-center justify-center transition-transform active:scale-95 cursor-pointer shrink-0"
+                  style="background: var(--accent-soft); color: var(--accent-solid);" aria-label="Editar teléfono">
+                  <i data-lucide="pencil" class="w-3.5 h-3.5 text-white" style="color: var(--accent-solid);"></i>
+                </button>
+              </div>
+
+              <!-- Card: Fecha de Registro -->
+              <div class="soft-card p-4 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                  <i data-lucide="calendar" class="w-5 h-5 text-gray-300"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Fecha de Registro</p>
+                  <p id="display-profile-date" class="font-semibold text-[14px]">12 de Octubre, 2024</p>
+                </div>
+              </div>
+
+              <!-- Info final -->
+              <div class="p-4 rounded-2xl flex items-start gap-3 border border-[var(--line-color)]" style="background: rgba(0,0,0,0.08);">
+                <i data-lucide="lock" class="w-4 h-4 mt-0.5 shrink-0" style="color:var(--text-muted)"></i>
+                <p class="text-[11px] leading-relaxed" style="color:var(--text-muted)">
+                  Los datos de perfil corporativo son gestionados por el Administrador de Sistemas y no son editables desde este portal de clientes.
+                </p>
               </div>
             </div>
 
-            <!-- Card: Número de Teléfono -->
-            <div class="soft-card p-4 flex items-center gap-4">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
-                <i data-lucide="phone" class="w-5 h-5 text-gray-300"></i>
+            <!-- Columna 2: Herramientas y Ajustes -->
+            <div class="space-y-4">
+              <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1 flex items-center gap-1.5">
+                <i data-lucide="settings" class="w-3.5 h-3.5" style="color: var(--accent-solid);"></i>Herramientas y Ajustes
+              </h3>
+
+              <!-- Push Notifications toggle -->
+              <div class="soft-card p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                    <i data-lucide="bell" class="w-5 h-5 text-gray-300"></i>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-sm">Notificaciones Push</p>
+                    <p class="text-[11px]" style="color:var(--text-muted)">Alertas en tiempo real</p>
+                  </div>
+                </div>
+                <div class="toggle-track">
+                  <input id="push-toggle-visible" type="checkbox" onchange="togglePushNotifications(this.checked)">
+                  <div class="toggle-thumb"></div>
+                </div>
               </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Número de
-                  Teléfono</p>
-                <p class="font-semibold text-[14px]">+54 297 555-1212</p>
+
+              <!-- WhatsApp Support link -->
+              <a href="https://wa.me/5491112345678" target="_blank"
+                class="soft-card p-4 flex items-center justify-between gap-4 hover:border-orange-500/40 transition duration-300">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-sm">Soporte WhatsApp</p>
+                    <p class="text-[11px]" style="color:var(--text-muted)">Atención inmediata</p>
+                  </div>
+                </div>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-400"></i>
+              </a>
+
+              <!-- Métodos de pago (Unhidden list container) -->
+              <div class="soft-card p-4 space-y-3">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                    <i data-lucide="credit-card" class="w-5 h-5 text-gray-300"></i>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-sm">Métodos de Pago</p>
+                    <p class="text-[11px]" style="color:var(--text-muted)">Tarjetas guardadas</p>
+                  </div>
+                </div>
+                
+                <div id="payment-list" class="space-y-3">
+                  <!-- Los métodos de pago se montarán dinámicamente acá -->
+                </div>
+
+                <button onclick="openCardDialog()" class="pill-btn pill-secondary text-xs w-full justify-center mt-2">
+                  <i data-lucide="plus" class="w-3.5 h-3.5 inline mr-1"></i>Agregar Tarjeta
+                </button>
               </div>
-              <button onclick="document.getElementById('phone-modal').classList.add('is-open')"
-                class="w-8 h-8 rounded-full flex items-center justify-center transition-transform active:scale-95 cursor-pointer shrink-0"
-                style="background: rgba(255,255,255,0.05);" aria-label="Editar teléfono">
-                <i data-lucide="pencil" class="w-3.5 h-3.5 text-white"></i>
-              </button>
+
+              <!-- Asistente de chat soporte interno (Unhidden chat container) -->
+              <div class="soft-card p-4 space-y-3">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                    <i data-lucide="help-circle" class="w-5 h-5 text-gray-300"></i>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-sm">Soporte Técnico</p>
+                    <p class="text-[11px]" style="color:var(--text-muted)">Ayuda del asistente virtual</p>
+                  </div>
+                </div>
+                
+                <div class="border border-[var(--line-color)] rounded-2xl overflow-hidden" style="background: rgba(0,0,0,0.15);">
+                  <div id="support-thread" class="support-thread p-3 space-y-3 overflow-y-auto max-h-[160px]">
+                    <!-- Mensajes de conversación cargados acá -->
+                  </div>
+                  
+                  <form id="support-form" class="p-2 border-t border-[var(--line-color)] flex gap-2" style="background: rgba(0,0,0,0.25);">
+                    <input id="support-message" type="text" placeholder="Escribe tu consulta..."
+                      class="flex-1 rounded-xl px-3 py-2 text-xs outline-none transition text-white"
+                      style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);" />
+                    <button type="submit" class="p-2 rounded-xl transition shrink-0" style="background: var(--accent-solid); color: white;">
+                      <i data-lucide="send-horizontal" class="w-3.5 h-3.5"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+
             </div>
 
-            <!-- Card: Fecha de Registro -->
-            <div class="soft-card p-4 flex items-center gap-4">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
-                <i data-lucide="calendar" class="w-5 h-5 text-gray-300"></i>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Fecha de
-                  Registro</p>
-                <p class="font-semibold text-[14px]">12 de Octubre, 2024</p>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Info final -->
-          <div class="mt-8 p-4 rounded-2xl flex items-start gap-3" style="border: 1px solid rgba(255,255,255,0.08);">
-            <i data-lucide="lock" class="w-4 h-4 mt-0.5 shrink-0" style="color:var(--text-muted)"></i>
-            <p class="text-[11px] leading-relaxed" style="color:var(--text-muted)">
-              Los datos de perfil corporativo son gestionados por el Administrador de Sistemas y no son editables desde
-              este portal de clientes.
-            </p>
           </div>
 
         </div>
@@ -2973,8 +3083,7 @@
           onclick="document.getElementById('phone-modal').classList.remove('is-open')"><i data-lucide="x"
             class="w-5 h-5"></i></button>
       </div>
-      <form id="phone-form" class="space-y-4 mt-5"
-        onsubmit="event.preventDefault(); document.getElementById('phone-modal').classList.remove('is-open'); showToast('Teléfono actualizado');">
+      <form id="phone-form" class="space-y-4 mt-5">
         <div>
           <label class="field-label" for="phone-number-input">Número</label>
           <input id="phone-number-input" class="input-field" type="tel" placeholder="+54 9 11 0000 0000" required>
@@ -3287,9 +3396,9 @@
     // Datos de prueba para mostrar el producto como demo terminada.
     const DEMO_SESSION = {
       id: 'demo-user-01',
-      name: 'María López',
+      name: 'Diana Administradora',
       phone: '+54 11 5555 4321',
-      email: 'maria.lopez@tododelivery.com',
+      email: 'diana.admin@tododelivery.com',
       avatar: '',
       address: 'Av. Libertador 1530',
       destination: 'Ignacio de la Roza Oeste 542',
@@ -3410,7 +3519,7 @@
     }
 
     function addOrMoveMarker(which, latlng) {
-      const color = which === 'origin' ? '#ff6a2f' : '#38bdf8';
+      const color = which === 'origin' ? '#ff6a2f' : '#fb7185';
       const popupText = which === 'origin' ? 'Origen seleccionado' : 'Destino seleccionado';
       const markerFactory = () => L.marker(latlng, {
         draggable: true,
@@ -3525,9 +3634,8 @@
           zoom: 14.8
         });
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; OpenStreetMap contributors'
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          maxZoom: 20
         }).addTo(homeMap);
 
         const clickLayer = document.getElementById('home-map-click-layer');
@@ -3556,6 +3664,7 @@
     function applyDemoSession() {
       localStorage.setItem('id_cliente', DEMO_SESSION.id);
       localStorage.setItem('nombre_cliente', DEMO_SESSION.name);
+      localStorage.setItem('logixpress_client_name', DEMO_SESSION.name);
       localStorage.setItem('telefono_cliente', DEMO_SESSION.phone);
       localStorage.setItem('fecha_union_cliente', '2026-05-27T08:24:00.000Z');
       localStorage.setItem('foto_cliente', DEMO_SESSION.avatar);
@@ -3563,12 +3672,37 @@
       const profileName = document.getElementById('profile-name');
       const profilePhone = document.getElementById('profile-phone');
       const profileEmail = document.getElementById('profile-email');
-      const profileTitle = document.querySelector('#view-perfil h2.text-3xl');
 
       if (profileName) profileName.value = DEMO_SESSION.name;
       if (profilePhone) profilePhone.value = DEMO_SESSION.phone;
       if (profileEmail) profileEmail.value = DEMO_SESSION.email;
-      if (profileTitle) profileTitle.textContent = DEMO_SESSION.name;
+
+      const displayName = document.getElementById('display-profile-name');
+      const displayEmail = document.getElementById('display-profile-email');
+      const displayPhone = document.getElementById('display-profile-phone');
+      
+      if (displayName) displayName.textContent = DEMO_SESSION.name;
+      if (displayEmail) displayEmail.textContent = DEMO_SESSION.email;
+      if (displayPhone) displayPhone.textContent = DEMO_SESSION.phone;
+
+      updateNameUI(DEMO_SESSION.name);
+
+      if (DEMO_SESSION.avatar) {
+        ['profile-photo', 'profile-photo-2', 'visible-profile-avatar'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.src = DEMO_SESSION.avatar; el.classList.remove('hidden'); }
+        });
+        ['avatar-fallback', 'avatar-fallback-2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
+        });
+      } else {
+        const defaultAvatar = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80";
+        ['profile-photo', 'profile-photo-2', 'visible-profile-avatar'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.src = defaultAvatar; el.classList.remove('hidden'); }
+        });
+      }
 
       const quickActions = document.querySelectorAll('.quick-action');
       if (quickActions[0]) {
@@ -3625,7 +3759,7 @@
           attributionControl: false
         });
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(activeMap);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 20 }).addTo(activeMap);
 
         // initial render
         renderActiveOrder(DEMO_ACTIVE_ORDER);
@@ -3773,7 +3907,7 @@
         attributionControl: false
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(orderMap);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 20 }).addTo(orderMap);
       orderMap.on('click', handleMapClick);
       updateMapStepStatus(1);
 
@@ -3899,7 +4033,7 @@
       routeCoordsList = [[startPos.lat, startPos.lng], [endPos.lat, endPos.lng]];
 
       routePolyline = L.polyline(routeCoordsList, {
-        color: '#38bdf8',
+        color: '#ff8a5b',
         weight: 5,
         opacity: 0.72,
         dashArray: '8, 10'
@@ -4273,7 +4407,7 @@
     function createTrackingRoute(coords) {
       const customIconHTML = L.divIcon({
         html: `
-                <div class="pulse-marker flex items-center justify-center border-2 border-white w-10 h-10 rounded-full shadow-lg" style="background: #3b82f6;">
+                <div class="pulse-marker flex items-center justify-center border-2 border-white w-10 h-10 rounded-full shadow-lg" style="background: var(--accent-solid);">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                         <path d="M12 2v9M8 5h8" />
@@ -4288,7 +4422,7 @@
       trackingMarker = L.marker(coords, { icon: customIconHTML }).addTo(trackingMap);
       trackingHistory = [coords];
       trackingRouteLine = L.polyline(trackingHistory, {
-        color: '#3b82f6',
+        color: '#ff6a2f',
         weight: 5,
         opacity: 0.8,
         lineCap: 'round',
@@ -4319,6 +4453,117 @@
           velElement.innerText = `${velSimulada} km/h`;
         }
       }, 4000);
+    }
+
+    // ─── SEGUIMIENTO: CHAT FLOTANTE CON EL REPARTIDOR ───────────────
+    let isTrackingChatOpen = false;
+
+    function toggleTrackingChat() {
+      const chatWindow = document.getElementById('tracking-chat-window');
+      const badge = document.getElementById('tracking-unread-badge');
+      if (!chatWindow) return;
+
+      isTrackingChatOpen = !isTrackingChatOpen;
+
+      if (isTrackingChatOpen) {
+        chatWindow.style.display = 'flex';
+        // Force reflow for opacity transition
+        chatWindow.offsetHeight;
+        chatWindow.classList.remove('translate-y-10', 'opacity-0');
+        if (badge) badge.style.display = 'none';
+
+        // Scroll to bottom
+        const messagesDiv = document.getElementById('tracking-chat-messages');
+        if (messagesDiv) {
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Focus text input
+        const input = document.getElementById('tracking-chat-input');
+        if (input) input.focus();
+      } else {
+        chatWindow.classList.add('translate-y-10', 'opacity-0');
+        setTimeout(() => {
+          if (!isTrackingChatOpen) {
+            chatWindow.style.display = 'none';
+          }
+        }, 300);
+      }
+    }
+
+    function handleTrackingKeyPress(event) {
+      if (event.key === 'Enter') {
+        enviarMensajeTracking();
+      }
+    }
+
+    function enviarMensajeTracking() {
+      const input = document.getElementById('tracking-chat-input');
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendTrackingMessage('user', text);
+      input.value = '';
+
+      const typingIndicator = document.getElementById('tracking-typing-indicator');
+      if (typingIndicator) {
+        typingIndicator.classList.remove('opacity-0');
+        typingIndicator.classList.add('opacity-100');
+      }
+
+      // Simulate cadete typing & replying
+      setTimeout(() => {
+        if (typingIndicator) {
+          typingIndicator.classList.add('opacity-0');
+          typingIndicator.classList.remove('opacity-100');
+        }
+
+        let reply = "¡Recibido! Sigo en camino hacia tu ubicación.";
+        const normalizedText = text.toLowerCase();
+        if (normalizedText.includes('donde') || normalizedText.includes('dónde')) {
+          reply = "Estoy cerca de tu zona. Podés ver mi posición exacta actualizada en el mapa de arriba.";
+        } else if (normalizedText.includes('hola') || normalizedText.includes('buenas')) {
+          reply = "¡Hola! Estoy en viaje con tu pedido. ¿Querés dejar alguna indicación especial para la entrega?";
+        } else if (normalizedText.includes('demora') || normalizedText.includes('tardas') || normalizedText.includes('tardás') || normalizedText.includes('tiempo')) {
+          reply = "El mapa estima que llego en unos 5-8 minutos. El tránsito está despejado.";
+        } else if (normalizedText.includes('gracias') || normalizedText.includes('buenísimo') || normalizedText.includes('buenisimo')) {
+          reply = "¡De nada! Nos vemos en breve.";
+        }
+
+        appendTrackingMessage('cadete', reply);
+      }, 1400);
+    }
+
+    function appendTrackingMessage(sender, text) {
+      const messagesDiv = document.getElementById('tracking-chat-messages');
+      if (!messagesDiv) return;
+
+      const now = new Date();
+      const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+      const msgHtml = document.createElement('div');
+      if (sender === 'user') {
+        msgHtml.className = 'flex justify-end gap-2.5 max-w-[85%] ml-auto';
+        msgHtml.innerHTML = `
+          <div class="p-3 rounded-2xl rounded-tr-none text-xs leading-relaxed"
+            style="background: var(--accent-solid); color: white;">
+            ${text}
+            <span class="text-[9px] block text-right mt-1" style="color: rgba(255,255,255,0.7)">${timeStr}</span>
+          </div>
+        `;
+      } else {
+        msgHtml.className = 'flex items-start gap-2.5 max-w-[85%]';
+        msgHtml.innerHTML = `
+          <div class="p-3 rounded-2xl rounded-tl-none text-xs leading-relaxed"
+            style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); color: #e2e8f0;">
+            ${text}
+            <span class="text-[9px] block text-right mt-1" style="color:var(--text-muted)">${timeStr}</span>
+          </div>
+        `;
+      }
+      messagesDiv.appendChild(msgHtml);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
 
@@ -4392,7 +4637,7 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = () => {
-        ['profile-photo', 'profile-photo-2'].forEach(id => {
+        ['profile-photo', 'profile-photo-2', 'visible-profile-avatar'].forEach(id => {
           const el = document.getElementById(id);
           if (el) { el.src = reader.result; el.classList.remove('hidden'); }
         });
@@ -4400,6 +4645,7 @@
           const el = document.getElementById(id);
           if (el) el.classList.add('hidden');
         });
+        localStorage.setItem('foto_cliente', reader.result);
         showToast('Foto de perfil actualizada');
       };
       reader.readAsDataURL(file);
@@ -4409,6 +4655,20 @@
     document.getElementById('profile-form').addEventListener('submit', e => {
       e.preventDefault();
       showToast('Datos personales guardados');
+    });
+
+    document.getElementById('phone-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const val = document.getElementById('phone-number-input').value.trim();
+      if (val) {
+        const dp = document.getElementById('display-profile-phone');
+        if (dp) dp.textContent = val;
+        const pp = document.getElementById('profile-phone');
+        if (pp) pp.value = val;
+        localStorage.setItem('telefono_cliente', val);
+        document.getElementById('phone-modal').classList.remove('is-open');
+        showToast('Teléfono actualizado');
+      }
     });
 
     document.getElementById('password-form').addEventListener('submit', e => {
@@ -4423,6 +4683,14 @@
     document.getElementById('push-toggle').addEventListener('change', function () {
       showToast(this.checked ? 'Notificaciones push activadas' : 'Notificaciones push desactivadas');
     });
+
+    function togglePushNotifications(checked) {
+      const pt = document.getElementById('push-toggle');
+      if (pt) {
+        pt.checked = checked;
+        pt.dispatchEvent(new Event('change'));
+      }
+    }
 
     document.getElementById('close-inicio-preview').addEventListener('click', closeInicioPreview);
     document.getElementById('inicio-preview-modal').addEventListener('click', e => { if (e.target === document.getElementById('inicio-preview-modal')) closeInicioPreview(); });
@@ -4462,8 +4730,8 @@
 
     // ─── PERFIL: PAGOS ────────────────────────────────────────────
     let paymentCards = [
-      { id: 1, name: 'Visa Personal', brand: 'Visa', number: '4532 7814 9012 4431', expiry: '11/28', holder: 'María López', primary: true },
-      { id: 2, name: 'Mastercard Pyme', brand: 'Mastercard', number: '5129 6641 8820 7714', expiry: '07/27', holder: 'María López', primary: false }
+      { id: 1, name: 'Visa Personal', brand: 'Visa', number: '4532 7814 9012 4431', expiry: '11/28', holder: 'Diana Administradora', primary: true },
+      { id: 2, name: 'Mastercard Pyme', brand: 'Mastercard', number: '5129 6641 8820 7714', expiry: '07/27', holder: 'Diana Administradora', primary: false }
     ];
 
     function renderPaymentCards() {
@@ -4616,11 +4884,45 @@
       if (dcn) dcn.textContent = name;
       const hun = document.getElementById('header-user-name');
       if (hun) hun.textContent = name;
+      const dpn = document.getElementById('display-profile-name');
+      if (dpn) dpn.textContent = name;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const savedName = localStorage.getItem('logixpress_client_name') || 'Carlos Mendoza';
+      const savedName = localStorage.getItem('logixpress_client_name') || 'Diana Administradora';
       updateNameUI(savedName);
+
+      // Populate profile phone, email, and photo
+      const savedPhone = localStorage.getItem('telefono_cliente') || DEMO_SESSION.phone;
+      const displayPhone = document.getElementById('display-profile-phone');
+      if (displayPhone) displayPhone.textContent = savedPhone;
+      
+      const profilePhone = document.getElementById('profile-phone');
+      if (profilePhone) profilePhone.value = savedPhone;
+
+      const displayEmail = document.getElementById('display-profile-email');
+      if (displayEmail) displayEmail.textContent = DEMO_SESSION.email;
+
+      const profileEmail = document.getElementById('profile-email');
+      if (profileEmail) profileEmail.value = DEMO_SESSION.email;
+
+      const savedPhoto = localStorage.getItem('foto_cliente');
+      if (savedPhoto) {
+        ['profile-photo', 'profile-photo-2', 'visible-profile-avatar'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.src = savedPhoto; el.classList.remove('hidden'); }
+        });
+        ['avatar-fallback', 'avatar-fallback-2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
+        });
+      }
+
+      const pushToggle = document.getElementById('push-toggle');
+      const pushToggleVisible = document.getElementById('push-toggle-visible');
+      if (pushToggle && pushToggleVisible) {
+        pushToggleVisible.checked = pushToggle.checked;
+      }
     });
   </script>
 </body>
