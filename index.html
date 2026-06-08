@@ -1,17 +1,22 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Todo Delivery</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff6a2f'/%3E%3Cstop offset='100%25' stop-color='%23ff8a5b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='24' font-weight='800' fill='white'%3ETD%3C/text%3E%3C/svg%3E">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff6a2f'/%3E%3Cstop offset='100%25' stop-color='%23ff8a5b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='24' font-weight='800' fill='white'%3ETD%3C/text%3E%3C/svg%3E">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <style>
     /* ═══════════════════════════════════════════════
@@ -21,46 +26,48 @@
       --bg-color: #17181a;
       --card-bg: #1e2022;
       --card-bg-strong: #161920;
-      --card-soft: rgba(255,255,255,0.03);
+      --card-soft: rgba(255, 255, 255, 0.03);
       --text-main: #ffffff;
       --text-muted: #8e9297;
       --accent-glow: rgba(255, 69, 0, 0.4);
       --accent-solid: #ff5722;
       --accent-soft: rgba(255, 87, 34, 0.14);
-      --btn-shadow-out: -4px -4px 10px rgba(255,255,255,0.03), 4px 4px 10px rgba(0,0,0,0.5);
-      --btn-shadow-in: inset -2px -2px 6px rgba(255,255,255,0.02), inset 2px 2px 6px rgba(0,0,0,0.6);
-      --card-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      --line-color: rgba(255,255,255,0.08);
-      --shadow-soft: 0 22px 70px rgba(0,0,0,0.35);
-      --shadow-card: 0 14px 40px rgba(0,0,0,0.22);
+      --btn-shadow-out: -4px -4px 10px rgba(255, 255, 255, 0.03), 4px 4px 10px rgba(0, 0, 0, 0.5);
+      --btn-shadow-in: inset -2px -2px 6px rgba(255, 255, 255, 0.02), inset 2px 2px 6px rgba(0, 0, 0, 0.6);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --line-color: rgba(255, 255, 255, 0.08);
+      --shadow-soft: 0 22px 70px rgba(0, 0, 0, 0.35);
+      --shadow-card: 0 14px 40px rgba(0, 0, 0, 0.22);
       --ok: #34d399;
-      --bg-gradient: radial-gradient(circle at top left, rgba(255,122,69,0.15), transparent 32%), radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent 24%), linear-gradient(180deg,#15181c 0%,#111316 100%);
+      --bg-gradient: radial-gradient(circle at top left, rgba(255, 122, 69, 0.15), transparent 32%), radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 24%), linear-gradient(180deg, #15181c 0%, #111316 100%);
     }
 
     .light-theme {
       --bg-color: #e6ebf0;
       --card-bg: #f3f6f9;
       --card-bg-strong: #ffffff;
-      --card-soft: rgba(28,30,33,0.04);
+      --card-soft: rgba(28, 30, 33, 0.04);
       --text-main: #1c1e21;
       --text-muted: #65676b;
       --accent-glow: rgba(255, 87, 34, 0.25);
       --accent-solid: #e64a19;
       --accent-soft: rgba(255, 87, 34, 0.12);
-      --btn-shadow-out: -4px -4px 10px rgba(255,255,255,0.8), 4px 4px 10px rgba(165,175,190,0.4);
-      --btn-shadow-in: inset -2px -2px 6px rgba(255,255,255,0.8), inset 2px 2px 6px rgba(165,175,190,0.4);
-      --card-shadow: 0 10px 30px rgba(165,175,190,0.2);
-      --line-color: rgba(17,24,39,0.08);
-      --shadow-soft: 0 18px 50px rgba(15,23,42,0.08);
-      --shadow-card: 0 10px 28px rgba(15,23,42,0.08);
+      --btn-shadow-out: -4px -4px 10px rgba(255, 255, 255, 0.8), 4px 4px 10px rgba(165, 175, 190, 0.4);
+      --btn-shadow-in: inset -2px -2px 6px rgba(255, 255, 255, 0.8), inset 2px 2px 6px rgba(165, 175, 190, 0.4);
+      --card-shadow: 0 10px 30px rgba(165, 175, 190, 0.2);
+      --line-color: rgba(17, 24, 39, 0.08);
+      --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.08);
+      --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.08);
       --ok: #10b981;
-      --bg-gradient: radial-gradient(circle at top left, rgba(255,122,69,0.18), transparent 30%), radial-gradient(circle at top right, rgba(99,102,241,0.08), transparent 24%), linear-gradient(180deg,#f4f7fa 0%,#edf2f7 100%);
+      --bg-gradient: radial-gradient(circle at top left, rgba(255, 122, 69, 0.18), transparent 30%), radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent 24%), linear-gradient(180deg, #f4f7fa 0%, #edf2f7 100%);
     }
 
     /* ═══════════════════════════════════════════════
        RESET & BASE
     ═══════════════════════════════════════════════ */
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -83,7 +90,9 @@
     }
 
     html::-webkit-scrollbar,
-    body::-webkit-scrollbar { display: none; }
+    body::-webkit-scrollbar {
+      display: none;
+    }
 
     /* ═══════════════════════════════════════════════
        COMPONENTES NEUMÓRFICOS
@@ -92,7 +101,7 @@
       background: var(--card-bg);
       border-radius: 28px;
       box-shadow: var(--card-shadow);
-      border: 1px solid rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 255, 255, 0.03);
       transition: all 0.4s ease;
     }
 
@@ -105,18 +114,19 @@
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      border: 1px solid rgba(255,255,255,0.02);
+      border: 1px solid rgba(255, 255, 255, 0.02);
       color: var(--text-main);
     }
 
-    .neu-btn:active, .neu-btn.active {
+    .neu-btn:active,
+    .neu-btn.active {
       box-shadow: var(--btn-shadow-in);
       transform: scale(0.97);
     }
 
     .soft-card {
       background: var(--card-soft);
-      border: 1px solid rgba(255,255,255,0.04);
+      border: 1px solid rgba(255, 255, 255, 0.04);
       border-radius: 22px;
     }
 
@@ -125,17 +135,23 @@
     ═══════════════════════════════════════════════ */
     .curved-nav-container {
       position: fixed;
-      left: 0; right: 0; bottom: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: transparent;
-      width: 100%; height: 95px;
-      margin: 0; z-index: 120;
+      width: 100%;
+      height: 95px;
+      margin: 0;
+      z-index: 120;
     }
 
     .curved-nav-svg {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.15));
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 -5px 15px rgba(0, 0, 0, 0.15));
     }
 
     .curved-nav-svg path {
@@ -145,18 +161,22 @@
 
     .floating-action-container {
       position: absolute;
-      top: -12px; left: 50%;
+      top: -12px;
+      left: 50%;
       transform: translateX(-50%);
       z-index: 10;
     }
 
     .floating-action-btn {
-      width: 60px; height: 60px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       background: var(--card-bg);
       box-shadow: var(--btn-shadow-out), 0 0 15px var(--accent-glow);
-      border: 1px solid rgba(255,255,255,0.03);
-      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       transition: all 0.3s ease;
     }
@@ -166,23 +186,42 @@
       transform: translateY(-2px);
     }
 
-    .floating-action-btn i { color: var(--accent-solid); transition: transform 0.3s ease; }
-    .floating-action-btn:active { box-shadow: var(--btn-shadow-in); transform: translateY(1px); }
+    .floating-action-btn i {
+      color: var(--accent-solid);
+      transition: transform 0.3s ease;
+    }
+
+    .floating-action-btn:active {
+      box-shadow: var(--btn-shadow-in);
+      transform: translateY(1px);
+    }
 
     .nav-item {
       position: relative;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      cursor: pointer; width: 40px; height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
     }
 
-    .nav-item .nav-icon { color: var(--text-muted); transition: color 0.2s ease; }
-    .nav-item.is-active .nav-icon { color: var(--accent-solid) !important; }
+    .nav-item .nav-icon {
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav-item.is-active .nav-icon {
+      color: var(--accent-solid) !important;
+    }
 
     .active-dot-glow {
       position: absolute;
-      left: 50%; bottom: -6px;
-      width: 5px; height: 5px;
+      left: 50%;
+      bottom: -6px;
+      width: 5px;
+      height: 5px;
       background-color: var(--accent-solid);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--accent-solid), 0 0 15px var(--accent-solid);
@@ -190,28 +229,35 @@
       display: none;
     }
 
-    .nav-item.is-active .active-dot-glow { display: block; }
+    .nav-item.is-active .active-dot-glow {
+      display: block;
+    }
 
     /* ═══════════════════════════════════════════════
        TOAST
     ═══════════════════════════════════════════════ */
     .toast-notification {
       position: fixed;
-      bottom: 110px; left: 50%;
+      bottom: 110px;
+      left: 50%;
       transform: translateX(-50%) translateY(150px);
-      background: rgba(30,32,34,0.9);
+      background: rgba(30, 32, 34, 0.9);
       backdrop-filter: blur(10px);
       color: #fff;
       padding: 12px 24px;
       border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 1000;
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .toast-notification.show { transform: translateX(-50%) translateY(0); }
+    .toast-notification.show {
+      transform: translateX(-50%) translateY(0);
+    }
 
     /* ═══════════════════════════════════════════════
        SPA: VISTAS
@@ -223,7 +269,9 @@
       animation: fadeIn 0.35s ease;
     }
 
-    .spa-view.active { display: block; }
+    .spa-view.active {
+      display: block;
+    }
 
     #view-registro.active {
       display: grid;
@@ -231,83 +279,135 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Espacio seguro para la nav inferior */
-    .safe-bottom { padding-bottom: 120px; }
+    .safe-bottom {
+      padding-bottom: 120px;
+    }
 
     /* ═══════════════════════════════════════════════
        VISTA: PCARGA (Pantalla de carga)
     ═══════════════════════════════════════════════ */
     #view-pcarga {
       background:
-        radial-gradient(circle at 50% 30%, rgba(255,106,47,0.22), transparent 18%),
-        radial-gradient(circle at 18% 20%, rgba(255,255,255,0.035), transparent 18%),
-        radial-gradient(circle at 80% 78%, rgba(255,106,47,0.12), transparent 20%),
+        radial-gradient(circle at 50% 30%, rgba(255, 106, 47, 0.22), transparent 18%),
+        radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.035), transparent 18%),
+        radial-gradient(circle at 80% 78%, rgba(255, 106, 47, 0.12), transparent 20%),
         linear-gradient(135deg, #090a0c, #14161a 48%, #1b1d22);
       overflow: hidden;
-      position: fixed; inset: 0; z-index: 500;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
     }
 
-    #view-pcarga .shell { position: relative; width: 100%; height: 100%; }
+    #view-pcarga .shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
 
     #view-pcarga .half {
-      position: absolute; top: 0; width: 50vw; height: 100%;
-      background: linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.012) 40%,rgba(0,0,0,0.16)), linear-gradient(135deg,rgba(23,24,27,0.98),rgba(13,14,16,0.96));
-      transition: transform 780ms cubic-bezier(0.76,0,0.24,1), opacity 780ms ease;
+      position: absolute;
+      top: 0;
+      width: 50vw;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012) 40%, rgba(0, 0, 0, 0.16)), linear-gradient(135deg, rgba(23, 24, 27, 0.98), rgba(13, 14, 16, 0.96));
+      transition: transform 780ms cubic-bezier(0.76, 0, 0.24, 1), opacity 780ms ease;
       will-change: transform, opacity;
     }
 
-    #view-pcarga .half.left  { left: 0;  border-right: 1px solid rgba(255,255,255,0.035); box-shadow: inset -24px 0 45px rgba(0,0,0,0.22); }
-    #view-pcarga .half.right { right: 0; border-left:  1px solid rgba(255,255,255,0.035); box-shadow: inset 24px 0 45px rgba(0,0,0,0.22); }
+    #view-pcarga .half.left {
+      left: 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.035);
+      box-shadow: inset -24px 0 45px rgba(0, 0, 0, 0.22);
+    }
 
-    #view-pcarga .center { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2; }
+    #view-pcarga .half.right {
+      right: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.035);
+      box-shadow: inset 24px 0 45px rgba(0, 0, 0, 0.22);
+    }
+
+    #view-pcarga .center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+    }
 
     .logo-wrap {
       position: relative;
-      width: min(56vw,260px); height: min(56vw,260px);
-      display: grid; place-items: center;
+      width: min(56vw, 260px);
+      height: min(56vw, 260px);
+      display: grid;
+      place-items: center;
     }
 
     .loader-glow {
-      position: absolute; inset: 20%; border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,106,47,0.48), rgba(255,106,47,0.1) 44%, transparent 72%);
+      position: absolute;
+      inset: 20%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 106, 47, 0.48), rgba(255, 106, 47, 0.1) 44%, transparent 72%);
       filter: blur(14px);
       animation: pulse 3s ease-in-out infinite;
     }
 
     .orbit {
-      position: absolute; inset: 10%; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-top-color: rgba(255,106,47,0.62);
+      position: absolute;
+      inset: 10%;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-top-color: rgba(255, 106, 47, 0.62);
       animation: spin 3.1s linear infinite;
     }
 
     .orbit.small {
-      inset: 22%; border-color: rgba(255,106,47,0.16);
-      border-top-color: rgba(255,255,255,0.18);
-      animation-duration: 5.2s; animation-direction: reverse;
+      inset: 22%;
+      border-color: rgba(255, 106, 47, 0.16);
+      border-top-color: rgba(255, 255, 255, 0.18);
+      animation-duration: 5.2s;
+      animation-direction: reverse;
     }
 
     .logo-img {
-      position: relative; z-index: 2;
-      width: 74%; height: 74%; object-fit: contain;
+      position: relative;
+      z-index: 2;
+      width: 74%;
+      height: 74%;
+      object-fit: contain;
       display: block;
-      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.52)) drop-shadow(0 0 16px rgba(255,106,47,0.18));
+      filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.52)) drop-shadow(0 0 16px rgba(255, 106, 47, 0.18));
       animation: floaty 2.8s ease-in-out infinite;
     }
 
     .loader-bar {
-      position: absolute; bottom: 11%; left: 50%;
+      position: absolute;
+      bottom: 11%;
+      left: 50%;
       transform: translateX(-50%);
-      width: min(44vw,240px); height: 4px;
-      border-radius: 999px; background: rgba(255,255,255,0.05); overflow: hidden;
+      width: min(44vw, 240px);
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
     }
 
     .loader-bar::before {
-      content: ''; display: block; width: 38%; height: 100%;
+      content: '';
+      display: block;
+      width: 38%;
+      height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, transparent, #ff6a2f, transparent);
       box-shadow: 0 0 10px #ff6a2f;
@@ -315,15 +415,31 @@
     }
 
     .loader-caption {
-      position: absolute; bottom: 18%; left: 50%;
+      position: absolute;
+      bottom: 18%;
+      left: 50%;
       transform: translateX(-50%);
-      font-size: 0.78rem; letter-spacing: 0.18em;
-      text-transform: uppercase; color: rgba(255,255,255,0.38);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.38);
     }
 
-    .leaving .half.left  { transform: translateX(-100%); opacity: 0; }
-    .leaving .half.right { transform: translateX(100%);  opacity: 0; }
-    .leaving .logo-wrap  { transform: scale(0.92); opacity: 0; transition: transform 420ms ease, opacity 420ms ease; }
+    .leaving .half.left {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    .leaving .half.right {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    .leaving .logo-wrap {
+      transform: scale(0.92);
+      opacity: 0;
+      transition: transform 420ms ease, opacity 420ms ease;
+    }
 
     /* ═══════════════════════════════════════════════
        VISTA: REGISTRO
@@ -334,23 +450,30 @@
     }
 
     #view-registro::before {
-      content: ''; position: fixed; inset: -20% -10%;
-      background-image: radial-gradient(circle at 20% 30%, rgba(255,87,34,0.10), transparent 8%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.03), transparent 8%);
+      content: '';
+      position: fixed;
+      inset: -20% -10%;
+      background-image: radial-gradient(circle at 20% 30%, rgba(255, 87, 34, 0.10), transparent 8%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03), transparent 8%);
       pointer-events: none;
     }
 
     .reg-card {
-      width: min(100%,440px);
+      width: min(100%, 440px);
       background: #1e2022;
-      border-radius: 28px; padding: 24px 20px 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 28px;
+      padding: 24px 20px 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.03);
       text-align: center;
-      transform: translateY(18px); opacity: 0;
-      transition: transform .6s cubic-bezier(.2,.9,.2,1), opacity .6s;
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform .6s cubic-bezier(.2, .9, .2, 1), opacity .6s;
     }
 
-    .reg-card.entered { transform: none; opacity: 1; }
+    .reg-card.entered {
+      transform: none;
+      opacity: 1;
+    }
 
     .reg-logo {
       width: 88px;
@@ -360,38 +483,62 @@
       padding: 0;
       object-fit: contain;
       display: block;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.42), 0 0 18px rgba(255,87,34,0.16);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42), 0 0 18px rgba(255, 87, 34, 0.16);
     }
 
     .btn-google {
-      position: relative; width: 100%;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      padding: 14px 16px; border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.04);
-      cursor: pointer; color: #fff;
-      font-weight: 800; font-size: 0.98rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255,87,34,0.10);
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.98rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 87, 34, 0.10);
       transition: transform .18s ease, box-shadow .18s;
-      min-height: 54px; overflow: hidden;
+      min-height: 54px;
+      overflow: hidden;
     }
 
     .btn-google:hover {
       transform: translateY(-4px);
-      box-shadow: 0 16px 35px rgba(0,0,0,0.58), 0 0 24px rgba(255,87,34,0.18);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.58), 0 0 24px rgba(255, 87, 34, 0.18);
     }
 
-    .btn-google:active { transform: translateY(-1px) scale(.995); }
+    .btn-google:active {
+      transform: translateY(-1px) scale(.995);
+    }
 
-    .reg-loader { display: flex; justify-content: center; gap: 8px; margin: 6px 0 18px; }
+    .reg-loader {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 6px 0 18px;
+    }
+
     .reg-loader span {
-      width: 9px; height: 9px; border-radius: 999px;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
       background: #ff5722;
       animation: blink 1s infinite;
-      box-shadow: 0 0 10px rgba(255,87,34,0.14);
+      box-shadow: 0 0 10px rgba(255, 87, 34, 0.14);
     }
-    .reg-loader span:nth-child(2) { animation-delay: 0.12s; }
-    .reg-loader span:nth-child(3) { animation-delay: 0.24s; }
+
+    .reg-loader span:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .reg-loader span:nth-child(3) {
+      animation-delay: 0.24s;
+    }
 
     /* ═══════════════════════════════════════════════
        VISTA: INICIO (home)
@@ -403,121 +550,226 @@
     }
 
     .hero-banner {
-      padding: 24px; border-radius: 24px;
-      background: radial-gradient(circle at top right, rgba(255,87,34,0.14), transparent 35%), linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.08);
+      padding: 24px;
+      border-radius: 24px;
+      background: radial-gradient(circle at top right, rgba(255, 87, 34, 0.14), transparent 35%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 12px; border-radius: 999px;
-      background: var(--accent-soft); color: var(--accent-solid);
-      font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.04em; text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-solid);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .tag-pill {
-      display: inline-flex; align-items: center;
-      padding: 5px 12px; border-radius: 999px;
-      background: var(--accent-soft); color: var(--accent-solid);
-      font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-solid);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .quick-action {
-      display: flex; align-items: center; gap: 14px; padding: 16px;
-      border-radius: 20px; background: var(--card-soft);
-      border: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 20px;
+      background: var(--card-soft);
+      border: 1px solid rgba(255, 255, 255, 0.04);
     }
 
     .quick-action .icon-wrap {
-      width: 48px; height: 48px; border-radius: 16px;
-      display: grid; place-items: center;
-      background: var(--accent-soft); color: var(--accent-solid);
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: var(--accent-soft);
+      color: var(--accent-solid);
       flex: 0 0 auto;
     }
 
-    .section-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; }
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
 
     .content-area {
-      width: 100%; border-radius: 24px;
-      border: 1px dashed rgba(255,255,255,0.15);
+      width: 100%;
+      border-radius: 24px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
       padding: 1.25rem;
-      background: linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
     }
 
     .light-theme .content-area {
-      border-color: rgba(28,30,33,0.2);
-      background: linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.45));
+      border-color: rgba(28, 30, 33, 0.2);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.45));
     }
 
     .map-preview {
-      position: relative; min-height: 260px;
-      border-radius: 24px; overflow: hidden;
-      background: radial-gradient(circle at 30% 25%, rgba(255,87,34,0.18), transparent 20%), linear-gradient(145deg,rgba(18,19,21,0.95),rgba(8,8,10,0.95));
-      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      min-height: 260px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: radial-gradient(circle at 30% 25%, rgba(255, 87, 34, 0.18), transparent 20%), linear-gradient(145deg, rgba(18, 19, 21, 0.95), rgba(8, 8, 10, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .street-grid {
-      position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 32px 32px; opacity: 0.4;
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.4;
     }
 
     .route-line {
-      position: absolute; left: 14%; top: 50%; width: 72%; height: 4px;
-      transform: translateY(-50%); border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255,87,34,0.1), var(--accent-solid), rgba(255,87,34,0.1));
-      box-shadow: 0 0 20px rgba(255,87,34,0.35);
+      position: absolute;
+      left: 14%;
+      top: 50%;
+      width: 72%;
+      height: 4px;
+      transform: translateY(-50%);
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255, 87, 34, 0.1), var(--accent-solid), rgba(255, 87, 34, 0.1));
+      box-shadow: 0 0 20px rgba(255, 87, 34, 0.35);
     }
 
     .route-marker {
-      position: absolute; top: 50%; width: 18px; height: 18px;
-      transform: translate(-50%,-50%); border-radius: 50%;
-      background: var(--accent-solid); box-shadow: 0 0 16px rgba(255,87,34,0.5);
+      position: absolute;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--accent-solid);
+      box-shadow: 0 0 16px rgba(255, 87, 34, 0.5);
     }
 
-    .route-marker.origin   { left: 14%; }
-    .route-marker.destination { left: 86%; }
-    .route-marker.rider    { left: 44%; width: 22px; height: 22px; animation: floatRide 5s ease-in-out infinite; }
-
-    .stat-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-    .metric-card { padding: 18px; border-radius: 20px; background: var(--card-soft); border: 1px solid rgba(255,255,255,0.04); }
-    .metric-card strong { display: block; font-size: 1.3rem; margin-bottom: 4px; }
-
-    .horizontal-list { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; }
-    .chip-card { min-width: 150px; padding: 16px; border-radius: 20px; background: var(--card-soft); border: 1px solid rgba(255,255,255,0.04); }
-
-    .history-item, .recommendation-item {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; padding: 16px; border-radius: 18px;
-      background: var(--card-soft); border: 1px solid rgba(255,255,255,0.04);
+    .route-marker.origin {
+      left: 14%;
     }
 
-    .service-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
-    .service-card { padding: 18px; border-radius: 20px; background: var(--card-soft); border: 1px solid rgba(255,255,255,0.04); }
-    .service-card strong { display: block; margin-bottom: 6px; }
+    .route-marker.destination {
+      left: 86%;
+    }
+
+    .route-marker.rider {
+      left: 44%;
+      width: 22px;
+      height: 22px;
+      animation: floatRide 5s ease-in-out infinite;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .metric-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: var(--card-soft);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .metric-card strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .horizontal-list {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .chip-card {
+      min-width: 150px;
+      padding: 16px;
+      border-radius: 20px;
+      background: var(--card-soft);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .history-item,
+    .recommendation-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--card-soft);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .service-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: var(--card-soft);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .service-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
 
     /* ═══════════════════════════════════════════════
        VISTA: DASHBOARD (genérico)
     ═══════════════════════════════════════════════ */
     .dashboard-content-area {
-      width: 100%; min-height: 46vh;
+      width: 100%;
+      min-height: 46vh;
       border-radius: 24px;
-      border: 1px dashed rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 2rem 1.25rem;
-      background: linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.25rem;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
     }
 
     .light-theme .dashboard-content-area {
-      border-color: rgba(28,30,33,0.2);
-      background: linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.45));
+      border-color: rgba(28, 30, 33, 0.2);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.45));
     }
 
     /* ═══════════════════════════════════════════════
        VISTA: PERFIL
     ═══════════════════════════════════════════════ */
-    .app-shell { position: relative; width: min(1180px, calc(100% - 1.5rem)); margin: 0 auto; }
+    .app-shell {
+      position: relative;
+      width: min(1180px, calc(100% - 1.5rem));
+      margin: 0 auto;
+    }
 
     .profile-scroll-shell {
       max-height: 100dvh;
@@ -528,7 +780,9 @@
       padding-bottom: 120px;
     }
 
-    .profile-scroll-shell::-webkit-scrollbar { display: none; }
+    .profile-scroll-shell::-webkit-scrollbar {
+      display: none;
+    }
 
     .panel-shell {
       backdrop-filter: blur(18px);
@@ -547,99 +801,410 @@
     }
 
     .soft-chip {
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      border-radius: 9999px; padding: 0.45rem 0.8rem;
-      background: var(--accent-soft); color: var(--accent-solid);
-      font-size: 0.8125rem; font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border-radius: 9999px;
+      padding: 0.45rem 0.8rem;
+      background: var(--accent-soft);
+      color: var(--accent-solid);
+      font-size: 0.8125rem;
+      font-weight: 700;
     }
 
     .icon-btn {
-      width: 48px; height: 48px; border-radius: 16px;
-      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border: 1px solid var(--line-color);
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       color: var(--text-main);
       transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     }
 
-    .icon-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.16); }
+    .icon-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
 
     .pill-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 0.5rem; border-radius: 16px; padding: 0.8rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: 16px;
+      padding: 0.8rem 1rem;
       font-weight: 700;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .pill-btn:hover { transform: translateY(-1px); }
-
-    .pill-primary { background: linear-gradient(135deg, var(--accent-solid), #ff8a5b); color: #fff; box-shadow: 0 16px 30px var(--accent-glow); }
-    .pill-secondary { background: rgba(255,255,255,0.03); color: var(--text-main); border: 1px solid var(--line-color); }
-
-    .profile-hero {
-      position: relative; overflow: hidden; border-radius: 30px; padding: 1.25rem;
-      background: radial-gradient(circle at top left, rgba(255,122,69,0.26), transparent 28%), radial-gradient(circle at bottom right, rgba(16,185,129,0.12), transparent 22%), linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
-      border: 1px solid var(--line-color); box-shadow: var(--shadow-soft);
+    .pill-btn:hover {
+      transform: translateY(-1px);
     }
 
-    .profile-hero-grid { position: relative; display: grid; gap: 1rem; }
-    .profile-ident { display: flex; flex-direction: column; gap: 1rem; }
-    .profile-badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .profile-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.48rem 0.75rem; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid var(--line-color); font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
-    .profile-stats { display: grid; gap: 0.75rem; }
-    .profile-card-grid { display: grid; gap: 0.85rem; }
-    .profile-detail-card { border-radius: 24px; padding: 1rem; border: 1px solid var(--line-color); background: rgba(255,255,255,0.03); }
-    .hero-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
-    .hero-value { margin-top: 0.35rem; font-size: 1rem; font-weight: 800; letter-spacing: -0.01em; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+    .pill-primary {
+      background: linear-gradient(135deg, var(--accent-solid), #ff8a5b);
+      color: #fff;
+      box-shadow: 0 16px 30px var(--accent-glow);
+    }
 
-    .accordion-stack { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
-    .accordion-item { overflow: hidden; }
-    .accordion-summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.1rem; outline: none; }
-    .accordion-summary::-webkit-details-marker { display: none; }
-    .accordion-meta { display: flex; flex-direction: column; gap: 0.35rem; }
-    .accordion-kicker { display: inline-flex; align-items: center; gap: 0.4rem; width: fit-content; padding: 0.28rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-solid); background: var(--accent-soft); }
-    .accordion-title-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-    .accordion-summary-action { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 0.85rem; border-radius: 14px; border: 1px solid var(--line-color); color: var(--text-main); background: rgba(255,255,255,0.02); font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
-    .accordion-body { border-top: 1px solid var(--line-color); padding: 1rem 1.1rem 1.1rem; }
-    .accordion-item[open] .accordion-summary-action { background: var(--accent-soft); border-color: transparent; color: var(--accent-solid); }
+    .pill-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      border: 1px solid var(--line-color);
+    }
 
-    .field-label { display: block; margin-bottom: 0.45rem; font-size: 0.84rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .profile-hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      padding: 1.25rem;
+      background: radial-gradient(circle at top left, rgba(255, 122, 69, 0.26), transparent 28%), radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 22%), linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--line-color);
+      box-shadow: var(--shadow-soft);
+    }
 
-    .input-field, .select-field, .textarea-field {
-      width: 100%; border-radius: 18px; border: 1px solid var(--line-color);
-      background: rgba(255,255,255,0.03); color: var(--text-main);
-      padding: 0.95rem 1rem; outline: none;
+    .profile-hero-grid {
+      position: relative;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .profile-ident {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .profile-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .profile-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.48rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line-color);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .profile-stats {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .profile-card-grid {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .profile-detail-card {
+      border-radius: 24px;
+      padding: 1rem;
+      border: 1px solid var(--line-color);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .hero-value {
+      margin-top: 0.35rem;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .accordion-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .accordion-item {
+      overflow: hidden;
+    }
+
+    .accordion-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      outline: none;
+    }
+
+    .accordion-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .accordion-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .accordion-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: fit-content;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent-solid);
+      background: var(--accent-soft);
+    }
+
+    .accordion-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .accordion-summary-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: 14px;
+      border: 1px solid var(--line-color);
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.02);
+      font-size: 0.9rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .accordion-body {
+      border-top: 1px solid var(--line-color);
+      padding: 1rem 1.1rem 1.1rem;
+    }
+
+    .accordion-item[open] .accordion-summary-action {
+      background: var(--accent-soft);
+      border-color: transparent;
+      color: var(--accent-solid);
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-field,
+    .select-field,
+    .textarea-field {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid var(--line-color);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      padding: 0.95rem 1rem;
+      outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
       font-family: 'Inter', sans-serif;
     }
 
-    .input-field:focus, .select-field:focus, .textarea-field:focus { border-color: var(--accent-solid); box-shadow: 0 0 0 4px var(--accent-soft); background: rgba(255,255,255,0.05); }
-    .textarea-field { min-height: 138px; resize: vertical; }
-    .input-hint { margin-top: 0.45rem; font-size: 0.84rem; color: var(--text-muted); }
+    .input-field:focus,
+    .select-field:focus,
+    .textarea-field:focus {
+      border-color: var(--accent-solid);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+      background: rgba(255, 255, 255, 0.05);
+    }
 
-    .avatar-frame { width: 96px; height: 96px; border-radius: 28px; overflow: hidden; border: 1px solid var(--line-color); background: linear-gradient(135deg,rgba(255,106,61,0.2),rgba(255,255,255,0.03)); display: grid; place-items: center; }
-    .avatar-photo { width: 100%; height: 100%; object-fit: cover; }
+    .textarea-field {
+      min-height: 138px;
+      resize: vertical;
+    }
 
-    .payment-card { border-radius: 24px; padding: 1rem; border: 1px solid var(--line-color); background: linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02)); }
-    .payment-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.06); color: var(--text-main); }
+    .input-hint {
+      margin-top: 0.45rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
 
-    .toggle-track { position: relative; width: 58px; height: 34px; border-radius: 999px; background: rgba(148,163,184,0.28); border: 1px solid var(--line-color); transition: background 0.25s ease; }
-    .toggle-track input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-    .toggle-thumb { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: #fff; transition: transform 0.22s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
-    .toggle-track input:checked + .toggle-thumb { transform: translateX(24px); }
-    .toggle-track:has(input:checked) { background: rgba(16,185,129,0.28); }
+    .avatar-frame {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--line-color);
+      background: linear-gradient(135deg, rgba(255, 106, 61, 0.2), rgba(255, 255, 255, 0.03));
+      display: grid;
+      place-items: center;
+    }
 
-    .support-thread { max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.2rem; }
-    .bubble { max-width: 88%; border-radius: 18px; padding: 0.8rem 0.95rem; line-height: 1.5; font-size: 0.92rem; }
-    .bubble.user { align-self: flex-end; background: linear-gradient(135deg,var(--accent-solid),#ff8a5b); color: #fff; border-bottom-right-radius: 6px; }
-    .bubble.agent { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid var(--line-color); color: var(--text-main); border-bottom-left-radius: 6px; }
+    .avatar-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-    .modal-backdrop { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgba(4,8,12,0.58); backdrop-filter: blur(10px); z-index: 200; }
-    .modal-backdrop.is-open { display: flex; }
-    .modal-panel { width: min(520px,100%); border-radius: 28px; padding: 1.25rem; background: var(--card-bg); border: 1px solid var(--line-color); box-shadow: var(--shadow-soft); }
+    .payment-card {
+      border-radius: 24px;
+      padding: 1rem;
+      border: 1px solid var(--line-color);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    }
 
-    .modal-panel.modal-panel-wide { width: min(1180px, 100%); max-height: min(92dvh, 1100px); overflow: hidden; padding: 0; }
+    .payment-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+    }
+
+    .toggle-track {
+      position: relative;
+      width: 58px;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.28);
+      border: 1px solid var(--line-color);
+      transition: background 0.25s ease;
+    }
+
+    .toggle-track input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.22s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .toggle-track input:checked+.toggle-thumb {
+      transform: translateX(24px);
+    }
+
+    .toggle-track:has(input:checked) {
+      background: rgba(16, 185, 129, 0.28);
+    }
+
+    .support-thread {
+      max-height: 260px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding-right: 0.2rem;
+    }
+
+    .bubble {
+      max-width: 88%;
+      border-radius: 18px;
+      padding: 0.8rem 0.95rem;
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent-solid), #ff8a5b);
+      color: #fff;
+      border-bottom-right-radius: 6px;
+    }
+
+    .bubble.agent {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line-color);
+      color: var(--text-main);
+      border-bottom-left-radius: 6px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      visibility: hidden;
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(4, 8, 12, 0.58);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-backdrop.is-open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-panel {
+      width: min(520px, 100%);
+      border-radius: 28px;
+      padding: 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--line-color);
+      box-shadow: var(--shadow-soft);
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-backdrop.is-open .modal-panel {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-panel.modal-panel-wide {
+      width: min(1180px, 100%);
+      max-height: min(92dvh, 1100px);
+      overflow: hidden;
+      padding: 0;
+    }
 
     .preview-shell {
       max-height: min(92dvh, 1100px);
@@ -649,18 +1214,20 @@
       -ms-overflow-style: none;
     }
 
-    .preview-shell::-webkit-scrollbar { display: none; }
+    .preview-shell::-webkit-scrollbar {
+      display: none;
+    }
 
     .empty-canvas {
       min-height: 52vh;
       border-radius: 24px;
-      border: 1px dashed rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
     }
 
     .light-theme .empty-canvas {
-      border-color: rgba(17,24,39,0.1);
-      background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.35));
+      border-color: rgba(17, 24, 39, 0.1);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.35));
     }
 
     .home-map-shell {
@@ -669,7 +1236,7 @@
       border-radius: 28px;
       overflow: hidden;
       border: 1px solid var(--line-color);
-      background: radial-gradient(circle at top left, rgba(255,122,69,0.18), transparent 28%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      background: radial-gradient(circle at top left, rgba(255, 122, 69, 0.18), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
       box-shadow: var(--shadow-soft);
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
@@ -704,8 +1271,8 @@
       justify-content: space-between;
       gap: 1rem;
       padding: 1rem;
-      background: linear-gradient(180deg, rgba(6,10,14,0.86), rgba(6,10,14,0.72));
-      border-left: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(6, 10, 14, 0.86), rgba(6, 10, 14, 0.72));
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .home-map-topbar {
@@ -722,8 +1289,8 @@
       gap: 0.45rem;
       padding: 0.45rem 0.75rem;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(10,14,18,0.58);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(10, 14, 18, 0.58);
       color: #fff;
       font-size: 0.8rem;
       font-weight: 700;
@@ -734,10 +1301,10 @@
       width: min(100%, 360px);
       border-radius: 22px;
       padding: 1rem;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(9,12,15,0.62);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(9, 12, 15, 0.62);
       backdrop-filter: blur(14px);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
     }
 
     .map-legend {
@@ -752,8 +1319,8 @@
       gap: 0.4rem;
       padding: 0.42rem 0.7rem;
       border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       font-size: 0.78rem;
       font-weight: 700;
     }
@@ -765,9 +1332,20 @@
       display: inline-block;
     }
 
-    .map-legend-dot.primary { background: #ff6a2f; box-shadow: 0 0 12px rgba(255,106,47,0.6); }
-    .map-legend-dot.secondary { background: #38bdf8; box-shadow: 0 0 12px rgba(56,189,248,0.45); }
-    .map-legend-dot.ok { background: #34d399; box-shadow: 0 0 12px rgba(52,211,153,0.45); }
+    .map-legend-dot.primary {
+      background: #ff6a2f;
+      box-shadow: 0 0 12px rgba(255, 106, 47, 0.6);
+    }
+
+    .map-legend-dot.secondary {
+      background: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+    }
+
+    .map-legend-dot.ok {
+      background: #34d399;
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.45);
+    }
 
     .home-map-stats {
       display: grid;
@@ -786,12 +1364,15 @@
     .home-map-stat {
       border-radius: 18px;
       padding: 0.9rem 1rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(10px);
     }
 
-    .home-map-stat strong { display: block; font-size: 1.1rem; }
+    .home-map-stat strong {
+      display: block;
+      font-size: 1.1rem;
+    }
 
     .home-map-notes {
       display: flex;
@@ -807,28 +1388,30 @@
     }
 
     .leaflet-control-container .leaflet-top,
-    .leaflet-control-container .leaflet-bottom { z-index: 1; }
+    .leaflet-control-container .leaflet-bottom {
+      z-index: 1;
+    }
 
     .leaflet-bar,
     .leaflet-control-zoom a {
-      background: rgba(9,12,15,0.78) !important;
+      background: rgba(9, 12, 15, 0.78) !important;
       color: #fff !important;
-      border-color: rgba(255,255,255,0.08) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     .leaflet-control-attribution {
-      background: rgba(9,12,15,0.68) !important;
-      color: rgba(255,255,255,0.72) !important;
+      background: rgba(9, 12, 15, 0.68) !important;
+      color: rgba(255, 255, 255, 0.72) !important;
       border-radius: 10px 0 0 0;
       backdrop-filter: blur(8px);
     }
 
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
-      background: rgba(10,14,18,0.94) !important;
+      background: rgba(10, 14, 18, 0.94) !important;
       color: #fff !important;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35) !important;
-      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .leaflet-popup-content {
@@ -843,19 +1426,25 @@
       gap: 0.4rem;
       padding: 0.45rem 0.75rem;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(9,12,15,0.62);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(9, 12, 15, 0.62);
       color: #fff;
       font-size: 0.8rem;
       font-weight: 700;
     }
 
-    .section-subtitle { color: var(--text-muted); font-size: 0.92rem; line-height: 1.55; }
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
 
     /* ═══════════════════════════════════════════════
        VISTA: PEDIDOS / REALIZAR PEDIDO
     ═══════════════════════════════════════════════ */
-    .mobile-fullscreen-panel { padding-bottom: 120px; }
+    .mobile-fullscreen-panel {
+      padding-bottom: 120px;
+    }
 
     .order-map-shell {
       grid-template-columns: minmax(0, 1fr) minmax(320px, 390px);
@@ -870,8 +1459,8 @@
       z-index: 4;
       padding: 0.85rem 0.95rem;
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(9,12,15,0.84);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(9, 12, 15, 0.84);
       backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
@@ -889,10 +1478,10 @@
       gap: 0.8rem;
       border-radius: 16px;
       padding: 0.75rem 0.85rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(9,12,15,0.86);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(9, 12, 15, 0.86);
       backdrop-filter: blur(10px);
-      box-shadow: 0 18px 38px rgba(0,0,0,0.3);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.3);
     }
 
     .rp-vehicle-card {
@@ -902,17 +1491,36 @@
 
     .rp-vehicle-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
     }
 
     .rp-vehicle-card.is-active {
       border-color: var(--accent-solid) !important;
       background: var(--accent-soft) !important;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
     }
 
-    .radar-pulse { position: relative; }
+    .radar-pulse {
+      position: relative;
+    }
+
+    .pulse-marker {
+      position: relative;
+    }
+
+    .pulse-marker::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: -10px;
+      left: -10px;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.4);
+      animation: pulse-ring 1.8s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+      z-index: -1;
+    }
 
     .radar-pulse::after {
       content: '';
@@ -924,20 +1532,50 @@
     }
 
     @media (max-width: 1023px) {
-      .mobile-fullscreen-panel { min-height: 100dvh; border-radius: 0; border-left: 0; border-right: 0; }
-      .app-shell { width: calc(100% - 0.85rem); }
-      .panel-shell { border-radius: 26px; }
-      .order-map-shell { min-height: 100dvh; }
+      .mobile-fullscreen-panel {
+        min-height: 100dvh;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .app-shell {
+        width: calc(100% - 0.85rem);
+      }
+
+      .panel-shell {
+        border-radius: 26px;
+      }
+
+      .order-map-shell {
+        min-height: 100dvh;
+      }
     }
 
     /* ═══════════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════════ */
     @media (max-width: 767px) {
-      .hero-grid, .service-grid, .stat-strip { grid-template-columns: 1fr; }
-      .home-map-shell { grid-template-columns: 1fr; }
-      .order-map-shell { grid-template-columns: 1fr; }
-      .home-map-sidebar { border-left: 0; border-top: 1px solid rgba(255,255,255,0.06); }
+
+      .hero-grid,
+      .service-grid,
+      .stat-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .home-map-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .order-map-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .home-map-sidebar {
+        border-left: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
       .order-map-overlay {
         left: 0.75rem;
         right: 0.75rem;
@@ -946,22 +1584,108 @@
     }
 
     @media (max-width: 640px) {
-      .quick-action, .history-item, .recommendation-item { align-items: flex-start; flex-direction: column; }
-      .content-area { min-height: 34vh; }
+
+      .quick-action,
+      .history-item,
+      .recommendation-item {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .content-area {
+        min-height: 34vh;
+      }
     }
 
     /* ═══════════════════════════════════════════════
        KEYFRAMES GLOBALES
     ═══════════════════════════════════════════════ */
-    @keyframes spin      { to { transform: rotate(360deg); } }
-    @keyframes pulse     { 0%,100%{ transform: scale(0.96); opacity: 0.78; } 50%{ transform: scale(1.04); opacity: 1; } }
-    @keyframes floaty    { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-6px); } }
-    @keyframes floatRide { 0%,100%{ transform: translate(-50%,-50%) translateY(0); } 50%{ transform: translate(-50%,-50%) translateY(-6px); } }
-    @keyframes sweep     { 0%{ transform: translateX(-140%); } 100%{ transform: translateX(340%); } }
-    @keyframes blink     { 0%,100%{ opacity:.15; transform:scale(.85); } 50%{ opacity:1; transform:scale(1.12); } }
-    @keyframes pulse-ring { 0% { transform: scale(0.95); opacity: 0.75; } 100% { transform: scale(2.2); opacity: 0; } }
+    .modal {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(0.96);
+        opacity: 0.78;
+      }
+
+      50% {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes floatRide {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) translateY(0);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) translateY(-6px);
+      }
+    }
+
+    @keyframes sweep {
+      0% {
+        transform: translateX(-140%);
+      }
+
+      100% {
+        transform: translateX(340%);
+      }
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: .15;
+        transform: scale(.85);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.12);
+      }
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.75;
+      }
+
+      100% {
+        transform: scale(2.2);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <!-- ════════════════════════════════════════════
@@ -990,16 +1714,20 @@
   <div id="view-registro" class="spa-view">
     <div class="reg-card" id="reg-card">
       <img src="images/LogoTD.png" alt="Todo Delivery" class="reg-logo" loading="eager" decoding="async">
-        <span class="tag-pill">Modo demo</span>
+      <span class="tag-pill">Modo demo</span>
       <h1 class="font-extrabold text-xl tracking-tight mt-2 mb-1">SistemaTDclientes</h1>
-      <p class="text-sm mb-3" style="color:#8e9297">Sesión simulada para mostrar el producto terminado con datos de prueba.</p>
+      <p class="text-sm mb-3" style="color:#8e9297">Sesión simulada para mostrar el producto terminado con datos de
+        prueba.</p>
 
       <div class="reg-loader">
         <span></span><span></span><span></span>
       </div>
 
       <button id="signInBtn" class="btn-google">
-        <svg viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#ffffff" d="M533.5 278.4c0-17.4-1.5-34-4.4-50.2H272v95.1h146.9c-6.3 34-25 62.8-53.4 82l86.5 67.1c50.6-46.6 81.5-115.4 81.5-193z"/></svg>
+        <svg viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+          <path fill="#ffffff"
+            d="M533.5 278.4c0-17.4-1.5-34-4.4-50.2H272v95.1h146.9c-6.3 34-25 62.8-53.4 82l86.5 67.1c50.6-46.6 81.5-115.4 81.5-193z" />
+        </svg>
         <span>Entrar al entorno de demo</span>
       </button>
 
@@ -1011,87 +1739,278 @@
        VISTA: INICIO
   ════════════════════════════════════════════ -->
   <div id="view-inicio" class="spa-view">
-    <div class="w-full flex flex-col neu-card overflow-hidden relative mobile-fullscreen-panel lg:mx-0">
+    <div class="w-full flex flex-col neu-card relative mobile-fullscreen-panel lg:mx-0 h-full overflow-hidden">
 
       <!-- Header -->
-      <div class="flex justify-between items-center px-6 pt-8 pb-4">
-        <div class="w-12 h-12 neu-btn" onclick="showToast('Abriendo navegación principal')">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </div>
-        <div class="flex gap-4">
-          <button type="button" class="w-12 h-12 neu-btn" onclick="openInicioPreview()" title="Ver vista inicial">
-            <i data-lucide="panel-top-open" class="w-5 h-5"></i>
-          </button>
-          <div class="w-12 h-12 neu-btn relative" onclick="showToast('Tienes 2 ofertas activas y un cupón disponible')">
-            <i data-lucide="bell" class="w-5 h-5"></i>
-            <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+      <header class="flex justify-between items-center px-6 pt-8 pb-4 shrink-0"
+        style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="flex items-center space-x-3">
+          <div class="p-2.5 rounded-xl shadow-lg"
+            style="background: linear-gradient(to top right, #2563eb, #6366f1); box-shadow: 0 10px 15px -3px rgba(99,102,241,0.2);">
+            <i data-lucide="package" class="w-6 h-6 text-white"></i>
           </div>
-          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()" title="Cambiar Tema">
+          <div>
+            <span class="text-xl font-extrabold tracking-tight text-transparent bg-clip-text"
+              style="background-image: linear-gradient(to right, #ffffff, #e2e8f0, #a5b4fc);">Todo Delivery</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <!-- Nombre de cuenta rápido en Header -->
+          <div class="hidden sm:flex items-center space-x-3 py-1.5 px-3.5 rounded-full"
+            style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs font-medium text-slate-300">Cliente Activo: <strong id="header-user-name"
+                style="color: #818cf8;">Carlos Mendoza</strong></span>
+          </div>
+
+          <!-- Botón Tema -->
+          <div class="w-12 h-12 neu-btn shrink-0" onclick="toggleTheme()" title="Cambiar Tema">
             <i data-lucide="sun-moon" class="w-5 h-5"></i>
           </div>
         </div>
-      </div>
+      </header>
 
-      
+      <!-- Contenido Principal Scrollable -->
+      <main class="flex-1 overflow-y-auto px-6 py-8 pb-32" style="-ms-overflow-style: none; scrollbar-width: thin;">
+        <div class="max-w-7xl mx-auto w-full">
 
-      <!-- Contenido -->
-      <div class="px-6 flex-1 flex items-center justify-center pb-6">
-        <div class="empty-canvas w-full p-4 md:p-5">
-          <div class="home-map-shell">
-            <div class="home-map-stage">
-              <div id="home-map" class="home-map-canvas" aria-label="Mapa interactivo de la página de inicio"></div>
-              <div id="home-map-click-layer" class="home-map-click-layer" aria-label="Área para seleccionar puntos en el mapa"></div>
+          <!-- Saludo Inicial y Presentación -->
+          <section class="mb-10 text-center md:text-left">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-3"
+                  style="background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2);">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                  Tu cuenta está lista para enviar
+                </div>
+                <h1
+                  class="text-3xl md:text-5xl font-black tracking-tight text-white flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1">
+                  <span>¡Hola,</span>
+                  <span id="display-client-name" class="text-transparent bg-clip-text"
+                    style="background-image: linear-gradient(to right, #818cf8, #38bdf8, #34d399);">Carlos
+                    Mendoza</span>! 👋
+                </h1>
+                <p class="mt-3 text-base md:text-lg max-w-2xl font-light" style="color:var(--text-muted)">
+                  Bienvenido de nuevo a tu portal logístico. A continuación tienes un resumen del estado de nuestra red
+                  para que planifiques tus envíos hoy con total seguridad.
+                </p>
+              </div>
+              <div class="flex justify-center md:justify-end">
+                <button onclick="openNameModal()"
+                  class="flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium shadow-md hover:-translate-y-0.5 active:translate-y-0"
+                  style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">
+                  <i data-lucide="edit-3" class="w-4 h-4 text-slate-400"></i>
+                  <span>Editar nombre</span>
+                </button>
+              </div>
             </div>
-            <aside class="home-map-sidebar">
-              <div class="home-map-topbar">
-                <div class="space-y-3 max-w-2xl">
-                  <span class="map-hero-chip"><i data-lucide="map" class="w-4 h-4"></i>Mapa operativo en vivo</span>
-                  <div>
-                    <h1 class="text-2xl md:text-3xl font-black tracking-tight leading-tight">Seguimiento visual premium para el cliente</h1>
-                    <p class="mt-3 text-sm md:text-base" style="color:rgba(255,255,255,0.78)">Un mapa real, interactivo y listo para mostrar la experiencia completa de entregas, rutas y puntos clave dentro de la interfaz.</p>
-                  </div>
-                </div>
-                <div class="map-hero-card">
-                  <div class="flex items-center justify-between gap-3 mb-4">
-                    <div>
-                      <p class="text-xs uppercase tracking-[0.18em] font-bold" style="color:rgba(255,255,255,0.62)">Estado</p>
-                      <div id="home-route-state" class="text-lg font-extrabold mt-1">Seleccioná origen y destino</div>
-                    </div>
-                    <span class="tag-pill">Buenos Aires</span>
-                  </div>
-                  <div class="map-legend mb-4">
-                    <span class="map-legend-item"><span class="map-legend-dot primary"></span>Origen</span>
-                    <span class="map-legend-item"><span class="map-legend-dot secondary"></span>Destino</span>
-                    <span class="map-legend-item"><span class="map-legend-dot ok"></span>Zona segura</span>
-                  </div>
-                  <div class="space-y-2 text-sm" style="color:rgba(255,255,255,0.76)">
-                    <div class="flex items-center justify-between gap-3"><span>ETA</span><strong id="home-route-eta">--</strong></div>
-                    <div class="flex items-center justify-between gap-3"><span>Distancia</span><strong id="home-route-distance">--</strong></div>
-                    <div class="flex items-center justify-between gap-3"><span>Última actualización</span><strong id="home-route-updated">Ahora</strong></div>
-                  </div>
-                </div>
+          </section>
+
+          <!-- Sección Informativa Rapida -->
+          <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            <div
+              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
+              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              <div class="p-3 rounded-xl shrink-0" style="background: rgba(59,130,246,0.1); color: #60a5fa;">
+                <i data-lucide="clock" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Tiempos
+                  de entrega</p>
+                <p class="text-base font-bold text-white leading-none">98.4% a tiempo</p>
+              </div>
+            </div>
+
+            <div
+              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
+              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              <div class="p-3 rounded-xl shrink-0" style="background: rgba(16,185,129,0.1); color: #34d399;">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Cobertura
+                </p>
+                <p class="text-base font-bold text-white leading-none">Metropolitana</p>
+              </div>
+            </div>
+
+            <div
+              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
+              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              <div class="p-3 rounded-xl shrink-0" style="background: rgba(245,158,11,0.1); color: #fbbf24;">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Garantía
+                </p>
+                <p class="text-base font-bold text-white leading-none">100% Protegido</p>
+              </div>
+            </div>
+
+            <div
+              class="p-4 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3"
+              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              <div class="p-3 rounded-xl shrink-0" style="background: rgba(99,102,241,0.1); color: #818cf8;">
+                <i data-lucide="zap" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider font-bold mb-1" style="color:var(--text-muted)">Nivel
+                  Cuenta</p>
+                <p class="text-base font-bold text-white leading-none">Preferente</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bloque Principal de Imágenes -->
+          <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+
+            <!-- TARJETA 1 -->
+            <div
+              class="group relative rounded-3xl overflow-hidden flex flex-col h-[350px] md:h-[400px] shadow-2xl transition-all duration-500"
+              style="border: 1px solid rgba(255,255,255,0.1);">
+              <div class="absolute inset-0 w-full h-full overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80"
+                  alt="Flota de Autos"
+                  class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  style="filter: brightness(0.6);" />
+                <div class="absolute inset-0 transition-all duration-500"
+                  style="background: linear-gradient(to top, #060913 0%, rgba(6,9,19,0.4) 100%);"></div>
               </div>
 
-              <div class="home-map-notes">
-                <div class="soft-card px-4 py-3" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08)">
-                  <strong id="home-route-label" class="block text-base md:text-lg">Tocá dos puntos sobre el mapa</strong>
-                  <p id="home-route-help" class="mt-1 text-sm" style="color:rgba(255,255,255,0.72)">Primer toque: origen. Segundo toque: destino. El camino se calcula automáticamente entre ambos.</p>
-                  <div class="home-map-actions mt-3">
-                    <span class="route-status-pill"><i data-lucide="mouse-pointer-click" class="w-4 h-4"></i>Click en el mapa</span>
-                    <button type="button" class="pill-btn pill-secondary" onclick="resetHomeRoute()"><i data-lucide="rotate-ccw" class="w-4 h-4"></i>Reiniciar</button>
-                  </div>
+              <div class="relative z-10 mt-auto p-6 md:p-8">
+                <div class="flex items-center space-x-2.5 mb-3">
+                  <span class="p-2 rounded-lg"
+                    style="background: rgba(59,130,246,0.25); border: 1px solid rgba(96,165,250,0.3); color: #93c5fd;">
+                    <i data-lucide="truck" class="w-5 h-5"></i>
+                  </span>
+                  <span class="text-xs font-bold uppercase tracking-widest" style="color: #60a5fa;">Tecnología de
+                    Desplazamiento</span>
                 </div>
-                <div class="home-map-stats">
-                  <div class="home-map-stat"><span class="text-xs uppercase tracking-wide" style="color:rgba(255,255,255,0.62)">Origen</span><strong id="home-origin-label">Sin seleccionar</strong><span class="text-sm" style="color:rgba(255,255,255,0.72)">primer punto</span></div>
-                  <div class="home-map-stat"><span class="text-xs uppercase tracking-wide" style="color:rgba(255,255,255,0.62)">Destino</span><strong id="home-destination-label">Sin seleccionar</strong><span class="text-sm" style="color:rgba(255,255,255,0.72)">segundo punto</span></div>
-                  <div class="home-map-stat"><span class="text-xs uppercase tracking-wide" style="color:rgba(255,255,255,0.62)">Ruta</span><strong id="home-route-mode">Lista para calcular</strong><span class="text-sm" style="color:rgba(255,255,255,0.72)">trayecto real</span></div>
-                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Flota Eléctrica e Inteligente</h2>
+                <p class="text-sm md:text-base font-light leading-relaxed" style="color:var(--text-muted)">
+                  Nuestras unidades eléctricas de última generación están estratégicamente distribuidas en la ciudad,
+                  garantizando respuesta rápida sin huella de carbono.
+                </p>
               </div>
-            </aside>
+            </div>
+
+            <!-- TARJETA 2 -->
+            <div
+              class="group relative rounded-3xl overflow-hidden flex flex-col h-[350px] md:h-[400px] shadow-2xl transition-all duration-500"
+              style="border: 1px solid rgba(255,255,255,0.1);">
+              <div class="absolute inset-0 w-full h-full overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80"
+                  alt="Ciudad Metropolitana"
+                  class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  style="filter: brightness(0.6);" />
+                <div class="absolute inset-0 transition-all duration-500"
+                  style="background: linear-gradient(to top, #060913 0%, rgba(6,9,19,0.4) 100%);"></div>
+              </div>
+
+              <div class="relative z-10 mt-auto p-6 md:p-8">
+                <div class="flex items-center space-x-2.5 mb-3">
+                  <span class="p-2 rounded-lg"
+                    style="background: rgba(99,102,241,0.25); border: 1px solid rgba(129,140,248,0.3); color: #a5b4fc;">
+                    <i data-lucide="navigation" class="w-5 h-5"></i>
+                  </span>
+                  <span class="text-xs font-bold uppercase tracking-widest" style="color: #818cf8;">Optimización de
+                    Rutas</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Rutas Urbanas Optimizadas</h2>
+                <p class="text-sm md:text-base font-light leading-relaxed" style="color:var(--text-muted)">
+                  Conectamos cada rincón de la metrópoli utilizando algoritmos de tráfico en tiempo real evitando zonas
+                  congestionadas.
+                </p>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- Indicador Amigable de Siguientes Pasos -->
+          <section
+            class="rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden"
+            style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -z-10"
+              style="background: rgba(99,102,241,0.05);"></div>
+
+            <div class="flex items-center space-x-4">
+              <div class="p-4 rounded-2xl hidden sm:block"
+                style="background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2);">
+                <i data-lucide="help-circle" class="w-7 h-7"></i>
+              </div>
+              <div class="text-center md:text-left">
+                <h3 class="text-lg md:text-xl font-bold text-white">¿Qué deseas hacer hoy?</h3>
+                <p class="text-sm mt-1 max-w-xl" style="color:var(--text-muted)">
+                  Para comenzar un envío, consultar tus entregas pasadas o gestionar tus datos, utiliza el menú de
+                  navegación general del sistema ubicado en la barra inferior. ¡Estamos listos para procesar tu carga!
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 justify-center md:justify-end shrink-0">
+              <span
+                class="px-3.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white hover:bg-white/10"
+                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+                onclick="navigateTo('realizar-pedido')">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5 inline mr-1.5" style="color: #818cf8;"></i> Realizar
+                Pedido
+              </span>
+              <span
+                class="px-3.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white hover:bg-white/10"
+                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+                onclick="navigateTo('pedidos')">
+                <i data-lucide="history" class="w-3.5 h-3.5 inline mr-1.5" style="color: #34d399;"></i> Historial
+              </span>
+              <span
+                class="px-3.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer transition-colors text-white hover:bg-white/10"
+                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+                onclick="navigateTo('perfil')">
+                <i data-lucide="user" class="w-3.5 h-3.5 inline mr-1.5" style="color: #38bdf8;"></i> Perfil
+              </span>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal elegante para editar el nombre de cuenta del cliente -->
+    <div id="name-modal"
+      class="fixed inset-0 backdrop-blur-md hidden items-center justify-center z-[3000] p-4 transition-all duration-300"
+      style="background: rgba(0,0,0,0.8);">
+      <div class="w-full max-w-md rounded-2xl p-6 shadow-2xl relative"
+        style="background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);">
+        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+          <i data-lucide="user-cog" style="color: #818cf8;"></i>
+          Configurar tu Cuenta
+        </h3>
+        <p class="text-xs mb-5" style="color:var(--text-muted)">Ingresa tu nombre o el de tu empresa para personalizar
+          la interfaz de bienvenida del dashboard.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label for="client-name-input" class="block text-xs font-semibold uppercase tracking-wider mb-2"
+              style="color:var(--text-muted)">Nombre del Cliente / Empresa</label>
+            <input type="text" id="client-name-input" placeholder="Ej. Carlos Mendoza"
+              class="w-full rounded-xl px-4 py-3 text-white outline-none transition-all font-medium"
+              style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);" />
           </div>
         </div>
-      </div>
 
+        <div class="flex items-center justify-end space-x-3 mt-6">
+          <button onclick="closeNameModal()"
+            class="px-4 py-2.5 rounded-xl hover:text-white transition-all text-sm font-medium"
+            style="color:var(--text-muted)">
+            Cancelar
+          </button>
+          <button onclick="saveClientName()"
+            class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg text-white"
+            style="background: linear-gradient(to right, #4f46e5, #6366f1); box-shadow: 0 10px 15px -3px rgba(99,102,241,0.2);">
+            Guardar Cambios
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1105,23 +2024,253 @@
           <i data-lucide="chevron-left" class="w-5 h-5"></i>
         </div>
         <div class="flex gap-4">
-          <div class="w-12 h-12 neu-btn relative" onclick="showToast('No hay nuevas alertas')">
-            <i data-lucide="bell" class="w-5 h-5"></i>
-            <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
-          </div>
-          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()">
-            <i data-lucide="settings" class="w-5 h-5"></i>
+          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()" title="Cambiar Tema">
+            <i data-lucide="sun-moon" class="w-5 h-5"></i>
           </div>
         </div>
       </div>
-      <div class="px-6 flex-1 flex flex-col gap-5">
-        <div class="dashboard-content-area">
-          <div>
-            <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Mis Pedidos</h1>
-            <p class="mt-3 text-sm md:text-base" style="color:var(--text-muted)">Estructura lista para conectar datos reales de pedidos.</p>
+      <div class="px-6 flex-1 flex flex-col gap-4 pb-24 overflow-y-auto"
+        style="-ms-overflow-style: none; scrollbar-width: none;">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Historial de Pedidos</h1>
+          <p class="text-sm mt-1" style="color:var(--text-muted)">Pedidos entregados exitosamente.</p>
+        </div>
+
+        <!-- Lista de Pedidos -->
+        <div class="flex flex-col gap-3 mt-2">
+
+          <!-- Tarjeta Entregado 1 -->
+          <div
+            class="p-4 rounded-2xl flex items-center justify-between hover:border-gray-700/80 cursor-pointer transition transform active:scale-95 duration-200"
+            onclick="openOrderModal('2031')"
+            style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px);">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 shrink-0"
+                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">
+                <i data-lucide="package" class="w-5 h-5 text-gray-300"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-white truncate">Orden #2031 • Moto Honda Wave</p>
+                <p class="text-[10px] font-bold mt-0.5" style="color:var(--text-muted)">Hoy, 15:42</p>
+                <div class="flex items-center gap-2 mt-1 text-[11px] truncate max-w-xs sm:max-w-md"
+                  style="color:var(--text-muted)">
+                  <span class="truncate">De: Rivadavia 420</span>
+                  <span style="color: rgba(255,255,255,0.3);">→</span>
+                  <span class="truncate">A: Gobernador Gregores 180</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right shrink-0 ml-4">
+              <p class="text-xs font-black text-white">$3,200.00</p>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest"
+                style="background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+                ENTREGADO
+              </span>
+            </div>
           </div>
+
+          <!-- Tarjeta Entregado 2 -->
+          <div
+            class="p-4 rounded-2xl flex items-center justify-between hover:border-gray-700/80 cursor-pointer transition transform active:scale-95 duration-200"
+            onclick="openOrderModal('1940')"
+            style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(12px);">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 shrink-0"
+                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">
+                <i data-lucide="package" class="w-5 h-5 text-gray-300"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-white truncate">Orden #1940 • Camioneta</p>
+                <p class="text-[10px] font-bold mt-0.5" style="color:var(--text-muted)">28 May 2026, 11:20</p>
+                <div class="flex items-center gap-2 mt-1 text-[11px] truncate max-w-xs sm:max-w-md"
+                  style="color:var(--text-muted)">
+                  <span class="truncate">De: Parque Industrial</span>
+                  <span style="color: rgba(255,255,255,0.3);">→</span>
+                  <span class="truncate">A: Base B22</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right shrink-0 ml-4">
+              <p class="text-xs font-black text-white">$8,500.00</p>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest"
+                style="background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+                ENTREGADO
+              </span>
+            </div>
+          </div>
+
         </div>
       </div>
+
+      <!-- Modal Detalle Pedido Inmersivo -->
+      <div id="order-detail-modal" class="modal-backdrop">
+        <div
+          class="modal-panel modal-panel-wide bg-[#0b0f19] border border-gray-800 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+          style="padding:0;">
+
+          <!-- Cabecera del Modal -->
+          <div class="p-6 border-b flex justify-between items-center shrink-0"
+            style="border-color: rgba(255,255,255,0.08);">
+            <div>
+              <span id="modal-status-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold"
+                style="background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+                ENTREGADO
+              </span>
+              <h3 id="modal-order-id" class="text-base font-extrabold text-white mt-2">Detalle de Pedido #2031</h3>
+              <p id="modal-order-date" class="text-[10px] uppercase tracking-widest font-semibold mt-0.5"
+                style="color:var(--text-muted)">Realizado el Hoy, 15:42</p>
+            </div>
+            <button onclick="closeOrderModal()"
+              class="w-10 h-10 rounded-xl flex items-center justify-center transition duration-200"
+              style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+              <i data-lucide="x" class="w-5 h-5 text-gray-300"></i>
+            </button>
+          </div>
+
+          <!-- Cuerpo Scrollable -->
+          <div class="p-6 overflow-y-auto space-y-6 flex-1">
+
+            <!-- SECCIÓN 1: MAPA / RUTA SIMULADA -->
+            <div class="h-36 rounded-2xl relative overflow-hidden border flex items-center justify-center"
+              style="background: #111827; border-color: rgba(255,255,255,0.08);">
+              <svg class="absolute inset-0 w-full h-full opacity-35" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                  <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+                <!-- Caminito -->
+                <path d="M 20 80 Q 50 20 80 50" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                  stroke-dasharray="4 4" style="animation: dash 2s linear infinite;" />
+              </svg>
+
+              <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+              </div>
+
+              <!-- Marcador de Origen y Destino -->
+              <div class="absolute left-6 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full"
+                  style="background: #10b981; border: 1px solid white; box-shadow: 0 0 0 4px rgba(16,185,129,0.2);"></span>
+                <div class="text-left">
+                  <p class="text-[9px] font-bold uppercase leading-none" style="color:var(--text-muted)">Inicio</p>
+                  <p id="modal-route-start" class="text-xs font-bold text-white truncate max-w-[120px]">Rivadavia 420
+                  </p>
+                </div>
+              </div>
+
+              <div class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+                <div class="text-right">
+                  <p class="text-[9px] font-bold uppercase leading-none" style="color:var(--text-muted)">Fin</p>
+                  <p id="modal-route-end" class="text-xs font-bold text-white truncate max-w-[120px]">Gob. Gregores 180
+                  </p>
+                </div>
+                <span class="w-3 h-3 rounded-full"
+                  style="background: #f43f5e; border: 1px solid white; box-shadow: 0 0 0 4px rgba(244,63,94,0.2);"></span>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 3: CHOFER Y VEHÍCULO -->
+            <div class="p-4 rounded-2xl flex items-center justify-between"
+              style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.08);">
+              <div class="flex items-center space-x-3.5">
+                <img id="modal-driver-avatar"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+                  onerror="this.src='https://placehold.co/100x100/1e293b/ffffff?text=Driver'"
+                  class="w-12 h-12 rounded-2xl object-cover" style="border: 1px solid rgba(255,255,255,0.08);"
+                  alt="Chofer">
+                <div>
+                  <p class="text-[8px] font-extrabold uppercase tracking-wider leading-none" style="color: #60a5fa;">
+                    Transportista Asociado</p>
+                  <p id="modal-driver-name" class="text-sm font-bold text-white mt-1">Lucas Gómez</p>
+                  <div class="flex items-center space-x-2 mt-0.5">
+                    <span class="text-[10px] font-bold flex items-center" style="color: #34d399;">
+                      <i data-lucide="star" class="w-3 h-3 mr-0.5"></i> 4.9
+                    </span>
+                    <span style="color:var(--text-muted)">•</span>
+                    <span id="modal-driver-plate" class="text-[10px] font-bold" style="color:var(--text-muted)">Patente
+                      123-ABC</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center"
+                  style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);">
+                  <i data-lucide="package" class="w-5 h-5 text-blue-400"></i>
+                </div>
+                <p id="modal-vehicle-name" class="text-[10px] font-bold mt-1" style="color:var(--text-muted)">Moto Honda
+                  Wave</p>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 5: DESGLOSE DE TARIFA -->
+            <div class="p-4 rounded-2xl space-y-2.5"
+              style="background: linear-gradient(to top right, #020617, #0f172a, #020617); border: 1px solid rgba(255,255,255,0.05);">
+              <div class="flex justify-between items-center pt-1">
+                <div>
+                  <p class="text-[10px] uppercase tracking-widest font-extrabold" style="color:var(--text-muted)">Total
+                    Pagado</p>
+                  <p class="text-[8px] font-medium" style="color: #10b981;">Método: Efectivo al repartidor</p>
+                </div>
+                <p id="modal-fee-total" class="text-xl font-black text-white">$3,200.00</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Botones de Acción -->
+          <div class="p-6 border-t shrink-0 flex gap-3"
+            style="background: #020617; border-color: rgba(255,255,255,0.05);">
+            <button onclick="showToast('Tracking copiado al portapapeles')"
+              class="flex-1 py-3 rounded-xl text-xs font-extrabold uppercase transition duration-200 flex items-center justify-center gap-1.5"
+              style="background: #0f172a; border: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+              <span>Copiar Tracking</span>
+            </button>
+            <button onclick="closeOrderModal()"
+              class="flex-1 py-3 rounded-xl text-xs font-extrabold uppercase transition duration-200 flex items-center justify-center gap-1.5"
+              style="background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.2);">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Entendido</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <script>
+        function openOrderModal(orderId) {
+          const modal = document.getElementById('order-detail-modal');
+          if (modal) {
+            if (orderId === '2031') {
+              document.getElementById('modal-order-id').innerText = 'Detalle de Pedido #2031';
+              document.getElementById('modal-fee-total').innerText = '$3,200.00';
+              document.getElementById('modal-route-start').innerText = 'Rivadavia 420';
+              document.getElementById('modal-route-end').innerText = 'Gobernador Gregores 180';
+              document.getElementById('modal-driver-name').innerText = 'Lucas Gómez';
+              document.getElementById('modal-driver-plate').innerText = 'Patente 123-ABC';
+              document.getElementById('modal-vehicle-name').innerText = 'Moto Honda Wave';
+            } else if (orderId === '1940') {
+              document.getElementById('modal-order-id').innerText = 'Detalle de Pedido #1940';
+              document.getElementById('modal-fee-total').innerText = '$8,500.00';
+              document.getElementById('modal-route-start').innerText = 'Parque Industrial';
+              document.getElementById('modal-route-end').innerText = 'Base B22';
+              document.getElementById('modal-driver-name').innerText = 'Martín Rossi';
+              document.getElementById('modal-driver-plate').innerText = 'Patente XZY-999';
+              document.getElementById('modal-vehicle-name').innerText = 'Camioneta';
+            }
+            modal.classList.add('is-open');
+            lucide.createIcons();
+          }
+        }
+
+        function closeOrderModal() {
+          const modal = document.getElementById('order-detail-modal');
+          if (modal) {
+            modal.classList.remove('is-open');
+          }
+        }
+      </script>
     </div>
   </div>
 
@@ -1129,30 +2278,315 @@
        VISTA: DASHBOARD / TRACKING
   ════════════════════════════════════════════ -->
   <div id="view-tracking" class="spa-view">
-    <div class="w-full flex flex-col neu-card overflow-hidden relative mobile-fullscreen-panel lg:mx-0">
-      <div class="flex justify-between items-center px-6 pt-8 pb-4">
-        <div class="w-12 h-12 neu-btn" onclick="navigateTo('inicio')">
-          <i data-lucide="chevron-left" class="w-5 h-5"></i>
-        </div>
-        <div class="flex gap-4">
-          <div class="w-12 h-12 neu-btn relative" onclick="showToast('No hay nuevas alertas de telemetría')">
-            <i data-lucide="bell" class="w-5 h-5"></i>
-            <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+    <div class="w-full flex flex-col h-full neu-card overflow-hidden relative mobile-fullscreen-panel lg:mx-0">
+
+      <!-- CABECERA -->
+      <header class="flex justify-between items-center px-6 pt-8 pb-4 shrink-0"
+        style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 neu-btn shrink-0" onclick="navigateTo('inicio')">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
           </div>
-          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()">
-            <i data-lucide="settings" class="w-5 h-5"></i>
-          </div>
-        </div>
-      </div>
-      <div class="px-6 flex-1 flex flex-col gap-5">
-        <div class="dashboard-content-area">
           <div>
-            <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Dashboard Principal</h1>
-            <p class="mt-3 text-sm md:text-base" style="color:var(--text-muted)">Estructura limpia lista para conectar datos reales.</p>
+            <span class="text-[10px] font-bold tracking-widest uppercase" style="color:var(--accent-solid)">Seguimiento
+              Activo</span>
+            <h1 class="text-base md:text-lg font-extrabold text-white leading-none mt-1">Pedido #FD-84920</h1>
           </div>
         </div>
-      </div>
+        <div class="flex items-center space-x-4">
+          <div class="px-3.5 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1.5 animate-pulse"
+            style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            En Tránsito
+          </div>
+          <div class="w-12 h-12 neu-btn hidden sm:flex shrink-0" onclick="toggleTheme()" title="Cambiar Tema">
+            <i data-lucide="sun-moon" class="w-5 h-5"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENIDO PRINCIPAL -->
+      <main class="flex-1 flex flex-col lg:flex-row relative overflow-hidden" style="display: flex;">
+
+        <!-- PANEL DE DETALLES -->
+        <section
+          class="w-full lg:max-w-md flex flex-col overflow-y-auto shrink-0 z-20 order-2 lg:order-1 h-[50vh] lg:h-auto"
+          style="border-right: 1px solid rgba(255,255,255,0.05); background: var(--card-bg);">
+
+          <!-- Perfil del Repartidor -->
+          <div class="p-6" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <h3 class="text-[10px] font-bold tracking-widest uppercase mb-4" style="color:var(--text-muted)">Repartidor
+              Asignado</h3>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <div class="relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120"
+                    class="w-14 h-14 rounded-2xl object-cover" style="border: 2px solid rgba(255,255,255,0.1);"
+                    alt="Carlos">
+                  <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full"
+                    style="border: 2px solid #0f172a;"></span>
+                </div>
+                <div>
+                  <h2 class="text-base font-bold text-white" id="cadete-nombre">Carlos Mendoza</h2>
+                  <div class="flex items-center gap-1 mt-0.5">
+                    <i data-lucide="star" class="w-3.5 h-3.5" style="color: #fbbf24; fill: #fbbf24;"></i>
+                    <span class="text-xs font-semibold text-white">4.9</span>
+                    <span class="text-[10px]" style="color:var(--text-muted)">(1,240 viajes)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] block font-bold uppercase tracking-wider"
+                  style="color:var(--text-muted)">Llegada est.</span>
+                <span class="text-lg font-black" style="color:var(--accent-solid)" id="eta-tiempo">12-18 min</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información Técnica del Envío -->
+          <div class="p-6 space-y-4"
+            style="border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.1);">
+            <h3 class="text-[10px] font-bold tracking-widest uppercase" style="color:var(--text-muted)">Transporte &
+              Paquete</h3>
+
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Vehículo -->
+              <div class="p-3.5 rounded-xl flex items-start gap-3"
+                style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="p-2 rounded-lg" style="background: rgba(59,130,246,0.1); color: #60a5fa;">
+                  <i data-lucide="car" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <span class="text-[9px] font-bold uppercase tracking-widest block"
+                    style="color:var(--text-muted)">Vehículo</span>
+                  <span class="text-xs font-bold text-white block mt-0.5" id="vehiculo-nombre">Renault Sandero</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded font-bold tracking-wider mt-1 inline-block"
+                    style="background: rgba(255,255,255,0.1); color: #e2e8f0;" id="vehiculo-patente">AA 123 BB</span>
+                </div>
+              </div>
+              <!-- Paquete -->
+              <div class="p-3.5 rounded-xl flex items-start gap-3"
+                style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="p-2 rounded-lg" style="background: rgba(245,158,11,0.1); color: #fbbf24;">
+                  <i data-lucide="package" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <span class="text-[9px] font-bold uppercase tracking-widest block"
+                    style="color:var(--text-muted)">Peso</span>
+                  <span class="text-xs font-bold text-white block mt-0.5" id="paquete-peso">2.5 Kg</span>
+                  <span class="text-[9px] block truncate max-w-[80px] mt-1" style="color:var(--text-muted)"
+                    id="paquete-desc">Componentes</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detalles de Ruta -->
+            <div class="p-4 rounded-xl space-y-3"
+              style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+              <div class="flex items-start gap-3">
+                <div class="mt-1 flex flex-col items-center">
+                  <span class="w-3 h-3 rounded-full"
+                    style="background: var(--accent-solid); border: 2px solid #0f172a;"></span>
+                  <div class="w-0.5 h-6 my-1" style="background: rgba(255,255,255,0.1);"></div>
+                  <span class="w-3 h-3 rounded-full" style="background: #10b981; border: 2px solid #0f172a;"></span>
+                </div>
+                <div class="flex-1 space-y-3">
+                  <div>
+                    <span class="text-[9px] font-bold uppercase tracking-widest block leading-none"
+                      style="color:var(--text-muted)">Origen</span>
+                    <span class="text-xs font-bold text-white mt-1 block">Centro de Distribución</span>
+                  </div>
+                  <div>
+                    <span class="text-[9px] font-bold uppercase tracking-widest block leading-none"
+                      style="color:var(--text-muted)">Destino</span>
+                    <span class="text-xs font-bold text-white mt-1 block" id="direccion-destino">Gob. Gregores
+                      180</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Línea de Progreso Real del Pedido -->
+          <div class="p-6 flex-1 pb-32 lg:pb-6">
+            <h3 class="text-[10px] font-bold tracking-widest uppercase mb-6" style="color:var(--text-muted)">Progreso
+            </h3>
+            <div
+              class="space-y-6 relative before:absolute before:bottom-2 before:top-2 before:left-[15px] before:w-[2px]"
+              style="before:background: rgba(255,255,255,0.05);">
+              <!-- Paso 1 -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 shrink-0"
+                  style="background: rgba(59,130,246,0.1); border: 2px solid #0f172a; color: #60a5fa;">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </div>
+                <div class="pt-1">
+                  <h4 class="text-xs font-bold text-white">Pedido Recibido</h4>
+                  <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">El local confirmó tu orden</p>
+                </div>
+              </div>
+              <!-- Paso 2 -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 shrink-0"
+                  style="background: rgba(59,130,246,0.1); border: 2px solid #0f172a; color: #60a5fa;">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </div>
+                <div class="pt-1">
+                  <h4 class="text-xs font-bold text-white">Preparado</h4>
+                  <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">Paquete despachado</p>
+                </div>
+              </div>
+              <!-- Paso 3 -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 shrink-0"
+                  style="background: #3b82f6; border: 2px solid #0f172a; color: white;">
+                  <i data-lucide="navigation" class="w-4 h-4 animate-bounce"></i>
+                </div>
+                <div class="pt-1">
+                  <h4 class="text-xs font-bold text-blue-400">En Camino</h4>
+                  <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">Carlos se dirige a tu ubicación</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCIÓN DE MAPA -->
+        <section class="flex-1 h-[50vh] lg:h-auto relative order-1 lg:order-2" style="min-height: 50vh;">
+          <div id="tracking-map" class="absolute inset-0 w-full h-full" style="z-index: 10;"></div>
+
+          <!-- Panel de Notificaciones flotante sobre el mapa -->
+          <div class="absolute top-4 left-4 z-[20] max-w-sm hidden sm:block">
+            <div class="p-3 rounded-2xl flex items-center gap-3"
+              style="background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);">
+              <div class="p-2 rounded-xl" style="background: rgba(59,130,246,0.15); color: #60a5fa;">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">Entrega Protegida</h4>
+                <p class="text-[9px] mt-0.5 max-w-[150px] leading-tight" style="color:var(--text-muted)">Respaldado por
+                  FastDrop S.A.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta de telemetría flotante -->
+          <div class="absolute bottom-6 left-6 z-[20] hidden md:block">
+            <div class="p-4 rounded-2xl min-w-[220px]"
+              style="background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);">
+              <span class="text-[9px] font-bold uppercase block tracking-widest mb-3"
+                style="color:var(--text-muted)">Telemetría GPS</span>
+              <div class="space-y-2.5">
+                <div class="flex justify-between items-center text-xs">
+                  <span style="color:var(--text-muted)">Señal Satelital</span>
+                  <span class="font-bold flex items-center gap-1.5" style="color: #34d399;"><span
+                      class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Excelente</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span style="color:var(--text-muted)">Velocidad</span>
+                  <span class="font-bold text-white" id="telemetria-vel">42 km/h</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span style="color:var(--text-muted)">Precisión</span>
+                  <span class="font-bold text-white">&lt; 3 metros</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
+
+    <!-- SISTEMA DE CHAT FLOTANTE (FUERA DEL NEU-CARD PARA EVITAR OVERFLOW-HIDDEN) -->
+    <div class="fixed bottom-[110px] right-6 z-[2000] flex flex-col items-end pointer-events-none">
+
+      <!-- Ventana de Chat Flotante -->
+      <div id="tracking-chat-window"
+        class="w-[300px] sm:w-[340px] md:w-[360px] h-[400px] md:h-[480px] rounded-3xl flex flex-col overflow-hidden mb-4 translate-y-10 opacity-0 transition-all duration-300 ease-out"
+        style="background: rgba(15,23,42,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); pointer-events: auto; display: none;">
+
+        <!-- Encabezado del Chat -->
+        <div class="p-4 flex items-center justify-between shrink-0"
+          style="background: linear-gradient(to right, #1e3a8a, #312e81); border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <div class="flex items-center space-x-3">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120"
+                class="w-10 h-10 rounded-xl object-cover" style="border: 1px solid rgba(255,255,255,0.2);" alt="Carlos">
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 rounded-full"
+                style="border-color: #312e81;"></span>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white leading-tight">Carlos Mendoza</h4>
+              <span class="text-[10px] font-semibold block" style="color: #a5b4fc;">Conductor asignado</span>
+            </div>
+          </div>
+          <button onclick="toggleTrackingChat()" class="p-2 rounded-xl transition"
+            style="background: rgba(255,255,255,0.1); color: white;">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Historial de Conversación -->
+        <div class="flex-1 p-4 overflow-y-auto space-y-4" id="tracking-chat-messages"
+          style="-ms-overflow-style: none; scrollbar-width: thin;">
+          <div class="flex justify-center my-1">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest"
+              style="background: rgba(255,255,255,0.05); color:var(--text-muted)">Hoy</span>
+          </div>
+
+          <!-- Mensaje del Cadete -->
+          <div class="flex items-start gap-2.5 max-w-[85%]">
+            <div class="p-3 rounded-2xl rounded-tl-none text-xs leading-relaxed"
+              style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); color: #e2e8f0;">
+              ¡Hola! Ya retiré tu paquete del centro logístico. Voy manejando hacia tu dirección de ubicación real.
+              <span class="text-[9px] block text-right mt-1" style="color:var(--text-muted)">10:01</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificación de 'Escribiendo...' -->
+        <div id="tracking-typing-indicator"
+          class="px-4 py-2 text-[10px] font-medium flex items-center gap-1.5 opacity-0 transition-opacity duration-200"
+          style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05); color:var(--text-muted)">
+          <span class="flex space-x-0.5 items-center">
+            <span class="w-1.5 h-1.5 rounded-full animate-bounce"
+              style="background: #94a3b8; animation-delay: 0.1s"></span>
+            <span class="w-1.5 h-1.5 rounded-full animate-bounce"
+              style="background: #94a3b8; animation-delay: 0.2s"></span>
+            <span class="w-1.5 h-1.5 rounded-full animate-bounce"
+              style="background: #94a3b8; animation-delay: 0.3s"></span>
+          </span>
+          Carlos está escribiendo...
+        </div>
+
+        <!-- Barra de Escritura -->
+        <div class="p-3 flex items-center gap-2 shrink-0"
+          style="background: #0f172a; border-top: 1px solid rgba(255,255,255,0.05);">
+          <input type="text" id="tracking-chat-input" placeholder="Escribe un mensaje..."
+            class="flex-1 rounded-2xl px-4 py-2.5 text-xs outline-none transition text-white"
+            style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"
+            onkeypress="handleTrackingKeyPress(event)">
+          <button onclick="enviarMensajeTracking()" class="p-2.5 rounded-2xl transition shrink-0"
+            style="background: #2563eb; color: white;">
+            <i data-lucide="send-horizontal" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botón Principal del Chat -->
+      <button onclick="toggleTrackingChat()"
+        class="px-4 py-3 md:py-3.5 rounded-2xl font-bold flex items-center gap-3 transition transform hover:-translate-y-0.5 active:translate-y-0 relative shadow-lg"
+        style="background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.3); pointer-events: auto;">
+        <span id="tracking-unread-badge"
+          class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-[9px] font-black flex items-center justify-center animate-bounce"
+          style="background: #f43f5e; border: 2px solid #0f172a;">1</span>
+        <i data-lucide="message-square" class="w-5 h-5"></i>
+        <span class="text-sm">Chat con Carlos</span>
+      </button>
+    </div>
+
   </div>
 
   <!-- ════════════════════════════════════════════
@@ -1165,12 +2599,8 @@
           <i data-lucide="chevron-left" class="w-5 h-5"></i>
         </div>
         <div class="flex gap-4">
-          <div class="w-12 h-12 neu-btn relative" onclick="showToast('No hay nuevas alertas')">
-            <i data-lucide="bell" class="w-5 h-5"></i>
-            <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
-          </div>
-          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()">
-            <i data-lucide="settings" class="w-5 h-5"></i>
+          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()" title="Cambiar Tema">
+            <i data-lucide="sun-moon" class="w-5 h-5"></i>
           </div>
         </div>
       </div>
@@ -1182,12 +2612,14 @@
 
               <div class="order-map-overlay">
                 <div class="flex items-center gap-3 min-w-0">
-                  <div id="map-step-indicator" class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-300 shrink-0">
+                  <div id="map-step-indicator"
+                    class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-300 shrink-0">
                     <i data-lucide="map-pin" class="w-4 h-4"></i>
                   </div>
                   <div class="min-w-0">
                     <p id="map-step-title" class="text-xs font-semibold truncate">Configuracion de ruta</p>
-                    <p id="map-step-desc" class="text-[11px] truncate" style="color:rgba(255,255,255,0.66)">Hace click para seleccionar el origen en el mapa.</p>
+                    <p id="map-step-desc" class="text-[11px] truncate" style="color:rgba(255,255,255,0.66)">Hace click
+                      para seleccionar el origen en el mapa.</p>
                   </div>
                 </div>
                 <button type="button" class="pill-btn pill-secondary" onclick="resetRoute()">
@@ -1210,19 +2642,22 @@
             <aside class="home-map-sidebar">
               <div class="space-y-4">
                 <div>
-                  <h2 class="text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2" style="color:var(--text-muted)">
+                  <h2 class="text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2"
+                    style="color:var(--text-muted)">
                     <i data-lucide="route" class="w-4 h-4" style="color:var(--accent-solid)"></i>Detalle del trayecto
                   </h2>
                   <div class="space-y-2">
                     <div class="soft-card px-3 py-3 flex items-center gap-3">
-                      <span class="w-2.5 h-2.5 rounded-full" style="background:#34d399;box-shadow:0 0 12px rgba(52,211,153,0.6)"></span>
+                      <span class="w-2.5 h-2.5 rounded-full"
+                        style="background:#34d399;box-shadow:0 0 12px rgba(52,211,153,0.6)"></span>
                       <div class="min-w-0">
                         <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#34d399">Origen</p>
                         <p id="txt-origin" class="text-xs truncate">No seleccionado (click en el mapa)</p>
                       </div>
                     </div>
                     <div class="soft-card px-3 py-3 flex items-center gap-3">
-                      <span class="w-2.5 h-2.5 rounded-full" style="background:#fb7185;box-shadow:0 0 12px rgba(251,113,133,0.55)"></span>
+                      <span class="w-2.5 h-2.5 rounded-full"
+                        style="background:#fb7185;box-shadow:0 0 12px rgba(251,113,133,0.55)"></span>
                       <div class="min-w-0">
                         <p class="text-[10px] uppercase tracking-widest font-bold" style="color:#fb7185">Destino</p>
                         <p id="txt-destination" class="text-xs truncate">No seleccionado (click en el mapa)</p>
@@ -1232,27 +2667,33 @@
                 </div>
 
                 <div>
-                  <h2 class="text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2" style="color:var(--text-muted)">
+                  <h2 class="text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2"
+                    style="color:var(--text-muted)">
                     <i data-lucide="truck" class="w-4 h-4" style="color:var(--accent-solid)"></i>Tipo de vehiculo
                   </h2>
                   <div id="vehicle-grid" class="grid grid-cols-2 gap-3">
                     <article id="veh-moto" class="service-card rp-vehicle-card" onclick="selectVehicle('moto')">
-                      <div class="flex items-center justify-between"><i data-lucide="bike" class="w-5 h-5" style="color:#f59e0b"></i><span class="text-[10px] tag-pill">15 kg</span></div>
+                      <div class="flex items-center justify-between"><i data-lucide="bike" class="w-5 h-5"
+                          style="color:#f59e0b"></i><span class="text-[10px] tag-pill">15 kg</span></div>
                       <strong class="mt-2">Moto veloz</strong>
                       <p class="text-xs" style="color:var(--text-muted)">Paquetes livianos</p>
                     </article>
                     <article id="veh-auto" class="service-card rp-vehicle-card" onclick="selectVehicle('auto')">
-                      <div class="flex items-center justify-between"><i data-lucide="car" class="w-5 h-5" style="color:#38bdf8"></i><span class="text-[10px] tag-pill">50 kg</span></div>
+                      <div class="flex items-center justify-between"><i data-lucide="car" class="w-5 h-5"
+                          style="color:#38bdf8"></i><span class="text-[10px] tag-pill">50 kg</span></div>
                       <strong class="mt-2">Auto estandar</strong>
                       <p class="text-xs" style="color:var(--text-muted)">Rapido y protegido</p>
                     </article>
-                    <article id="veh-camioneta" class="service-card rp-vehicle-card" onclick="selectVehicle('camioneta')">
-                      <div class="flex items-center justify-between"><i data-lucide="package" class="w-5 h-5" style="color:#34d399"></i><span class="text-[10px] tag-pill">250 kg</span></div>
+                    <article id="veh-camioneta" class="service-card rp-vehicle-card"
+                      onclick="selectVehicle('camioneta')">
+                      <div class="flex items-center justify-between"><i data-lucide="package" class="w-5 h-5"
+                          style="color:#34d399"></i><span class="text-[10px] tag-pill">250 kg</span></div>
                       <strong class="mt-2">Furgoneta</strong>
                       <p class="text-xs" style="color:var(--text-muted)">Carga mediana</p>
                     </article>
                     <article id="veh-camion" class="service-card rp-vehicle-card" onclick="selectVehicle('camion')">
-                      <div class="flex items-center justify-between"><i data-lucide="truck" class="w-5 h-5" style="color:#a78bfa"></i><span class="text-[10px] tag-pill">1000 kg</span></div>
+                      <div class="flex items-center justify-between"><i data-lucide="truck" class="w-5 h-5"
+                          style="color:#a78bfa"></i><span class="text-[10px] tag-pill">1000 kg</span></div>
                       <strong class="mt-2">Camion</strong>
                       <p class="text-xs" style="color:var(--text-muted)">Carga pesada</p>
                     </article>
@@ -1261,40 +2702,51 @@
 
                 <div>
                   <div class="flex items-center justify-between mb-3">
-                    <h2 class="text-sm font-bold uppercase tracking-widest flex items-center gap-2" style="color:var(--text-muted)">
+                    <h2 class="text-sm font-bold uppercase tracking-widest flex items-center gap-2"
+                      style="color:var(--text-muted)">
                       <i data-lucide="weight" class="w-4 h-4" style="color:var(--accent-solid)"></i>Peso del paquete
                     </h2>
                     <span id="weight-badge" class="tag-pill">15 kg</span>
                   </div>
                   <div class="soft-card px-3 py-3">
-                    <input type="range" id="input-weight" min="1" max="1000" value="15" oninput="updateWeight(this.value)" class="w-full" />
+                    <input type="range" id="input-weight" min="1" max="1000" value="15"
+                      oninput="updateWeight(this.value)" class="w-full" />
                     <div class="flex justify-between text-[10px] mt-2" style="color:var(--text-muted)">
                       <span>1 kg</span><span>500 kg</span><span>1000 kg</span>
                     </div>
                   </div>
-                  <div id="weight-warning" class="hidden soft-card px-3 py-2 mt-2 text-[11px]" style="border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.12)">
+                  <div id="weight-warning" class="hidden soft-card px-3 py-2 mt-2 text-[11px]"
+                    style="border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.12)">
                     <span id="weight-warning-text">El peso excede el limite recomendado para este vehiculo.</span>
                   </div>
                 </div>
 
                 <div>
-                  <h2 class="text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2" style="color:var(--text-muted)">
-                    <i data-lucide="file-text" class="w-4 h-4" style="color:var(--accent-solid)"></i>Descripcion del envio
+                  <h2 class="text-sm font-bold uppercase tracking-widest mb-3 flex items-center gap-2"
+                    style="color:var(--text-muted)">
+                    <i data-lucide="file-text" class="w-4 h-4" style="color:var(--accent-solid)"></i>Descripcion del
+                    envio
                   </h2>
-                  <textarea id="input-description" rows="3" class="textarea-field" placeholder="Ej: Fragil. Entregar en recepcion."></textarea>
+                  <textarea id="input-description" rows="3" class="textarea-field"
+                    placeholder="Ej: Fragil. Entregar en recepcion."></textarea>
                 </div>
 
-                <div class="soft-card p-4 space-y-2" style="background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));">
-                  <div class="flex justify-between text-sm" style="color:var(--text-muted)"><span>Envio por km base</span><span id="price-km-base">$0.00</span></div>
-                  <div class="flex justify-between text-sm" style="color:var(--text-muted)"><span>Recargo por peso</span><span id="price-weight-fee">$0.00</span></div>
+                <div class="soft-card p-4 space-y-2"
+                  style="background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));">
+                  <div class="flex justify-between text-sm" style="color:var(--text-muted)"><span>Envio por km
+                      base</span><span id="price-km-base">$0.00</span></div>
+                  <div class="flex justify-between text-sm" style="color:var(--text-muted)"><span>Recargo por
+                      peso</span><span id="price-weight-fee">$0.00</span></div>
                   <div class="pt-2 border-t" style="border-color:var(--line-color)">
-                    <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Costo estimado</p>
+                    <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Costo
+                      estimado</p>
                     <p id="price-total" class="text-2xl font-black">$0.00</p>
                   </div>
                 </div>
               </div>
 
-              <button onclick="placeOrder()" id="btn-submit" disabled class="pill-btn pill-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+              <button onclick="placeOrder()" id="btn-submit" disabled
+                class="pill-btn pill-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed">
                 <i data-lucide="send" class="w-4 h-4"></i>
                 <span id="btn-submit-text">Selecciona la ruta para cotizar</span>
               </button>
@@ -1309,251 +2761,128 @@
        VISTA: PERFIL
   ════════════════════════════════════════════ -->
   <div id="view-perfil" class="spa-view">
-    <div class="min-h-screen w-full">
-      <main class="app-shell profile-scroll-shell py-4 md:py-6 lg:py-8 safe-bottom">
-        <section class="panel-shell overflow-hidden">
+    <div class="w-full flex flex-col neu-card overflow-hidden relative mobile-fullscreen-panel lg:mx-0">
+      <div class="flex justify-between items-center px-6 pt-8 pb-4">
+        <div class="w-12 h-12 neu-btn" onclick="navigateTo('inicio')">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 neu-btn" onclick="toggleTheme()" title="Cambiar Tema">
+            <i data-lucide="sun-moon" class="w-5 h-5"></i>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 flex-1 flex flex-col items-center pb-24 overflow-y-auto"
+        style="-ms-overflow-style: none; scrollbar-width: none;">
+        <!-- Elementos ocultos para evitar errores JS -->
+        <form id="profile-form" class="hidden"></form>
+        <input id="profile-name" class="hidden">
+        <input id="profile-phone" class="hidden">
+        <input id="profile-email" class="hidden">
+        <img id="profile-photo" class="hidden">
+        <img id="profile-photo-2" class="hidden">
+        <input id="photo-input" type="file" class="hidden">
+        <form id="password-form" class="hidden"></form>
+        <input id="new-password" class="hidden">
+        <input id="repeat-password" class="hidden">
+        <input id="push-toggle" type="checkbox" class="hidden">
+        <button id="quick-support-open" class="hidden"></button>
+        <form id="support-form" class="hidden"></form>
+        <input id="support-message" class="hidden">
+        <div id="support-chat" class="hidden"></div>
+        <div id="support-thread" class="hidden"></div>
+        <a id="whatsapp-support" class="hidden"></a>
+        <button id="open-card-modal" class="hidden"></button>
+        <div id="payment-list" class="hidden"></div>
 
-          <!-- Header de perfil -->
-          <header class="px-4 sm:px-6 lg:px-8 pt-5 pb-4 border-b" style="border-color:var(--line-color)">
-            <div class="flex items-center justify-between mb-5">
-              <button class="icon-btn" onclick="navigateTo('inicio')">
-                <i data-lucide="chevron-left" class="w-5 h-5"></i>
-              </button>
-              <div class="flex items-center gap-3">
-                <button class="icon-btn relative" onclick="showToast('No hay nuevas alertas de soporte')">
-                  <i data-lucide="bell" class="w-5 h-5"></i>
-                  <span class="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full" style="background:#ef4444;box-shadow:0 0 10px rgba(239,68,68,0.8)"></span>
-                </button>
-                <button class="icon-btn" onclick="toggleTheme()">
-                  <i data-lucide="settings" class="w-5 h-5"></i>
-                </button>
+        <!-- Contenedor único de perfil -->
+        <div class="w-full max-w-[420px] p-4 rounded-[32px] mt-4" style="background: transparent; border: none;">
+
+          <!-- Cabecera / Avatar -->
+          <div class="flex flex-col items-center mb-6 mt-2">
+            <div class="relative w-[80px] h-[80px] mb-4">
+              <div class="w-full h-full rounded-full overflow-hidden border-[3px]"
+                style="border-color: rgba(255,255,255,0.08);">
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+                  alt="María López" class="w-full h-full object-cover">
               </div>
+              <!-- Status dot -->
+              <div class="absolute bottom-1 right-1 w-[18px] h-[18px] rounded-full border-[3px]"
+                style="background: #10b981; border-color: var(--card-bg-strong);"></div>
             </div>
-
-            <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-              <div class="space-y-3">
-                <div class="flex flex-wrap items-center gap-2">
-                  <span class="soft-chip"><i data-lucide="shield-check" class="w-4 h-4"></i>Centro de control del usuario</span>
-                  <span class="inline-flex items-center gap-2 text-sm font-semibold" style="color:var(--text-muted)">
-                    <span class="w-2.5 h-2.5 rounded-full" style="background:var(--ok);box-shadow:0 0 14px var(--ok)"></span>
-                    Cuenta verificada y lista para operar
-                  </span>
-                </div>
-                <div>
-                  <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Perfil y herramientas</h1>
-                  <p class="section-subtitle mt-2 max-w-2xl">Una interfaz limpia, confiable y pensada para que el usuario gestione sus datos, pagos, soporte y configuración sin fricción.</p>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:w-[360px]">
-                <div class="profile-detail-card">
-                  <div class="text-xs uppercase tracking-[0.18em] font-bold" style="color:var(--text-muted)">Entregas</div>
-                  <div class="mt-1 text-2xl font-extrabold">18</div>
-                  <div class="mt-1 text-sm" style="color:var(--text-muted)">realizadas este mes</div>
-                </div>
-                <div class="profile-detail-card">
-                  <div class="text-xs uppercase tracking-[0.18em] font-bold" style="color:var(--text-muted)">Soporte</div>
-                  <div class="mt-1 text-2xl font-extrabold">24/7</div>
-                  <div class="mt-1 text-sm" style="color:var(--text-muted)">respuesta asistida</div>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <!-- Cuerpo del perfil -->
-          <div class="px-4 sm:px-6 lg:px-8 py-5">
-            <section class="profile-hero">
-              <div class="profile-hero-grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-                <div class="profile-ident">
-                  <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                    <div class="avatar-frame">
-                      <img id="profile-photo" class="avatar-photo hidden" alt="Foto de perfil">
-                      <div id="avatar-fallback" class="text-center">
-                        <div class="text-3xl font-extrabold" style="color:var(--accent-solid)">TD</div>
-                        <div class="text-xs font-semibold uppercase tracking-[0.18em]" style="color:var(--text-muted)">Cliente</div>
-                      </div>
-                    </div>
-                    <div class="space-y-3">
-                      <h2 class="text-3xl sm:text-4xl font-black tracking-tight">María López</h2>
-                      <div class="profile-badge-row">
-                        <span class="profile-badge"><i data-lucide="phone" class="w-4 h-4"></i>+54 11 5555 4321</span>
-                        <span class="profile-badge"><i data-lucide="mail" class="w-4 h-4"></i>maria.lopez@tododelivery.com</span>
-                        <span class="profile-badge"><i data-lucide="shield-check" class="w-4 h-4"></i>Verificado</span>
-                      </div>
-                      <div class="hero-actions">
-                        <button type="button" class="pill-btn pill-primary" onclick="document.getElementById('profile-details').open=true">
-                          <i data-lucide="edit-3" class="w-4 h-4"></i>Editar datos
-                        </button>
-                        <button type="button" class="pill-btn pill-secondary" onclick="showToast('Perfil preparado para sincronizar con backend')">
-                          <i data-lucide="activity" class="w-4 h-4"></i>Ver estado
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="profile-stats">
-                  <div class="profile-detail-card">
-                    <div class="hero-label">Estado de cuenta</div>
-                    <div class="hero-value">Activa y lista</div>
-                    <p class="input-hint mt-2">La cuenta está verificada y preparada para operar pedidos y soporte.</p>
-                  </div>
-                  <div class="profile-card-grid">
-                    <div class="profile-detail-card"><div class="hero-label">Último acceso</div><div class="hero-value">Hoy, 08:24</div></div>
-                    <div class="profile-detail-card"><div class="hero-label">Métodos de pago</div><div class="hero-value">2 guardados</div></div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <div class="accordion-stack">
-              <!-- Datos personales -->
-              <details id="profile-details" class="glass-card accordion-item" open>
-                <summary class="accordion-summary">
-                  <div class="accordion-meta">
-                    <span class="accordion-kicker"><i data-lucide="user-round" class="w-3.5 h-3.5"></i>Datos personales</span>
-                    <div class="accordion-title-row"><div class="section-title">Tu información principal</div></div>
-                    <p class="section-subtitle max-w-2xl">Foto, nombre, teléfono validado y correo.</p>
-                  </div>
-                  <span class="accordion-summary-action">Ver más <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i></span>
-                </summary>
-                <div class="accordion-body">
-                  <div class="grid gap-5 md:grid-cols-[180px_1fr]">
-                    <div class="space-y-4">
-                      <div class="avatar-frame">
-                        <img id="profile-photo-2" class="avatar-photo hidden" alt="Foto de perfil">
-                        <div id="avatar-fallback-2" class="text-center">
-                          <div class="text-3xl font-extrabold" style="color:var(--accent-solid)">TD</div>
-                          <div class="text-xs font-semibold uppercase tracking-[0.18em]" style="color:var(--text-muted)">Cliente</div>
-                        </div>
-                      </div>
-                      <label class="pill-btn pill-secondary w-full cursor-pointer">
-                        <i data-lucide="camera" class="w-4 h-4"></i>Cambiar foto
-                        <input id="photo-input" type="file" accept="image/*" class="hidden">
-                      </label>
-                    </div>
-                    <form id="profile-form" class="space-y-4">
-                      <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <label class="field-label" for="profile-name">Nombre y apellido</label>
-                          <input id="profile-name" class="input-field" type="text" placeholder="Ej. María López" value="María López">
-                        </div>
-                        <div>
-                          <label class="field-label" for="profile-phone">Teléfono</label>
-                          <input id="profile-phone" class="input-field" type="tel" placeholder="Ej. +54 11 5555 4321" value="+54 11 5555 4321">
-                          <p id="phone-helper" class="input-hint">Acepta entre 8 y 15 dígitos.</p>
-                        </div>
-                      </div>
-                      <div>
-                        <label class="field-label" for="profile-email">Correo electrónico</label>
-                        <input id="profile-email" class="input-field" type="email" placeholder="usuario@correo.com" value="maria.lopez@tododelivery.com">
-                      </div>
-                      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
-                        <div class="text-sm" style="color:var(--text-muted)">Los cambios se aplican sólo en esta interfaz hasta conectar el backend.</div>
-                        <button type="submit" class="pill-btn pill-primary"><i data-lucide="save" class="w-4 h-4"></i>Guardar datos</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </details>
-
-              <!-- Pagos -->
-              <details class="glass-card accordion-item">
-                <summary class="accordion-summary">
-                  <div class="accordion-meta">
-                    <span class="accordion-kicker"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i>Pagos</span>
-                    <div class="accordion-title-row"><div class="section-title">Métodos guardados</div><span class="payment-chip"><i data-lucide="wallet" class="w-4 h-4"></i>2 tarjetas</span></div>
-                    <p class="section-subtitle max-w-2xl">Gestioná tarjetas y definí cuál queda como principal.</p>
-                  </div>
-                  <span class="accordion-summary-action">Ver más <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i></span>
-                </summary>
-                <div class="accordion-body space-y-4">
-                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <p class="section-subtitle">Revisá o cambiá una tarjeta cuando lo necesites.</p>
-                    <button id="open-card-modal" type="button" class="pill-btn pill-secondary shrink-0"><i data-lucide="plus" class="w-4 h-4"></i>Agregar tarjeta</button>
-                  </div>
-                  <div id="payment-list" class="grid gap-3"></div>
-                </div>
-              </details>
-
-              <!-- Soporte -->
-              <details class="glass-card accordion-item">
-                <summary class="accordion-summary">
-                  <div class="accordion-meta">
-                    <span class="accordion-kicker"><i data-lucide="message-square-more" class="w-3.5 h-3.5"></i>Soporte</span>
-                    <div class="accordion-title-row"><div class="section-title">Centro de ayuda</div><span class="payment-chip"><i data-lucide="phone-call" class="w-4 h-4"></i>WhatsApp</span></div>
-                    <p class="section-subtitle max-w-2xl">Soporte humano, reclamos y chat interno.</p>
-                  </div>
-                  <span class="accordion-summary-action">Ver más <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i></span>
-                </summary>
-                <div class="accordion-body space-y-4">
-                  <div class="grid gap-3 sm:grid-cols-2">
-                    <a id="whatsapp-support" class="pill-btn pill-primary w-full" target="_blank" rel="noreferrer" style="text-decoration:none">
-                      <i data-lucide="message-circle" class="w-4 h-4"></i>WhatsApp
-                    </a>
-                    <button id="quick-support-open" type="button" class="pill-btn pill-secondary w-full">
-                      <i data-lucide="messages-square" class="w-4 h-4"></i>Chat interno
-                    </button>
-                  </div>
-                  <div id="support-chat" class="hidden space-y-3">
-                    <div class="support-thread glass-card p-4" style="box-shadow:none" id="support-thread">
-                      <div class="bubble agent">Hola, soy el asistente de soporte. Contame qué pasó con tu pedido.</div>
-                    </div>
-                    <form id="support-form" class="flex gap-2">
-                      <textarea id="support-message" class="textarea-field flex-1" placeholder="Escribí tu reclamo o consulta..." style="min-height:80px"></textarea>
-                      <button type="submit" class="pill-btn pill-primary self-end h-[52px] px-5"><i data-lucide="send" class="w-4 h-4"></i></button>
-                    </form>
-                  </div>
-                </div>
-              </details>
-
-              <!-- Configuración -->
-              <details class="glass-card accordion-item">
-                <summary class="accordion-summary">
-                  <div class="accordion-meta">
-                    <span class="accordion-kicker"><i data-lucide="settings-2" class="w-3.5 h-3.5"></i>Configuración</span>
-                    <div class="accordion-title-row"><div class="section-title">Seguridad y preferencias</div></div>
-                    <p class="section-subtitle max-w-2xl">Cambiar contraseña, alertas push y modo claro/oscuro.</p>
-                  </div>
-                  <span class="accordion-summary-action">Ver más <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i></span>
-                </summary>
-                <div class="accordion-body">
-                  <form id="password-form" class="space-y-4">
-                    <div><label class="field-label" for="current-password">Contraseña actual</label><input id="current-password" class="input-field" type="password" placeholder="Ingresá tu contraseña actual"></div>
-                    <div class="grid gap-4 sm:grid-cols-2">
-                      <div><label class="field-label" for="new-password">Nueva contraseña</label><input id="new-password" class="input-field" type="password" placeholder="Mínimo 8 caracteres"></div>
-                      <div><label class="field-label" for="repeat-password">Repetir contraseña</label><input id="repeat-password" class="input-field" type="password" placeholder="Confirmar contraseña"></div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
-                      <p class="input-hint">Usá una contraseña nueva si notás actividad sospechosa.</p>
-                      <button type="submit" class="pill-btn pill-secondary"><i data-lucide="key-round" class="w-4 h-4"></i>Actualizar</button>
-                    </div>
-                  </form>
-                  <div class="mt-6 space-y-4">
-                    <div class="flex items-center justify-between gap-4">
-                      <div><div class="font-bold">Notificaciones push</div><div class="text-sm" style="color:var(--text-muted)">Recibir alertas de entrega, estado de pedido y soporte.</div></div>
-                      <label class="toggle-track"><input id="push-toggle" type="checkbox" checked><span class="toggle-thumb"></span></label>
-                    </div>
-                    <div class="flex items-center justify-between gap-4">
-                      <div><div class="font-bold">Modo claro / oscuro</div><div class="text-sm" style="color:var(--text-muted)">Usá el botón superior derecho para alternar el tema.</div></div>
-                      <span class="payment-chip"><i data-lucide="paintbrush-2" class="w-4 h-4"></i>Toggle activo</span>
-                    </div>
-                  </div>
-                </div>
-              </details>
-            </div>
+            <h2 class="text-2xl font-extrabold mb-2 tracking-tight text-center">María López</h2>
+            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest text-center"
+              style="background: rgba(245,158,11,0.15); color: #f59e0b;">CLIENTE CORPORATIVO VERIFICADO</span>
           </div>
 
-        </section>
-      </main>
+          <div class="w-full h-px mb-7 mt-2" style="background: rgba(255,255,255,0.06);"></div>
+
+          <!-- Datos en Contenedores Organizadores -->
+          <div class="flex flex-col gap-4 w-full">
+
+            <!-- Card: Correo Electrónico -->
+            <div class="soft-card p-4 flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                <i data-lucide="mail" class="w-5 h-5 text-gray-300"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Correo
+                  Electrónico</p>
+                <p class="font-semibold text-[14px] truncate">maria.lopez@tododelivery.com</p>
+              </div>
+            </div>
+
+            <!-- Card: Número de Teléfono -->
+            <div class="soft-card p-4 flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                <i data-lucide="phone" class="w-5 h-5 text-gray-300"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Número de
+                  Teléfono</p>
+                <p class="font-semibold text-[14px]">+54 297 555-1212</p>
+              </div>
+              <button onclick="document.getElementById('phone-modal').classList.add('is-open')"
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-transform active:scale-95 cursor-pointer shrink-0"
+                style="background: rgba(255,255,255,0.05);" aria-label="Editar teléfono">
+                <i data-lucide="pencil" class="w-3.5 h-3.5 text-white"></i>
+              </button>
+            </div>
+
+            <!-- Card: Fecha de Registro -->
+            <div class="soft-card p-4 flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/5">
+                <i data-lucide="calendar" class="w-5 h-5 text-gray-300"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[10px] uppercase tracking-widest font-bold" style="color:var(--text-muted)">Fecha de
+                  Registro</p>
+                <p class="font-semibold text-[14px]">12 de Octubre, 2024</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Info final -->
+          <div class="mt-8 p-4 rounded-2xl flex items-start gap-3" style="border: 1px solid rgba(255,255,255,0.08);">
+            <i data-lucide="lock" class="w-4 h-4 mt-0.5 shrink-0" style="color:var(--text-muted)"></i>
+            <p class="text-[11px] leading-relaxed" style="color:var(--text-muted)">
+              Los datos de perfil corporativo son gestionados por el Administrador de Sistemas y no son editables desde
+              este portal de clientes.
+            </p>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
-
   <!-- ════════════════════════════════════════════
        NAVEGACIÓN INFERIOR (se oculta en pcarga y registro)
   ════════════════════════════════════════════ -->
   <div class="curved-nav-container" id="bottom-nav" style="display:none">
     <svg class="curved-nav-svg" viewBox="0 0 375 95" preserveAspectRatio="none">
-      <path d="M 0 25 L 135 25 C 152 25, 155 60, 187.5 60 C 220 60, 223 25, 240 25 L 375 25 L 375 95 L 0 95 Z"/>
+      <path d="M 0 25 L 135 25 C 152 25, 155 60, 187.5 60 C 220 60, 223 25, 240 25 L 375 25 L 375 95 L 0 95 Z" />
     </svg>
     <div class="floating-action-container">
       <div class="floating-action-btn" onclick="navigateTo('realizar-pedido')">
@@ -1598,18 +2927,26 @@
       </div>
       <form id="card-form" class="space-y-4 mt-5">
         <div class="grid gap-4 sm:grid-cols-2">
-          <div><label class="field-label" for="card-name">Alias</label><input id="card-name" class="input-field" type="text" placeholder="Ej. Visa personal" required></div>
+          <div><label class="field-label" for="card-name">Alias</label><input id="card-name" class="input-field"
+              type="text" placeholder="Ej. Visa personal" required></div>
           <div><label class="field-label" for="card-brand">Marca</label>
             <select id="card-brand" class="select-field" required>
-              <option>Visa</option><option>Mastercard</option><option>American Express</option><option>Débito</option>
+              <option>Visa</option>
+              <option>Mastercard</option>
+              <option>American Express</option>
+              <option>Débito</option>
             </select>
           </div>
         </div>
-        <div><label class="field-label" for="card-number">Número de tarjeta</label><input id="card-number" class="input-field" type="text" inputmode="numeric" placeholder="0000 0000 0000 0000" required></div>
+        <div><label class="field-label" for="card-number">Número de tarjeta</label><input id="card-number"
+            class="input-field" type="text" inputmode="numeric" placeholder="0000 0000 0000 0000" required></div>
         <div class="grid gap-4 sm:grid-cols-3">
-          <div><label class="field-label" for="card-expiry">Vencimiento</label><input id="card-expiry" class="input-field" type="text" placeholder="MM/AA" required></div>
-          <div><label class="field-label" for="card-holder">Titular</label><input id="card-holder" class="input-field" type="text" placeholder="Nombre en la tarjeta" required></div>
-          <div><label class="field-label" for="card-cvv">CVV</label><input id="card-cvv" class="input-field" type="password" inputmode="numeric" placeholder="123" maxlength="4" required></div>
+          <div><label class="field-label" for="card-expiry">Vencimiento</label><input id="card-expiry"
+              class="input-field" type="text" placeholder="MM/AA" required></div>
+          <div><label class="field-label" for="card-holder">Titular</label><input id="card-holder" class="input-field"
+              type="text" placeholder="Nombre en la tarjeta" required></div>
+          <div><label class="field-label" for="card-cvv">CVV</label><input id="card-cvv" class="input-field"
+              type="password" inputmode="numeric" placeholder="123" maxlength="4" required></div>
         </div>
         <label class="flex items-center gap-3 text-sm font-semibold" style="color:var(--text-muted)">
           <input id="card-default" type="checkbox" class="w-4 h-4" checked>
@@ -1617,7 +2954,35 @@
         </label>
         <div class="flex flex-col sm:flex-row gap-3 justify-end pt-1">
           <button id="cancel-card-modal" type="button" class="pill-btn pill-secondary">Cancelar</button>
-          <button type="submit" class="pill-btn pill-primary"><i data-lucide="credit-card" class="w-4 h-4"></i>Guardar tarjeta</button>
+          <button type="submit" class="pill-btn pill-primary"><i data-lucide="credit-card" class="w-4 h-4"></i>Guardar
+            tarjeta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de teléfono -->
+  <div id="phone-modal" class="modal-backdrop">
+    <div class="modal-panel">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="section-title">Editar Teléfono</div>
+          <p class="section-subtitle mt-1">Ingresá tu nuevo número de teléfono.</p>
+        </div>
+        <button type="button" class="icon-btn"
+          onclick="document.getElementById('phone-modal').classList.remove('is-open')"><i data-lucide="x"
+            class="w-5 h-5"></i></button>
+      </div>
+      <form id="phone-form" class="space-y-4 mt-5"
+        onsubmit="event.preventDefault(); document.getElementById('phone-modal').classList.remove('is-open'); showToast('Teléfono actualizado');">
+        <div>
+          <label class="field-label" for="phone-number-input">Número</label>
+          <input id="phone-number-input" class="input-field" type="tel" placeholder="+54 9 11 0000 0000" required>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 justify-end pt-1">
+          <button type="button" class="pill-btn pill-secondary"
+            onclick="document.getElementById('phone-modal').classList.remove('is-open')">Cancelar</button>
+          <button type="submit" class="pill-btn pill-primary"><i data-lucide="save" class="w-4 h-4"></i>Guardar</button>
         </div>
       </form>
     </div>
@@ -1632,7 +2997,8 @@
             <div class="section-title">Vista inicial</div>
             <p class="section-subtitle mt-1">Contenido actual de Inicio mostrado como modal de referencia.</p>
           </div>
-          <button id="close-inicio-preview" type="button" class="icon-btn"><i data-lucide="x" class="w-5 h-5"></i></button>
+          <button id="close-inicio-preview" type="button" class="icon-btn"><i data-lucide="x"
+              class="w-5 h-5"></i></button>
         </div>
         <div class="px-6 py-5">
           <section class="hero-grid">
@@ -1642,20 +3008,27 @@
                 Enviá paquetes, documentos y pedidos con una experiencia premium.
               </h1>
               <p class="mt-4 text-sm md:text-base" style="color:var(--text-muted)">
-                Todo Delivery organiza tu operación como una app de primer nivel: rápido, claro y listo para seguimiento en vivo.
+                Todo Delivery organiza tu operación como una app de primer nivel: rápido, claro y listo para seguimiento
+                en vivo.
               </p>
               <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div class="quick-action">
                   <div class="icon-wrap"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
-                  <div><strong>Tu dirección</strong><p class="text-sm">Av. Libertador 1530</p></div>
+                  <div><strong>Tu dirección</strong>
+                    <p class="text-sm">Av. Libertador 1530</p>
+                  </div>
                 </div>
                 <div class="quick-action">
                   <div class="icon-wrap"><i data-lucide="clock-3" class="w-5 h-5"></i></div>
-                  <div><strong>Entrega rápida</strong><p class="text-sm">Rider estimado en 12 min</p></div>
+                  <div><strong>Entrega rápida</strong>
+                    <p class="text-sm">Rider estimado en 12 min</p>
+                  </div>
                 </div>
                 <div class="quick-action">
                   <div class="icon-wrap"><i data-lucide="wallet" class="w-5 h-5"></i></div>
-                  <div><strong>Pago listo</strong><p class="text-sm">Mercado Pago habilitado</p></div>
+                  <div><strong>Pago listo</strong>
+                    <p class="text-sm">Mercado Pago habilitado</p>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1678,7 +3051,8 @@
                     <label class="block text-sm mb-2" style="color:var(--text-muted)">Receptor</label>
                     <div class="soft-card px-4 py-3">Sofía Pérez · 264 555 0192</div>
                   </div>
-                  <button class="w-full mt-2 py-3 rounded-2xl font-bold neu-btn" style="border-radius:18px;" onclick="navigateTo('realizar-pedido')">
+                  <button class="w-full mt-2 py-3 rounded-2xl font-bold neu-btn" style="border-radius:18px;"
+                    onclick="navigateTo('realizar-pedido')">
                     Continuar con el pedido
                   </button>
                 </div>
@@ -1687,15 +3061,24 @@
           </section>
 
           <section class="stat-strip mt-5">
-            <div class="metric-card neu-card"><strong>124</strong><p style="color:var(--text-muted)">Envíos hoy</p></div>
-            <div class="metric-card neu-card"><strong>16 min</strong><p style="color:var(--text-muted)">Tiempo promedio</p></div>
-            <div class="metric-card neu-card"><strong>97.8%</strong><p style="color:var(--text-muted)">Entregas a tiempo</p></div>
+            <div class="metric-card neu-card"><strong>124</strong>
+              <p style="color:var(--text-muted)">Envíos hoy</p>
+            </div>
+            <div class="metric-card neu-card"><strong>16 min</strong>
+              <p style="color:var(--text-muted)">Tiempo promedio</p>
+            </div>
+            <div class="metric-card neu-card"><strong>97.8%</strong>
+              <p style="color:var(--text-muted)">Entregas a tiempo</p>
+            </div>
           </section>
 
           <section class="service-grid mt-5">
             <article class="neu-card p-5 md:p-6">
               <div class="flex items-center justify-between mb-4">
-                <div><p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Estado en vivo</p><h2 class="section-title mt-1">Tu pedido actual</h2></div>
+                <div>
+                  <p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Estado en vivo</p>
+                  <h2 class="section-title mt-1">Tu pedido actual</h2>
+                </div>
                 <span class="tag-pill">En camino</span>
               </div>
               <div class="map-preview mb-4">
@@ -1706,21 +3089,48 @@
                 <div class="route-marker destination"></div>
               </div>
               <div class="grid grid-cols-2 gap-3">
-                <div class="soft-card p-4"><p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">Distancia</p><strong class="text-lg">4.2 km</strong></div>
-                <div class="soft-card p-4"><p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">ETA</p><strong class="text-lg">18 min</strong></div>
-                <div class="soft-card p-4"><p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">Precio</p><strong class="text-lg">$3.200</strong></div>
-                <div class="soft-card p-4"><p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">Pago</p><strong class="text-lg">Mercado Pago</strong></div>
+                <div class="soft-card p-4">
+                  <p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">Distancia</p><strong
+                    class="text-lg">4.2 km</strong>
+                </div>
+                <div class="soft-card p-4">
+                  <p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">ETA</p><strong
+                    class="text-lg">18 min</strong>
+                </div>
+                <div class="soft-card p-4">
+                  <p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">Precio</p><strong
+                    class="text-lg">$3.200</strong>
+                </div>
+                <div class="soft-card p-4">
+                  <p class="text-xs uppercase tracking-wide" style="color:var(--text-muted)">Pago</p><strong
+                    class="text-lg">Mercado Pago</strong>
+                </div>
               </div>
             </article>
 
             <article class="neu-card p-5 md:p-6">
               <div class="flex items-center justify-between mb-4">
-                <div><p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Accesos rápidos</p><h2 class="section-title mt-1">Tus herramientas</h2></div>
+                <div>
+                  <p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Accesos rápidos</p>
+                  <h2 class="section-title mt-1">Tus herramientas</h2>
+                </div>
               </div>
               <div class="space-y-3">
-                <div class="recommendation-item"><div><strong>Repetir último pedido</strong><p style="color:var(--text-muted)">Un toque para volver a enviar a la misma dirección.</p></div><span class="tag-pill">1 click</span></div>
-                <div class="recommendation-item"><div><strong>Programar envío</strong><p style="color:var(--text-muted)">Define día y hora para una entrega futura.</p></div><span class="tag-pill">Planificar</span></div>
-                <div class="recommendation-item"><div><strong>Compartir seguimiento</strong><p style="color:var(--text-muted)">Enviá el estado del viaje a quien recibe el paquete.</p></div><span class="tag-pill">GPS</span></div>
+                <div class="recommendation-item">
+                  <div><strong>Repetir último pedido</strong>
+                    <p style="color:var(--text-muted)">Un toque para volver a enviar a la misma dirección.</p>
+                  </div><span class="tag-pill">1 click</span>
+                </div>
+                <div class="recommendation-item">
+                  <div><strong>Programar envío</strong>
+                    <p style="color:var(--text-muted)">Define día y hora para una entrega futura.</p>
+                  </div><span class="tag-pill">Planificar</span>
+                </div>
+                <div class="recommendation-item">
+                  <div><strong>Compartir seguimiento</strong>
+                    <p style="color:var(--text-muted)">Enviá el estado del viaje a quien recibe el paquete.</p>
+                  </div><span class="tag-pill">GPS</span>
+                </div>
               </div>
             </article>
           </section>
@@ -1728,36 +3138,72 @@
           <section class="service-grid mt-5">
             <article class="neu-card p-5 md:p-6">
               <div class="flex items-center justify-between mb-4">
-                <div><p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Frecuentes</p><h2 class="section-title mt-1">Destinos recientes</h2></div>
+                <div>
+                  <p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Frecuentes</p>
+                  <h2 class="section-title mt-1">Destinos recientes</h2>
+                </div>
               </div>
               <div class="horizontal-list">
-                <div class="chip-card"><strong>Centro</strong><p class="text-sm" style="color:var(--text-muted)">Oficinas y comercios</p></div>
-                <div class="chip-card"><strong>Universidad</strong><p class="text-sm" style="color:var(--text-muted)">Documentos y paquetes</p></div>
-                <div class="chip-card"><strong>San Martín</strong><p class="text-sm" style="color:var(--text-muted)">Entregas express</p></div>
-                <div class="chip-card"><strong>Hospital</strong><p class="text-sm" style="color:var(--text-muted)">Envíos prioritarios</p></div>
+                <div class="chip-card"><strong>Centro</strong>
+                  <p class="text-sm" style="color:var(--text-muted)">Oficinas y comercios</p>
+                </div>
+                <div class="chip-card"><strong>Universidad</strong>
+                  <p class="text-sm" style="color:var(--text-muted)">Documentos y paquetes</p>
+                </div>
+                <div class="chip-card"><strong>San Martín</strong>
+                  <p class="text-sm" style="color:var(--text-muted)">Entregas express</p>
+                </div>
+                <div class="chip-card"><strong>Hospital</strong>
+                  <p class="text-sm" style="color:var(--text-muted)">Envíos prioritarios</p>
+                </div>
               </div>
             </article>
 
             <article class="neu-card p-5 md:p-6">
               <div class="flex items-center justify-between mb-4">
-                <div><p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Capacidades</p><h2 class="section-title mt-1">Lo que ofrece la app</h2></div>
+                <div>
+                  <p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Capacidades</p>
+                  <h2 class="section-title mt-1">Lo que ofrece la app</h2>
+                </div>
               </div>
               <div class="space-y-3">
-                <div class="service-card"><strong>Seguimiento en vivo</strong><p style="color:var(--text-muted)">Mapa, rider, ETA y estados operativos del pedido.</p></div>
-                <div class="service-card"><strong>Pagos flexibles</strong><p style="color:var(--text-muted)">Tarjeta, efectivo, wallet y cobros integrados listos para escalar.</p></div>
-                <div class="service-card"><strong>Soporte inteligente</strong><p style="color:var(--text-muted)">Cancelaciones, incidencias y ayuda para cliente y rider.</p></div>
+                <div class="service-card"><strong>Seguimiento en vivo</strong>
+                  <p style="color:var(--text-muted)">Mapa, rider, ETA y estados operativos del pedido.</p>
+                </div>
+                <div class="service-card"><strong>Pagos flexibles</strong>
+                  <p style="color:var(--text-muted)">Tarjeta, efectivo, wallet y cobros integrados listos para escalar.
+                  </p>
+                </div>
+                <div class="service-card"><strong>Soporte inteligente</strong>
+                  <p style="color:var(--text-muted)">Cancelaciones, incidencias y ayuda para cliente y rider.</p>
+                </div>
               </div>
             </article>
           </section>
 
           <section class="neu-card p-5 md:p-6 mt-5">
             <div class="flex items-center justify-between mb-4">
-              <div><p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Actividad reciente</p><h2 class="section-title mt-1">Últimos movimientos</h2></div>
+              <div>
+                <p class="text-xs uppercase tracking-widest" style="color:var(--text-muted)">Actividad reciente</p>
+                <h2 class="section-title mt-1">Últimos movimientos</h2>
+              </div>
             </div>
             <div class="space-y-3">
-              <div class="history-item"><div><strong>Pedido #2031 entregado</strong><p style="color:var(--text-muted)">Hoy 15:42 · Moto · Repartidor Lucas Gómez</p></div><span class="tag-pill">Entregado</span></div>
-              <div class="history-item"><div><strong>Pedido #2034 en viaje</strong><p style="color:var(--text-muted)">Hoy 12:22 · Auto · ETA 7 min</p></div><span class="tag-pill">Tracking</span></div>
-              <div class="history-item"><div><strong>Pedido #2028 programado</strong><p style="color:var(--text-muted)">Ayer 19:10 · Entrega para mañana 10:00</p></div><span class="tag-pill">Programado</span></div>
+              <div class="history-item">
+                <div><strong>Pedido #2031 entregado</strong>
+                  <p style="color:var(--text-muted)">Hoy 15:42 · Moto · Repartidor Lucas Gómez</p>
+                </div><span class="tag-pill">Entregado</span>
+              </div>
+              <div class="history-item">
+                <div><strong>Pedido #2034 en viaje</strong>
+                  <p style="color:var(--text-muted)">Hoy 12:22 · Auto · ETA 7 min</p>
+                </div><span class="tag-pill">Tracking</span>
+              </div>
+              <div class="history-item">
+                <div><strong>Pedido #2028 programado</strong>
+                  <p style="color:var(--text-muted)">Ayer 19:10 · Entrega para mañana 10:00</p>
+                </div><span class="tag-pill">Programado</span>
+              </div>
             </div>
           </section>
         </div>
@@ -1770,15 +3216,18 @@
     <div class="modal-panel" style="max-width:460px">
       <div class="flex items-start justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div id="sim-avatar-container" class="w-14 h-14 rounded-full flex items-center justify-center radar-pulse" style="background:var(--accent-soft);border:1px solid rgba(255,255,255,0.12)">
+          <div id="sim-avatar-container" class="w-14 h-14 rounded-full flex items-center justify-center radar-pulse"
+            style="background:var(--accent-soft);border:1px solid rgba(255,255,255,0.12)">
             <i id="sim-status-icon" data-lucide="satellite" class="w-6 h-6" style="color:var(--accent-solid)"></i>
           </div>
           <div>
             <h3 id="sim-status-title" class="font-bold text-base">Buscando conductor...</h3>
-            <p id="sim-status-subtitle" class="text-xs" style="color:var(--text-muted)">Asignando chofer en tu zona operativa.</p>
+            <p id="sim-status-subtitle" class="text-xs" style="color:var(--text-muted)">Asignando chofer en tu zona
+              operativa.</p>
           </div>
         </div>
-        <button type="button" class="icon-btn" onclick="closeTracking()"><i data-lucide="x" class="w-4 h-4"></i></button>
+        <button type="button" class="icon-btn" onclick="closeTracking()"><i data-lucide="x"
+            class="w-4 h-4"></i></button>
       </div>
 
       <div class="grid grid-cols-2 gap-3 mt-4">
@@ -1798,14 +3247,18 @@
           <span id="sim-percent">0%</span>
         </div>
         <div class="w-full h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.08)">
-          <div id="sim-progress-bar" class="h-full" style="width:0%;background:linear-gradient(90deg,var(--accent-solid),#34d399)"></div>
+          <div id="sim-progress-bar" class="h-full"
+            style="width:0%;background:linear-gradient(90deg,var(--accent-solid),#34d399)"></div>
         </div>
       </div>
 
       <div class="soft-card p-4 mt-4 space-y-2 text-sm" style="color:var(--text-muted)">
-        <div class="flex justify-between"><span>Distancia total</span><strong id="sim-dist" style="color:var(--text-main)">--</strong></div>
-        <div class="flex justify-between"><span>Tiempo aproximado</span><strong id="sim-eta" style="color:var(--text-main)">--</strong></div>
-        <div class="flex justify-between"><span>Costo final pagado</span><strong id="sim-total" style="color:var(--ok)">--</strong></div>
+        <div class="flex justify-between"><span>Distancia total</span><strong id="sim-dist"
+            style="color:var(--text-main)">--</strong></div>
+        <div class="flex justify-between"><span>Tiempo aproximado</span><strong id="sim-eta"
+            style="color:var(--text-main)">--</strong></div>
+        <div class="flex justify-between"><span>Costo final pagado</span><strong id="sim-total"
+            style="color:var(--ok)">--</strong></div>
       </div>
     </div>
   </div>
@@ -1813,14 +3266,17 @@
   <!-- Alerta de validacion -->
   <div id="custom-alert" class="modal-backdrop">
     <div class="modal-panel" style="max-width:360px">
-      <div class="w-12 h-12 rounded-full mx-auto flex items-center justify-center" style="background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.28)">
+      <div class="w-12 h-12 rounded-full mx-auto flex items-center justify-center"
+        style="background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.28)">
         <i data-lucide="triangle-alert" class="w-6 h-6" style="color:#f59e0b"></i>
       </div>
       <div class="text-center mt-4">
         <h4 id="alert-title" class="font-bold text-lg">Atencion</h4>
-        <p id="alert-msg" class="text-sm mt-2" style="color:var(--text-muted)">Por favor completa todos los datos antes de continuar.</p>
+        <p id="alert-msg" class="text-sm mt-2" style="color:var(--text-muted)">Por favor completa todos los datos antes
+          de continuar.</p>
       </div>
-      <button type="button" class="pill-btn pill-secondary w-full justify-center mt-5" onclick="closeAlert()">Entendido</button>
+      <button type="button" class="pill-btn pill-secondary w-full justify-center mt-5"
+        onclick="closeAlert()">Entendido</button>
     </div>
   </div>
 
@@ -2133,6 +3589,131 @@
       if (contentCards[1]) contentCards[1].textContent = DEMO_SESSION.recipient;
     }
 
+    /* ======= Active order (read-only) - demo simulation ======= */
+    const DEMO_ACTIVE_ORDER = {
+      id: 2034,
+      origin: { lat: -34.6062, lng: -58.3861 },
+      destination: { lat: -34.5991, lng: -58.3726 },
+      distanceKm: 1.2,
+      etaMin: 15,
+      status: 'created' // created, picked_up, en_route, delivered
+    };
+
+    let activeMap = null;
+    let activePolyline = null;
+    let activeOriginMarker = null;
+    let activeDestinationMarker = null;
+    let activeSimMarker = null;
+    let activeRouteCoords = [];
+    let activeInterval = null;
+
+    function ensureActiveOrderMap() {
+      const container = document.getElementById('active-order-map');
+      if (!container || typeof L === 'undefined') return;
+
+      if (!activeMap) {
+        activeMap = L.map(container, {
+          center: [DEMO_ACTIVE_ORDER.origin.lat, DEMO_ACTIVE_ORDER.origin.lng],
+          zoom: 13,
+          zoomControl: false,
+          dragging: false,
+          doubleClickZoom: false,
+          scrollWheelZoom: false,
+          boxZoom: false,
+          touchZoom: false,
+          keyboard: false,
+          attributionControl: false
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(activeMap);
+
+        // initial render
+        renderActiveOrder(DEMO_ACTIVE_ORDER);
+        setTimeout(() => activeMap.invalidateSize(), 200);
+      } else {
+        setTimeout(() => activeMap.invalidateSize(), 80);
+      }
+    }
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function generateLinePoints(a, b, segments = 60) {
+      const pts = [];
+      for (let i = 0; i <= segments; i++) {
+        const t = i / segments;
+        pts.push([lerp(a.lat, b.lat, t), lerp(a.lng, b.lng, t)]);
+      }
+      return pts;
+    }
+
+    function renderActiveOrder(order) {
+      if (!activeMap) return;
+      // clear existing
+      if (activePolyline) activeMap.removeLayer(activePolyline);
+      if (activeOriginMarker) activeMap.removeLayer(activeOriginMarker);
+      if (activeDestinationMarker) activeMap.removeLayer(activeDestinationMarker);
+      if (activeSimMarker) activeMap.removeLayer(activeSimMarker);
+
+      activeRouteCoords = generateLinePoints(order.origin, order.destination, 80);
+
+      activePolyline = L.polyline(activeRouteCoords, { color: '#ff6a2f', weight: 5, opacity: 0.95 }).addTo(activeMap);
+      activeOriginMarker = L.circleMarker([order.origin.lat, order.origin.lng], { radius: 6, color: '#ff6a2f', fillColor: '#ff6a2f', fillOpacity: 1 }).addTo(activeMap).bindPopup('Origen');
+      activeDestinationMarker = L.circleMarker([order.destination.lat, order.destination.lng], { radius: 6, color: '#38bdf8', fillColor: '#38bdf8', fillOpacity: 1 }).addTo(activeMap).bindPopup('Destino');
+
+      activeMap.fitBounds(activePolyline.getBounds().pad(0.12));
+
+      document.getElementById('welcome-name').textContent = DEMO_SESSION.name;
+      document.getElementById('stat-today').textContent = '124';
+      document.getElementById('stat-avg-time').textContent = '16 min';
+      document.getElementById('stat-ontime').textContent = '97.8%';
+
+      document.getElementById('active-dist').textContent = `${order.distanceKm.toFixed(1)} km`;
+      document.getElementById('active-eta').textContent = `${order.etaMin} min`;
+      document.getElementById('active-status').textContent = 'Realizado';
+      document.getElementById('active-order-badge').textContent = `#${order.id}`;
+
+      lucide.createIcons();
+    }
+
+    function startActiveOrderSimulation() {
+      if (!activeRouteCoords || activeRouteCoords.length === 0) return;
+      let idx = 0;
+      document.getElementById('active-status').textContent = 'Recogido';
+      document.getElementById('active-progress').style.width = '8%';
+
+      // place sim marker at origin
+      if (activeSimMarker) activeMap.removeLayer(activeSimMarker);
+      activeSimMarker = L.circleMarker(activeRouteCoords[0], { radius: 8, color: '#ff6a2f', fillColor: '#ff6a2f', fillOpacity: 1 }).addTo(activeMap);
+
+      // small delay then start moving
+      setTimeout(() => {
+        document.getElementById('active-status').textContent = 'En viaje';
+        activeInterval = setInterval(() => {
+          idx++;
+          if (idx >= activeRouteCoords.length) {
+            clearInterval(activeInterval);
+            document.getElementById('active-progress').style.width = '100%';
+            document.getElementById('active-status').textContent = 'Entregado';
+            document.getElementById('active-order-badge').textContent = `Entregado · #${DEMO_ACTIVE_ORDER.id}`;
+            document.getElementById('delivered-placeholder').classList.remove('hidden');
+            // store as delivered
+            localStorage.setItem('lastDeliveredOrder', JSON.stringify({ id: DEMO_ACTIVE_ORDER.id, time: new Date().toISOString() }));
+            return;
+          }
+          const pos = activeRouteCoords[idx];
+          activeSimMarker.setLatLng(pos);
+          const percent = Math.round((idx / (activeRouteCoords.length - 1)) * 100);
+          document.getElementById('active-progress').style.width = percent + '%';
+        }, 120);
+      }, 800);
+    }
+
+    document.addEventListener('click', e => {
+      if (e.target && e.target.id === 'btn-simulate-active') {
+        ensureActiveOrderMap();
+        startActiveOrderSimulation();
+      }
+    });
+
     function activateDemoSession(source = 'auto') {
       if (demoLoginStarted) return;
       demoLoginStarted = true;
@@ -2181,7 +3762,7 @@
         if (orderMap && !startMarker && !endMarker) {
           orderMap.setView([orderUserCoords.lat, orderUserCoords.lng], 13);
         }
-      }, () => {});
+      }, () => { });
     }
 
     function initOrderMap() {
@@ -2604,7 +4185,7 @@
     }
 
     // ─── ROUTER SPA ───────────────────────────────────────────────
-    const VIEWS_WITH_NAV = ['inicio','pedidos','tracking','perfil','realizar-pedido'];
+    const VIEWS_WITH_NAV = ['inicio', 'pedidos', 'tracking', 'perfil', 'realizar-pedido'];
     let currentView = null;
 
     function navigateTo(viewId) {
@@ -2636,10 +4217,110 @@
 
       if (viewId === 'inicio') {
         requestAnimationFrame(ensureHomeMap);
+        requestAnimationFrame(ensureActiveOrderMap);
       } else if (viewId === 'realizar-pedido') {
         requestAnimationFrame(ensureOrderFlow);
+      } else if (viewId === 'tracking') {
+        requestAnimationFrame(initTrackingMap);
       }
     }
+
+    // ─── TRACKING UI & SIMULATION ─────────────────────────────────
+    let trackingMap = null;
+    let trackingMarker = null;
+    let trackingRouteLine = null;
+    let trackingHistory = [];
+    let trackingSimInterval = null;
+
+    function initTrackingMap() {
+      if (trackingMap) {
+        trackingMap.invalidateSize();
+        return;
+      }
+
+      const coordsDefecto = [-46.8049, -67.9731]; // Pico Truncado
+
+      trackingMap = L.map('tracking-map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView(coordsDefecto, 15);
+
+      // Dark theme map based on CartoDB
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20
+      }).addTo(trackingMap);
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const posReal = [position.coords.latitude, position.coords.longitude];
+            trackingMap.setView(posReal, 16);
+            createTrackingRoute(posReal);
+            startTrackingSim(posReal[0], posReal[1]);
+          },
+          () => {
+            trackingMap.setView(coordsDefecto, 15);
+            createTrackingRoute(coordsDefecto);
+            startTrackingSim(coordsDefecto[0], coordsDefecto[1]);
+          }
+        );
+      } else {
+        createTrackingRoute(coordsDefecto);
+        startTrackingSim(coordsDefecto[0], coordsDefecto[1]);
+      }
+    }
+
+    function createTrackingRoute(coords) {
+      const customIconHTML = L.divIcon({
+        html: `
+                <div class="pulse-marker flex items-center justify-center border-2 border-white w-10 h-10 rounded-full shadow-lg" style="background: #3b82f6;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M12 2v9M8 5h8" />
+                    </svg>
+                </div>
+            `,
+        className: 'custom-leaflet-marker',
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+      });
+
+      trackingMarker = L.marker(coords, { icon: customIconHTML }).addTo(trackingMap);
+      trackingHistory = [coords];
+      trackingRouteLine = L.polyline(trackingHistory, {
+        color: '#3b82f6',
+        weight: 5,
+        opacity: 0.8,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(trackingMap);
+    }
+
+    function startTrackingSim(lat, lng) {
+      if (trackingSimInterval) clearInterval(trackingSimInterval);
+      let actualLat = lat;
+      let actualLng = lng;
+
+      trackingSimInterval = setInterval(() => {
+        actualLat += (Math.random() - 0.3) * 0.00015;
+        actualLng += (Math.random() - 0.3) * 0.00015;
+        const nuevaPos = [actualLat, actualLng];
+
+        if (trackingMarker) {
+          trackingMarker.setLatLng(nuevaPos);
+          trackingHistory.push(nuevaPos);
+          trackingRouteLine.setLatLngs(trackingHistory);
+          trackingMap.panTo(nuevaPos);
+        }
+
+        const velElement = document.getElementById('telemetria-vel');
+        if (velElement) {
+          const velSimulada = Math.floor(Math.random() * (48 - 36 + 1) + 36);
+          velElement.innerText = `${velSimulada} km/h`;
+        }
+      }, 4000);
+    }
+
 
     // ─── PANTALLA DE CARGA ────────────────────────────────────────
     function runLoader() {
@@ -2706,16 +4387,16 @@
     }
 
     // ─── PERFIL: FOTO ─────────────────────────────────────────────
-    document.getElementById('photo-input').addEventListener('change', function() {
+    document.getElementById('photo-input').addEventListener('change', function () {
       const file = this.files && this.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = () => {
-        ['profile-photo','profile-photo-2'].forEach(id => {
+        ['profile-photo', 'profile-photo-2'].forEach(id => {
           const el = document.getElementById(id);
           if (el) { el.src = reader.result; el.classList.remove('hidden'); }
         });
-        ['avatar-fallback','avatar-fallback-2'].forEach(id => {
+        ['avatar-fallback', 'avatar-fallback-2'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.add('hidden');
         });
@@ -2739,7 +4420,7 @@
       showToast('Contraseña actualizada');
     });
 
-    document.getElementById('push-toggle').addEventListener('change', function() {
+    document.getElementById('push-toggle').addEventListener('change', function () {
       showToast(this.checked ? 'Notificaciones push activadas' : 'Notificaciones push desactivadas');
     });
 
@@ -2757,7 +4438,7 @@
       if (!chat.classList.contains('hidden')) document.getElementById('support-message').focus();
     });
 
-    const messageFeed = [{ role:'agent', text:'Hola, soy el asistente de soporte. Contame qué pasó con tu pedido y te ayudamos a resolverlo.' }];
+    const messageFeed = [{ role: 'agent', text: 'Hola, soy el asistente de soporte. Contame qué pasó con tu pedido y te ayudamos a resolverlo.' }];
 
     function renderSupportThread() {
       const thread = document.getElementById('support-thread');
@@ -2770,19 +4451,19 @@
       const input = document.getElementById('support-message');
       const text = input.value.trim();
       if (!text) { showToast('Escribí tu consulta antes de enviar'); return; }
-      messageFeed.push({ role:'user', text });
+      messageFeed.push({ role: 'user', text });
       renderSupportThread();
       input.value = '';
       setTimeout(() => {
-        messageFeed.push({ role:'agent', text:'Recibimos tu mensaje. Estamos revisando el caso y te contactamos por este canal o por WhatsApp.' });
+        messageFeed.push({ role: 'agent', text: 'Recibimos tu mensaje. Estamos revisando el caso y te contactamos por este canal o por WhatsApp.' });
         renderSupportThread();
       }, 650);
     });
 
     // ─── PERFIL: PAGOS ────────────────────────────────────────────
     let paymentCards = [
-      { id:1, name:'Visa Personal', brand:'Visa', number:'4532 7814 9012 4431', expiry:'11/28', holder:'María López', primary:true },
-      { id:2, name:'Mastercard Pyme', brand:'Mastercard', number:'5129 6641 8820 7714', expiry:'07/27', holder:'María López', primary:false }
+      { id: 1, name: 'Visa Personal', brand: 'Visa', number: '4532 7814 9012 4431', expiry: '11/28', holder: 'María López', primary: true },
+      { id: 2, name: 'Mastercard Pyme', brand: 'Mastercard', number: '5129 6641 8820 7714', expiry: '07/27', holder: 'María López', primary: false }
     ];
 
     function renderPaymentCards() {
@@ -2844,10 +4525,10 @@
 
     document.getElementById('card-form').addEventListener('submit', e => {
       e.preventDefault();
-      const digits = document.getElementById('card-number').value.replace(/\D/g,'');
+      const digits = document.getElementById('card-number').value.replace(/\D/g, '');
       if (digits.length < 12 || digits.length > 19) { showToast('El número de tarjeta no es válido'); return; }
       const isDefault = document.getElementById('card-default').checked;
-      if (isDefault) paymentCards = paymentCards.map(c => ({ ...c, primary:false }));
+      if (isDefault) paymentCards = paymentCards.map(c => ({ ...c, primary: false }));
       paymentCards = [{
         id: Date.now(),
         name: document.getElementById('card-name').value.trim(),
@@ -2876,7 +4557,7 @@
     renderPaymentCards();
     runLoader();
 
-    </script>
+  </script>
 
   <script>
 
@@ -2897,9 +4578,51 @@
           requestAnimationFrame(ensureHomeMap);
         } else if (view === 'realizar-pedido') {
           requestAnimationFrame(ensureOrderFlow);
+        } else if (view === 'tracking') {
+          requestAnimationFrame(initTrackingMap);
         }
       }
     });
+
+    // ─── DASHBOARD MODAL NOMBRE ──────────────────────────────────────────
+    function openNameModal() {
+      const dcn = document.getElementById('display-client-name');
+      if (!dcn) return;
+      const currentName = dcn.textContent;
+      document.getElementById('client-name-input').value = currentName;
+
+      const modal = document.getElementById('name-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeNameModal() {
+      const modal = document.getElementById('name-modal');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    function saveClientName() {
+      const inputVal = document.getElementById('client-name-input').value.trim();
+      if (inputVal) {
+        localStorage.setItem('logixpress_client_name', inputVal);
+        updateNameUI(inputVal);
+      }
+      closeNameModal();
+    }
+
+    function updateNameUI(name) {
+      const dcn = document.getElementById('display-client-name');
+      if (dcn) dcn.textContent = name;
+      const hun = document.getElementById('header-user-name');
+      if (hun) hun.textContent = name;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('logixpress_client_name') || 'Carlos Mendoza';
+      updateNameUI(savedName);
+    });
   </script>
 </body>
+
 </html>
