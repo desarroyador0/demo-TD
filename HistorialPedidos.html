@@ -600,9 +600,7 @@
 
                 element.innerHTML = `
                     <div class="flex items-center space-x-3.5 min-w-0">
-                        <div class="w-10 h-10 bg-slate-900/80 border border-gray-800 rounded-xl flex items-center justify-center text-slate-300 flex-shrink-0">
-                            <i class="fa-solid fa-${vehicleIcons[order.vehicleId] || 'box'}"></i>
-                        </div>
+                        <img src="images/LogoTD.png" alt="Pedido" class="w-10 h-10 rounded-xl object-cover border border-gray-800 flex-shrink-0">
                         <div class="min-w-0">
                             <p class="text-xs font-bold text-white truncate">Orden #${order.orderNumber} • ${order.vehicleLabel}</p>
                             <p class="text-[10px] text-gray-500 font-bold mt-0.5">${order.date}</p>
