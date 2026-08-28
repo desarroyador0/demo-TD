@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Todo Delivery</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Animaciones aceleradas por GPU (translate3d/translateZ) */
+    @keyframes moveRouteA {
+      0% { stroke-dashoffset: 800; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes moveRouteB {
+      0% { stroke-dashoffset: 900; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 0.15; transform: scale(0.98) translateZ(0); }
+      50% { opacity: 0.35; transform: scale(1.02) translateZ(0); }
+    }
+
+    .path-dash-1 {
+      stroke-dasharray: 120, 300;
+      animation: moveRouteA 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .path-dash-2 {
+      stroke-dasharray: 150, 350;
+      animation: moveRouteB 11s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      animation-delay: -2s;
+    }
+    .glow-pulse {
+      animation: subtlePulse 5s ease-in-out infinite;
+    }
+
+    /* Liquid Glass ultraliviano (Simulado mediante opacidad y gradiente sin blur pesado) */
+    .glass-opt {
+      background: linear-gradient(145deg, rgba(25, 33, 50, 0.92) 0%, rgba(10, 15, 26, 0.96) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transform: translateZ(0);
+    }
+
+    .input-opt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+    .input-opt:focus {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: #f59e0b;
+      outline: none;
+    }
+
+    /* Clase para transiciones fluidas en cualquier procesador */
+    .gpu-layer {
+      transform: translate3d(0, 0, 0);
+      will-change: transform, opacity;
+      transition: transform 0.9s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.8s ease;
+    }
+  </style>
+</head>
+<body class="bg-[#05070a] text-slate-100 min-h-screen flex items-center justify-center p-4 overflow-hidden relative selection:bg-amber-500/30 select-none">
+
+  <!-- ================= FONDO VECTORIAL ULTRA EFICIENTE ================= -->
+  <!-- Halos de luz fijos (Renderizados una sola vez sin recalcular en cada frame) -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] rounded-full bg-amber-500/10 rounded-full glow-pulse"></div>
+    <div class="absolute bottom-10 right-0 w-[260px] h-[260px] rounded-full bg-sky-600/10 rounded-full glow-pulse" style="animation-delay: -2.5s;"></div>
+  </div>
+
+  <!-- Rutas vectoriales gruesas y suaves -->
+  <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gradAmber" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="gradCyan" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#0284c7" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Línea 1: Diagonal principal -->
+    <path d="M -100,120 C 200,450 350,150 850,420" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="4.5" />
+    <path d="M -100,120 C 200,450 350,150 850,420" fill="none" stroke="url(#gradAmber)" stroke-width="4" stroke-linecap="round" class="path-dash-1" />
+
+    <!-- Línea 2: Ruta cruzada -->
+    <path d="M 750,-50 C 550,380 180,280 -80,700" fill="none" stroke="url(#gradCyan)" stroke-width="4" stroke-linecap="round" class="path-dash-2" />
+  </svg>
+
+  <!-- ================= ESCENARIO PRINCIPAL ================= -->
+  <div class="relative w-full max-w-sm h-[560px] flex items-center justify-center z-10">
+
+    <!-- ================= 1. PANTALLA DE CARGA (SPLASH) ================= -->
+    <div id="splash-stage" class="gpu-layer absolute inset-0 flex flex-col items-center justify-center">
+      
+      <!-- Contenedor del Logo -->
+      <div class="relative flex items-center justify-center w-36 h-36">
+        <div class="absolute inset-0 rounded-full border border-white/10 animate-[spin_20s_linear_infinite]"></div>
+        <div class="absolute inset-2 bg-amber-500/10 rounded-full glow-pulse"></div>
+
+        <!-- REEMPLAZAR CON TU IMAGEN PNG -->
+        <img 
+          id="app-logo"
+          src="/LogoTD.png" 
+          alt="Todo Delivery Logo" 
+          class="relative z-10 w-24 h-24 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
+        />
+      </div>
+
+      <!-- Textos de Marca -->
+      <div class="text-center mt-5">
+        <h1 class="text-2xl font-black tracking-tight text-white">
+          Todo <span class="text-amber-400">Delivery</span>
+        </h1>
+        <p class="text-[11px] font-semibold tracking-[0.2em] text-slate-400 uppercase mt-0.5">Soluciones Logísticas</p>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div class="w-44 mt-10 flex flex-col items-center gap-2.5">
+        <div class="w-full h-[3px] bg-slate-800 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full w-0 bg-gradient-to-r from-amber-500 to-amber-300 rounded-full transition-all duration-100 ease-out"></div>
+        </div>
+        
+        <div class="flex justify-between items-center w-full text-[10px] tracking-wider text-slate-400 uppercase">
+          <span id="load-status" class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+            Iniciando
+          </span>
+          <span id="load-percent" class="font-mono text-slate-200">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 2. PANEL DE INICIO DE SESIÓN ================= -->
+    <div id="login-stage" class="gpu-layer absolute inset-0 opacity-0 pointer-events-none translate-x-8 translate-y-4 scale-95 flex flex-col justify-center">
+      
+      <div class="glass-opt rounded-3xl p-7 relative overflow-hidden">
+        
+        <!-- Línea superior de reflejo -->
+        <div class="absolute top-0 inset-x-8 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
+        <!-- Cabecera -->
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-white tracking-tight">Bienvenido</h2>
+            <p class="text-xs text-slate-400">Ingresa tus credenciales</p>
+          </div>
+        </div>
+
+        <form class="space-y-3.5" onsubmit="event.preventDefault();">
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase tracking-wider text-slate-400 font-bold px-1">Usuario / Celular</label>
+            <div class="relative flex items-center">
+              <i data-lucide="user" class="absolute left-3.5 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="text" 
+                placeholder="Ej. usuario o +54 9..." 
+                class="input-opt w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white placeholder-slate-500"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between px-1">
+              <label class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Contraseña</label>
+              <a href="#" class="text-[10px] text-amber-400 hover:underline">¿Olvidaste?</a>
+            </div>
+            <div class="relative flex items-center">
+              <i data-lucide="lock" class="absolute left-3.5 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="password" 
+                placeholder="••••••••" 
+                class="input-opt w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white placeholder-slate-500"
+                required
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 active:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+          >
+            <span>Iniciar Sesión</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div class="relative my-4">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.08]"></div></div>
+          <div class="relative flex justify-center text-[10px] uppercase">
+            <span class="bg-[#0f172a] px-2 text-slate-400 font-medium">o</span>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          class="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-300 border border-white/10 hover:bg-white/[0.04] transition-colors"
+        >
+          Crear cuenta de cliente
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= LÓGICA DE CONTROL ================= -->
+  <script>
+    lucide.createIcons();
+
+    const progressBar = document.getElementById('progress-bar');
+    const loadPercent = document.getElementById('load-percent');
+    const loadStatus = document.getElementById('load-status');
+    const splashStage = document.getElementById('splash-stage');
+    const loginStage = document.getElementById('login-stage');
+
+    let currentVal = 0;
+    const telemetry = [
+      { at: 35, text: "Iniciando nodos" },
+      { at: 70, text: "Sincronizando" },
+      { at: 90, text: "Verificando" },
+      { at: 100, text: "Listo" }
+    ];
+
+    const timer = setInterval(() => {
+      currentVal += Math.floor(Math.random() * 4) + 3;
+      
+      if (currentVal >= 100) {
+        currentVal = 100;
+        clearInterval(timer);
+        render(100);
+        setTimeout(executeShift, 350);
+      } else {
+        render(currentVal);
+      }
+    }, 50);
+
+    function render(val) {
+      progressBar.style.width = `${val}%`;
+      loadPercent.innerText = `${val}%`;
+      const step = telemetry.find(s => val <= s.at);
+      if (step) loadStatus.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> ${step.text}`;
+    }
+
+    function executeShift() {
+      // Desplazamiento limpio usando transform3d nativo
+      splashStage.style.transform = "translate3d(-24px, -60px, 0) scale(0.78)";
+      splashStage.style.opacity = "0.15";
+      splashStage.style.pointerEvents = "none";
+
+      setTimeout(() => {
+        loginStage.classList.remove('pointer-events-none');
+        loginStage.style.opacity = "1";
+        loginStage.style.transform = "translate3d(0, 0, 0) scale(1)";
+      }, 100);
+    }
+  </script>
+</body>
+</html>

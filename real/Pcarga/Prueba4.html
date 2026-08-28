@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Todo Delivery</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-mono {
+      font-family: 'Space Grotesk', monospace;
+    }
+
+    /* Rutas logísticas suaves y gruesas */
+    @keyframes smoothDashOffset {
+      0% { stroke-dashoffset: 1200; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes slowOrbit {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.95); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    .path-stream-thick-1 {
+      stroke-dasharray: 200, 400;
+      animation: smoothDashOffset 9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+    .path-stream-thick-2 {
+      stroke-dasharray: 260, 500;
+      animation: smoothDashOffset 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+      animation-delay: -3s;
+    }
+    .path-stream-thick-3 {
+      stroke-dasharray: 180, 420;
+      animation: smoothDashOffset 14s ease-in-out infinite;
+      animation-delay: -6s;
+    }
+
+    .animate-liquid-slow {
+      animation: slowOrbit 24s ease-in-out infinite;
+    }
+    .animate-glow-pulse {
+      animation: gentlePulse 6s ease-in-out infinite;
+    }
+
+    /* Superficie Liquid Glass Hi-Fi */
+    .liquid-glass-chassis {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+      backdrop-filter: blur(40px) saturate(160%);
+      -webkit-backdrop-filter: blur(40px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 30px 70px -10px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .liquid-field {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .liquid-field:focus {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Calidad de render en transiciones lentas */
+    .will-shift {
+      will-change: transform, opacity, filter;
+      transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  </style>
+</head>
+<body class="bg-[#03060a] text-slate-100 min-h-screen flex items-center justify-center p-4 overflow-hidden relative selection:bg-amber-500/30 select-none">
+
+  <!-- ================= 1. FONDO ATMOSFÉRICO & LÍNEAS GRUESAS BORROSAS ================= -->
+  
+  <!-- Orbes de luz líquida -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -left-20 w-[550px] h-[550px] rounded-full bg-amber-500/10 blur-[130px] animate-liquid-slow"></div>
+    <div class="absolute -bottom-40 -right-20 w-[600px] h-[600px] rounded-full bg-cyan-700/10 blur-[150px] animate-liquid-slow" style="animation-delay: -10s;"></div>
+  </div>
+
+  <!-- Capa Vectorial: Líneas gruesas desenfocadas de logística -->
+  <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Filtros de desenfoque gaussiano suave -->
+      <filter id="blur-route-glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="10" result="blurGlow"/>
+        <feMerge>
+          <feMergeNode in="blurGlow"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+
+      <filter id="heavy-blur" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="16"/>
+      </filter>
+
+      <!-- Gradientes de línea -->
+      <linearGradient id="glow-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0"/>
+        <stop offset="30%" stop-color="#f59e0b" stop-opacity="0.9"/>
+        <stop offset="70%" stop-color="#fb923c" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+      </linearGradient>
+
+      <linearGradient id="glow-cyan" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0"/>
+        <stop offset="40%" stop-color="#0284c7" stop-opacity="0.8"/>
+        <stop offset="70%" stop-color="#6366f1" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Línea 1: Ruta diagonal principal gruesa -->
+    <path d="M -150,150 C 250,550 450,100 950,450" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="5" filter="url(#heavy-blur)" />
+    <path d="M -150,150 C 250,550 450,100 950,450" fill="none" stroke="url(#glow-amber)" stroke-width="4.5" stroke-linecap="round" filter="url(#blur-route-glow)" class="path-stream-thick-1" />
+
+    <!-- Línea 2: Ruta cruzada -->
+    <path d="M 850,-100 C 650,400 200,300 -100,800" fill="none" stroke="url(#glow-cyan)" stroke-width="5" stroke-linecap="round" filter="url(#blur-route-glow)" class="path-stream-thick-2" />
+
+    <!-- Línea 3: Arco envolvente de fondo -->
+    <path d="M 50,900 Q 500,700 750,1000" fill="none" stroke="url(#glow-amber)" stroke-width="4" stroke-linecap="round" filter="url(#heavy-blur)" class="path-stream-thick-3" />
+  </svg>
+
+  <!-- ================= 2. ESCENARIO CENTRAL / WORKSPACE ================= -->
+  <div class="relative w-full max-w-sm h-[580px] flex items-center justify-center z-10">
+
+    <!-- ================= CAPA A: PANTALLA DE CARGA (SPLASH VIEW) ================= -->
+    <div id="splash-stage" class="will-shift absolute inset-0 flex flex-col items-center justify-center">
+      
+      <!-- Contenedor del Logo Flotante -->
+      <div class="relative flex items-center justify-center w-40 h-40">
+        
+        <!-- Anillo líquido exterior lento -->
+        <div class="absolute inset-0 rounded-full border border-white/10 animate-[spin_26s_linear_infinite]"></div>
+        
+        <!-- Resplandor posterior al logo -->
+        <div class="absolute inset-2 bg-gradient-to-tr from-amber-500/15 via-orange-500/10 to-transparent rounded-full blur-2xl animate-glow-pulse"></div>
+
+        <!-- LOGO PNG: REEMPLAZA EL SRC CON TU IMAGEN -->
+        <img 
+          id="app-logo"
+          src="/LogoTD.png" 
+          alt="Todo Delivery Logo" 
+          class="relative z-10 w-28 h-28 object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)]"
+        />
+      </div>
+
+      <!-- Título de Marca -->
+      <div class="text-center mt-6">
+        <h1 class="text-2xl font-extrabold tracking-tight text-white/95">
+          Todo <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400">Delivery</span>
+        </h1>
+        <p class="text-[11px] font-medium tracking-[0.25em] text-slate-400 uppercase mt-1">Soluciones Logísticas</p>
+      </div>
+
+      <!-- Barra de progreso cinemática lenta -->
+      <div class="w-48 mt-12 flex flex-col items-center gap-3">
+        <div class="relative w-full h-[3px] bg-white/[0.06] rounded-full overflow-hidden backdrop-blur-md">
+          <div id="progress-indicator" class="absolute left-0 top-0 bottom-0 w-0 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.8)] transition-all duration-150 ease-out"></div>
+        </div>
+        
+        <div class="flex justify-between items-center w-full text-[10px] tracking-wider text-slate-400 uppercase font-mono">
+          <span id="load-status" class="flex items-center gap-1.5">
+            <span class="w-1 h-1 rounded-full bg-amber-400 animate-ping"></span>
+            Conectando red
+          </span>
+          <span id="load-percent" class="text-slate-300">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CAPA B: INICIO DE SESIÓN (REVELADO POR DESPLAZAMIENTO) ================= -->
+    <div id="login-stage" class="will-shift absolute inset-0 opacity-0 pointer-events-none translate-x-12 translate-y-6 scale-95 flex flex-col justify-center">
+      
+      <div class="liquid-glass-chassis rounded-[2rem] p-8 relative overflow-hidden">
+        
+        <!-- Línea superior de reflejo óptico -->
+        <div class="absolute top-0 inset-x-8 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
+        <!-- Encabezado del Formulario -->
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center shadow-inner">
+            <i data-lucide="shield-check" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-white tracking-tight">Bienvenido</h2>
+            <p class="text-xs text-slate-400">Ingresa tus credenciales para operar</p>
+          </div>
+        </div>
+
+        <form class="space-y-4" onsubmit="event.preventDefault();">
+          
+          <!-- Input Teléfono / Usuario -->
+          <div class="space-y-1.5">
+            <label class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold px-1">Usuario / Celular</label>
+            <div class="relative flex items-center">
+              <i data-lucide="user" class="absolute left-3.5 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="text" 
+                placeholder="Ej. usuario o +54 9 11..." 
+                class="liquid-field w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Input Contraseña -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between px-1">
+              <label class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Contraseña</label>
+              <a href="#" class="text-[10px] text-amber-400/80 hover:text-amber-300 transition-colors">¿Olvidaste?</a>
+            </div>
+            <div class="relative flex items-center">
+              <i data-lucide="key-round" class="absolute left-3.5 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="password" 
+                placeholder="••••••••" 
+                class="liquid-field w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Botón de Ingreso Principal -->
+          <button 
+            type="submit" 
+            class="w-full mt-2 py-3.5 px-4 rounded-xl font-semibold text-sm text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:brightness-105 active:scale-[0.98] transition-all duration-300 shadow-[0_4px_25px_rgba(245,158,11,0.25)] flex items-center justify-center gap-2"
+          >
+            <span>Iniciar Sesión</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div class="relative my-5">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.06]"></div></div>
+          <div class="relative flex justify-center text-[10px] uppercase">
+            <span class="bg-[#0c1017] px-2 text-slate-400 font-medium">o</span>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          class="w-full py-2.5 rounded-xl text-xs font-medium text-slate-300 border border-white/[0.08] hover:bg-white/[0.03] transition-colors"
+        >
+          Crear cuenta de cliente
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= 3. LÓGICA DE CARGA Y DESPLAZAMIENTO CINEMÁTICO ================= -->
+  <script>
+    lucide.createIcons();
+
+    const progressIndicator = document.getElementById('progress-indicator');
+    const loadPercent = document.getElementById('load-percent');
+    const loadStatus = document.getElementById('load-status');
+    const splashStage = document.getElementById('splash-stage');
+    const loginStage = document.getElementById('login-stage');
+
+    let currentVal = 0;
+    const telemetrySteps = [
+      { at: 30, text: "Iniciando nodos" },
+      { at: 65, text: "Sincronizando rutas" },
+      { at: 90, text: "Seguridad verificada" },
+      { at: 100, text: "Listo" }
+    ];
+
+    // Carga fluida a velocidad suave
+    const loaderInterval = setInterval(() => {
+      currentVal += Math.floor(Math.random() * 3) + 2; // Avance pausado y elegante
+      
+      if (currentVal >= 100) {
+        currentVal = 100;
+        clearInterval(loaderInterval);
+        updateUI(100);
+        setTimeout(performCinematicShift, 600); // Pausa breve al 100%
+      } else {
+        updateUI(currentVal);
+      }
+    }, 70);
+
+    function updateUI(val) {
+      progressIndicator.style.width = `${val}%`;
+      loadPercent.innerText = `${val}%`;
+      const match = telemetrySteps.find(s => val <= s.at);
+      if (match) loadStatus.innerHTML = `<span class="w-1 h-1 rounded-full bg-amber-400 animate-ping"></span> ${match.text}`;
+    }
+
+    // Transición de desplazamiento en 2 planos
+    function performCinematicShift() {
+      // 1. Desplazar el Splash hacia arriba a la izquierda, reduciendo escala y desenfocándolo en segundo plano
+      splashStage.style.transform = "translate(-30px, -70px) scale(0.75) rotate(-2deg)";
+      splashStage.style.opacity = "0.2";
+      splashStage.style.filter = "blur(8px)";
+      splashStage.style.pointerEvents = "none";
+
+      // 2. Revelar el panel de Login entrando suavemente desde la derecha hacia el centro
+      setTimeout(() => {
+        loginStage.classList.remove('pointer-events-none');
+        loginStage.style.opacity = "1";
+        loginStage.style.transform = "translate(0px, 0px) scale(1) rotate(0deg)";
+      }, 150);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Todo Delivery - Perfil e Historial</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .tab-content {
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none">
+
+  <!-- ================= 1. CABECERA & SELECTOR DE PESTAÑAS ================= -->
+  <header class="sticky top-0 z-20 bg-slate-950/95 border-b border-slate-800/80 px-4 pt-3 pb-2 backdrop-blur-sm">
+    <div class="max-w-md mx-auto space-y-3">
+      
+      <!-- Título Superior -->
+      <div class="flex items-center justify-between">
+        <h1 class="text-base font-bold text-white tracking-tight">Mi Cuenta</h1>
+        <span class="text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
+          ID: #CLI-9041
+        </span>
+      </div>
+
+      <!-- Segmented Tabs (Historial vs Perfil) -->
+      <div class="grid grid-cols-2 p-1 bg-slate-900 border border-slate-800 rounded-xl">
+        <button 
+          id="btn-tab-history" 
+          onclick="switchTab('history')" 
+          class="py-1.5 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition-all shadow-sm"
+        >
+          Historial de Envíos
+        </button>
+        <button 
+          id="btn-tab-profile" 
+          onclick="switchTab('profile')" 
+          class="py-1.5 text-xs font-medium text-slate-400 rounded-lg transition-all"
+        >
+          Datos de Perfil
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <main class="flex-1 max-w-md w-full mx-auto p-4 pb-24 space-y-4">
+
+    <!-- ========================================== -->
+    <!-- VISTA 1: HISTORIAL DE ENVÍOS               -->
+    <!-- ========================================== -->
+    <section id="view-history" class="tab-content space-y-4">
+      
+      <!-- Filtros Rápidos -->
+      <div class="flex gap-2 overflow-x-auto no-scrollbar">
+        <button class="px-3 py-1 rounded-lg bg-slate-800 text-amber-400 text-xs font-bold shrink-0 border border-slate-700">
+          Todos (14)
+        </button>
+        <button class="px-3 py-1 rounded-lg bg-slate-900 text-slate-400 text-xs font-medium shrink-0 border border-slate-800">
+          En curso (1)
+        </button>
+        <button class="px-3 py-1 rounded-lg bg-slate-900 text-slate-400 text-xs font-medium shrink-0 border border-slate-800">
+          Entregados (12)
+        </button>
+        <button class="px-3 py-1 rounded-lg bg-slate-900 text-slate-400 text-xs font-medium shrink-0 border border-slate-800">
+          Cancelados (1)
+        </button>
+      </div>
+
+      <!-- Lista de Pedidos -->
+      <div class="space-y-3">
+        
+        <!-- Pedido 1: En curso -->
+        <article class="bg-slate-900 border border-amber-500/40 rounded-2xl p-3.5 space-y-2.5 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span class="text-xs font-bold text-white">Envío #2492</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Hoy, 15:30 • Moto Express</p>
+            </div>
+            <span class="text-xs font-bold text-amber-400 font-mono bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">
+              $1.300
+            </span>
+          </div>
+
+          <div class="text-[11px] text-slate-300 space-y-1 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+            <p class="flex items-center gap-1.5 truncate">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="truncate">Av. Libertador 1420</span>
+            </p>
+            <p class="flex items-center gap-1.5 truncate">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+              <span class="truncate font-medium text-white">Calle Mendoza 350 Sur</span>
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-[11px] text-slate-400">Cadete: <strong>Martín G.</strong></span>
+            <a href="./live-tracking.html" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold active:bg-amber-600 transition-colors">
+              Seguir en vivo
+            </a>
+          </div>
+        </article>
+
+        <!-- Pedido 2: Entregado -->
+        <article class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span class="text-xs font-bold text-white">Envío #2488</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">26 Ago, 18:15 • Paquetería Auto</p>
+            </div>
+            <span class="text-xs font-bold text-slate-200 font-mono">$2.200</span>
+          </div>
+
+          <div class="text-[11px] text-slate-400 space-y-1 bg-slate-950 p-2.5 rounded-xl border border-slate-800/60">
+            <p class="truncate">De: Mitre 540 Este</p>
+            <p class="truncate text-slate-300">A: Paula A. de Sarmiento 120</p>
+          </div>
+
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <button class="text-slate-400 hover:text-slate-200 flex items-center gap-1 text-[11px]">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Comprobante
+            </button>
+            <button class="px-3 py-1 rounded-lg border border-slate-700 font-bold text-slate-200 active:bg-slate-800">
+              Repetir pedido
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VISTA 2: PERFIL DE USUARIO Y AJUSTES      -->
+    <!-- ========================================== -->
+    <section id="view-profile" class="tab-content hidden space-y-4">
+      
+      <!-- Resumen del Usuario -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-base shrink-0">
+          JS
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="text-sm font-bold text-white truncate">Juan Segura</h2>
+          <p class="text-xs text-slate-400 truncate">+54 9 264 123 4567</p>
+          <span class="inline-block text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-1.5 py-0.2 rounded mt-1">
+            Cliente Verificado
+          </span>
+        </div>
+        <button class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:bg-slate-700">
+          <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+      <!-- Métodos de Pago Guardados -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Métodos de Pago</h3>
+          <button class="text-xs text-amber-400 font-bold hover:underline">+ Agregar</button>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="credit-card" class="w-4 h-4 text-amber-400"></i>
+              <span>Visa Débito •••• 8821</span>
+            </div>
+            <span class="text-[10px] text-slate-500 font-medium">Predeterminado</span>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="qr-code" class="w-4 h-4 text-sky-400"></i>
+              <span>Mercado Pago / Alias</span>
+            </div>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direcciones Guardadas -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Mis Direcciones</h3>
+          <button class="text-xs text-amber-400 font-bold hover:underline">+ Nueva</button>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+            <div class="flex items-center gap-2.5 truncate pr-2">
+              <i data-lucide="home" class="w-4 h-4 text-amber-400 shrink-0"></i>
+              <div class="truncate">
+                <p class="font-bold text-white">Casa</p>
+                <p class="text-[11px] text-slate-400 truncate">Av. Libertador 1420</p>
+              </div>
+            </div>
+            <i data-lucide="more-vertical" class="w-4 h-4 text-slate-500 shrink-0"></i>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+            <div class="flex items-center gap-2.5 truncate pr-2">
+              <i data-lucide="briefcase" class="w-4 h-4 text-sky-400 shrink-0"></i>
+              <div class="truncate">
+                <p class="font-bold text-white">Trabajo</p>
+                <p class="text-[11px] text-slate-400 truncate">Calle Mendoza 350 Sur</p>
+              </div>
+            </div>
+            <i data-lucide="more-vertical" class="w-4 h-4 text-slate-500 shrink-0"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seguridad y Soporte -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden text-xs">
+        <button class="w-full p-3.5 flex items-center justify-between border-b border-slate-800/80 active:bg-slate-800/50">
+          <span class="flex items-center gap-2.5 text-slate-300">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i> Ayuda y Soporte
+          </span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+        </button>
+        <button class="w-full p-3.5 flex items-center justify-between border-b border-slate-800/80 active:bg-slate-800/50">
+          <span class="flex items-center gap-2.5 text-slate-300">
+            <i data-lucide="shield" class="w-4 h-4 text-slate-400"></i> Términos y Privacidad
+          </span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+        </button>
+        <button class="w-full p-3.5 flex items-center justify-between text-red-400 active:bg-red-500/10">
+          <span class="flex items-center gap-2.5 font-bold">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Cerrar Sesión
+          </span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= 3. NAVEGACIÓN INFERIOR (BOTTOM NAV) ================= -->
+  <nav class="fixed bottom-0 inset-x-0 bg-slate-950/95 border-t border-slate-800 px-4 py-2 backdrop-blur-sm z-30">
+    <div class="max-w-md mx-auto grid grid-cols-4 gap-1">
+      
+      <!-- Inicio -->
+      <a href="./home.html" class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Inicio</span>
+      </a>
+
+      <!-- Envíos (Activo cuando estamos en historial) -->
+      <button onclick="switchTab('history')" id="nav-orders" class="flex flex-col items-center justify-center py-1 text-amber-400">
+        <i data-lucide="package" class="w-5 h-5"></i>
+        <span class="text-[10px] font-bold mt-1">Envíos</span>
+      </button>
+
+      <!-- Chat -->
+      <a href="./order-chat.html" class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200">
+        <i data-lucide="message-square" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Chat</span>
+      </a>
+
+      <!-- Perfil (Activo cuando estamos en perfil) -->
+      <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Perfil</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ================= 4. LÓGICA DE CONTROL ================= -->
+  <script>
+    lucide.createIcons();
+
+    function switchTab(target) {
+      const historyView = document.getElementById('view-history');
+      const profileView = document.getElementById('view-profile');
+      const btnTabHistory = document.getElementById('btn-tab-history');
+      const btnTabProfile = document.getElementById('btn-tab-profile');
+      const navOrders = document.getElementById('nav-orders');
+      const navProfile = document.getElementById('nav-profile');
+
+      if (target === 'history') {
+        historyView.classList.remove('hidden');
+        profileView.classList.add('hidden');
+
+        btnTabHistory.className = "py-1.5 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition-all shadow-sm";
+        btnTabProfile.className = "py-1.5 text-xs font-medium text-slate-400 rounded-lg transition-all";
+
+        navOrders.className = "flex flex-col items-center justify-center py-1 text-amber-400";
+        navProfile.className = "flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200";
+      } else {
+        profileView.classList.remove('hidden');
+        historyView.classList.add('hidden');
+
+        btnTabProfile.className = "py-1.5 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition-all shadow-sm";
+        btnTabHistory.className = "py-1.5 text-xs font-medium text-slate-400 rounded-lg transition-all";
+
+        navProfile.className = "flex flex-col items-center justify-center py-1 text-amber-400";
+        navOrders.className = "flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200";
+      }
+      
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

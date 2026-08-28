@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Todo Delivery - Chat con el Cadete</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    /* Ocultar barra de desplazamiento en los chips horizontales */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen w-screen flex flex-col justify-between select-none overflow-hidden">
+
+  <!-- ================= 1. CABECERA DEL CHAT ================= -->
+  <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 shrink-0 z-10">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      
+      <!-- Volver y Perfil del Cadete -->
+      <div class="flex items-center gap-3">
+        <button onclick="window.history.back()" class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700/80 flex items-center justify-center text-slate-300 active:bg-slate-700">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </button>
+
+        <div class="relative">
+          <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </div>
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-900"></span>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-sm font-bold text-white leading-none">Martín Gómez</h1>
+            <span class="text-[10px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">Cadete</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+            <i data-lucide="bike" class="w-3 h-3 text-slate-500"></i> Honda Wave • <span class="text-emerald-400 font-medium">En viaje (#2492)</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Acción: Llamar directo -->
+      <a href="tel:+5492641234567" class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 active:bg-slate-700 transition-colors">
+        <i data-lucide="phone" class="w-4 h-4"></i>
+      </a>
+
+    </div>
+  </header>
+
+  <!-- ================= 2. ÁREA DE MENSAJES (SCROLLABLE) ================= -->
+  <main id="chat-container" class="flex-1 max-w-md w-full mx-auto p-4 overflow-y-auto space-y-3.5">
+
+    <!-- Separador de fecha / inicio de servicio -->
+    <div class="flex justify-center my-2">
+      <span class="text-[10px] uppercase font-bold tracking-wider bg-slate-900 border border-slate-800 text-slate-400 px-3 py-1 rounded-full">
+        Pedido iniciado • 15:30
+      </span>
+    </div>
+
+    <!-- Mensaje del Cadete (Izquierda) -->
+    <div class="flex flex-col items-start max-w-[82%]">
+      <div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-3.5 py-2.5 rounded-2xl rounded-tl-sm shadow-sm leading-relaxed">
+        ¡Hola! Ya retiré tu paquete en Av. Libertador. Voy en camino a tu domicilio.
+      </div>
+      <span class="text-[10px] text-slate-400 mt-1 ml-1 font-mono">15:32</span>
+    </div>
+
+    <!-- Mensaje del Cliente (Derecha) -->
+    <div class="flex flex-col items-end max-w-[82%] ml-auto">
+      <div class="bg-amber-500 text-slate-950 text-xs font-medium px-3.5 py-2.5 rounded-2xl rounded-tr-sm shadow-sm leading-relaxed">
+        Excelente Martín, gracias. Recuerda que es en el timbre 4B.
+      </div>
+      <div class="flex items-center gap-1 text-[10px] text-slate-400 mt-1 mr-1 font-mono">
+        <span>15:33</span>
+        <i data-lucide="check-check" class="w-3.5 h-3.5 text-amber-400"></i>
+      </div>
+    </div>
+
+    <!-- Mensaje del Cadete (Izquierda) -->
+    <div class="flex flex-col items-start max-w-[82%]">
+      <div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-3.5 py-2.5 rounded-2xl rounded-tl-sm shadow-sm leading-relaxed">
+        Perfecto, anotado. Llego en aproximadamente 8 minutos. Te aviso cuando esté en la puerta.
+      </div>
+      <span class="text-[10px] text-slate-400 mt-1 ml-1 font-mono">15:34</span>
+    </div>
+
+  </main>
+
+  <!-- ================= 3. RESPUESTAS RÁPIDAS (CHIPS) ================= -->
+  <div class="bg-slate-950 border-t border-slate-800/80 px-4 py-2 shrink-0">
+    <div class="max-w-md mx-auto flex gap-2 overflow-x-auto no-scrollbar">
+      <button onclick="sendQuickMessage('Ya estoy bajando')" class="px-3 py-1 rounded-full bg-slate-900 border border-slate-700/80 text-[11px] text-slate-300 font-medium shrink-0 active:bg-slate-800">
+        Ya estoy bajando
+      </button>
+      <button onclick="sendQuickMessage('Dejar en portería/recepción')" class="px-3 py-1 rounded-full bg-slate-900 border border-slate-700/80 text-[11px] text-slate-300 font-medium shrink-0 active:bg-slate-800">
+        Dejar en portería
+      </button>
+      <button onclick="sendQuickMessage('¿Por dónde vienes?')" class="px-3 py-1 rounded-full bg-slate-900 border border-slate-700/80 text-[11px] text-slate-300 font-medium shrink-0 active:bg-slate-800">
+        ¿Por dónde vienes?
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= 4. BARRA DE ENTRADA FIJA ================= -->
+  <footer class="bg-slate-900 border-t border-slate-800 p-3 shrink-0">
+    <div class="max-w-md mx-auto flex items-center gap-2">
+      
+      <!-- Adjuntar foto / comprobante -->
+      <button class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 flex items-center justify-center active:bg-slate-700 transition-colors shrink-0">
+        <i data-lucide="camera" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Input de Texto -->
+      <div class="flex-1 relative">
+        <input 
+          id="message-input"
+          type="text" 
+          placeholder="Escribe un mensaje al cadete..." 
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+          onkeypress="if(event.key === 'Enter') handleSend();"
+        />
+      </div>
+
+      <!-- Botón Enviar -->
+      <button 
+        onclick="handleSend()" 
+        class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 font-bold flex items-center justify-center active:bg-amber-600 transition-colors shrink-0 shadow-md"
+      >
+        <i data-lucide="send" class="w-4 h-4"></i>
+      </button>
+
+    </div>
+  </footer>
+
+  <!-- ================= 5. LÓGICA DE INTERACCIÓN ================= -->
+  <script>
+    lucide.createIcons();
+
+    const chatContainer = document.getElementById('chat-container');
+    const messageInput = document.getElementById('message-input');
+
+    // Auto-scroll al final al cargar
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    function handleSend() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      sendMessage(text);
+      messageInput.value = '';
+    }
+
+    function sendQuickMessage(text) {
+      sendMessage(text);
+    }
+
+    function sendMessage(text) {
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Inyectar burbuja del cliente
+      const messageBubble = document.createElement('div');
+      messageBubble.className = "flex flex-col items-end max-w-[82%] ml-auto";
+      messageBubble.innerHTML = `
+        <div class="bg-amber-500 text-slate-950 text-xs font-medium px-3.5 py-2.5 rounded-2xl rounded-tr-sm shadow-sm leading-relaxed">
+          ${escapeHTML(text)}
+        </div>
+        <div class="flex items-center gap-1 text-[10px] text-slate-400 mt-1 mr-1 font-mono">
+          <span>${time}</span>
+          <i data-lucide="check" class="w-3.5 h-3.5 text-slate-400"></i>
+        </div>
+      `;
+
+      chatContainer.appendChild(messageBubble);
+      lucide.createIcons();
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      // Simulación de respuesta automática del cadete tras 3 segundos
+      setTimeout(() => {
+        simulateDriverReply();
+      }, 3000);
+    }
+
+    function simulateDriverReply() {
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const replyBubble = document.createElement('div');
+      replyBubble.className = "flex flex-col items-start max-w-[82%]";
+      replyBubble.innerHTML = `
+        <div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-3.5 py-2.5 rounded-2xl rounded-tl-sm shadow-sm leading-relaxed">
+          Recibido, todo en orden.
+        </div>
+        <span class="text-[10px] text-slate-400 mt-1 ml-1 font-mono">${time}</span>
+      `;
+      chatContainer.appendChild(replyBubble);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>

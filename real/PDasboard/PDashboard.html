@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Todo Delivery - Inicio</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    /* Ocultar barra de scroll en contenedores horizontales */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none">
+
+  <!-- ================= 1. CABECERA / HEADER ================= -->
+  <header class="sticky top-0 z-20 bg-slate-950/95 border-b border-slate-800/80 px-4 py-3 backdrop-blur-sm">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      
+      <!-- Ubicación actual -->
+      <div class="flex items-center gap-2 overflow-hidden pr-2">
+        <div class="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0">
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
+        </div>
+        <div class="truncate">
+          <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold leading-tight">Ubicación actual</p>
+          <button class="flex items-center gap-1 text-sm font-semibold text-white truncate focus:outline-none">
+            <span class="truncate">Av. Libertador 1420</span>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Notificaciones y Perfil -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button class="relative w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 active:bg-slate-800 transition-colors">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-5 pb-24">
+
+    <!-- BANNER: PEDIDO EN CURSO (Condicional) -->
+    <section class="bg-gradient-to-r from-slate-900 to-slate-900/90 border border-amber-500/30 rounded-2xl p-3.5 flex items-center justify-between shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+          <i data-lucide="bike" class="w-5 h-5 animate-pulse"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <p class="text-xs font-bold text-white">Pedido #2491 en camino</p>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">Cadete: <strong class="text-slate-200">Martín G.</strong> • Llega en ~12 min</p>
+        </div>
+      </div>
+      <button class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold shrink-0 active:bg-amber-600 transition-colors">
+        Ver mapa
+      </button>
+    </section>
+
+    <!-- COTIZADOR RÁPIDO: ORIGEN Y DESTINO -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+      <h2 class="text-sm font-bold text-white tracking-tight mb-3">¿A dónde enviamos hoy?</h2>
+
+      <div class="space-y-2 relative">
+        <!-- Punto A: Origen -->
+        <div class="relative flex items-center">
+          <span class="absolute left-3 w-2 h-2 rounded-full bg-emerald-400"></span>
+          <input 
+            type="text" 
+            value="Mi ubicación actual" 
+            class="w-full pl-8 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+          />
+        </div>
+
+        <!-- Punto B: Destino -->
+        <div class="relative flex items-center">
+          <span class="absolute left-3 w-2 h-2 rounded-full bg-amber-400"></span>
+          <input 
+            type="text" 
+            placeholder="Dirección de entrega (ej. San Martín 450)" 
+            class="w-full pl-8 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+          />
+        </div>
+      </div>
+
+      <!-- Accesos rápidos de direcciones -->
+      <div class="flex gap-2 mt-3 overflow-x-auto no-scrollbar pt-1">
+        <button class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/60 border border-slate-700/60 text-[11px] text-slate-300 font-medium shrink-0 active:bg-slate-800">
+          <i data-lucide="home" class="w-3 h-3 text-amber-400"></i>
+          Casa
+        </button>
+        <button class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/60 border border-slate-700/60 text-[11px] text-slate-300 font-medium shrink-0 active:bg-slate-800">
+          <i data-lucide="briefcase" class="w-3 h-3 text-sky-400"></i>
+          Trabajo
+        </button>
+        <button class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/60 border border-slate-700/60 text-[11px] text-slate-300 font-medium shrink-0 active:bg-slate-800">
+          <i data-lucide="plus" class="w-3 h-3 text-slate-400"></i>
+          Nueva dirección
+        </button>
+      </div>
+    </section>
+
+    <!-- TIPOS DE SERVICIO / VEHÍCULO -->
+    <section>
+      <div class="flex justify-between items-center mb-2.5">
+        <h2 class="text-sm font-bold text-white tracking-tight">Opciones de Envío</h2>
+        <span class="text-[11px] text-slate-400">Tarifas dinámicas</span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2.5">
+        
+        <!-- Opción 1: Moto (Seleccionada) -->
+        <div class="relative bg-slate-900 border-2 border-amber-500 rounded-2xl p-3 flex flex-col items-center text-center cursor-pointer active:scale-95 transition-all">
+          <span class="absolute -top-2 px-1.5 py-0.5 rounded-full bg-amber-500 text-[9px] font-bold text-slate-950 uppercase tracking-wider">Rápido</span>
+          <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center my-1">
+            <i data-lucide="bike" class="w-5 h-5"></i>
+          </div>
+          <p class="text-xs font-bold text-white mt-1">Moto</p>
+          <p class="text-[10px] text-slate-400 mt-0.5">Hasta 5 kg</p>
+          <p class="text-xs font-bold text-amber-400 mt-1.5 font-mono">$1.200</p>
+        </div>
+
+        <!-- Opción 2: Auto -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col items-center text-center cursor-pointer active:scale-95 transition-all">
+          <div class="w-9 h-9 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center my-1">
+            <i data-lucide="car" class="w-5 h-5"></i>
+          </div>
+          <p class="text-xs font-bold text-white mt-1">Auto</p>
+          <p class="text-[10px] text-slate-400 mt-0.5">Hasta 25 kg</p>
+          <p class="text-xs font-bold text-slate-300 mt-1.5 font-mono">$2.100</p>
+        </div>
+
+        <!-- Opción 3: Flete / Camioneta -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col items-center text-center cursor-pointer active:scale-95 transition-all">
+          <div class="w-9 h-9 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center my-1">
+            <i data-lucide="truck" class="w-5 h-5"></i>
+          </div>
+          <p class="text-xs font-bold text-white mt-1">Flete</p>
+          <p class="text-[10px] text-slate-400 mt-0.5">Cargas grandes</p>
+          <p class="text-xs font-bold text-slate-300 mt-1.5 font-mono">$4.500</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BOTÓN DE ACCIÓN PRINCIPAL -->
+    <button class="w-full py-3.5 px-4 rounded-xl font-bold text-sm bg-amber-500 text-slate-950 flex items-center justify-center gap-2 active:bg-amber-600 transition-colors shadow-md">
+      <span>Continuar con el Pedido</span>
+      <i data-lucide="arrow-right" class="w-4 h-4"></i>
+    </button>
+
+    <!-- HISTORIAL RECIENTE -->
+    <section>
+      <div class="flex justify-between items-center mb-2.5">
+        <h2 class="text-sm font-bold text-white tracking-tight">Últimos Envíos</h2>
+        <a href="#" class="text-xs text-amber-500 font-semibold hover:underline">Ver todos</a>
+      </div>
+
+      <div class="space-y-2">
+        <!-- Item Historial 1 -->
+        <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <i data-lucide="check" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-white">Documentación comercial</p>
+              <p class="text-[10px] text-slate-400">Ayer, 18:30 • Entregado</p>
+            </div>
+          </div>
+          <button class="text-xs font-bold text-slate-300 border border-slate-700 px-2.5 py-1 rounded-lg active:bg-slate-800">
+            Reordenar
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 3. NAVEGACIÓN INFERIOR (BOTTOM NAV) ================= -->
+  <nav class="fixed bottom-0 inset-x-0 bg-slate-950/95 border-t border-slate-800 px-4 py-2 backdrop-blur-sm z-30">
+    <div class="max-w-md mx-auto grid grid-cols-4 gap-1">
+      
+      <!-- Tab 1: Inicio (Activo) -->
+      <button class="flex flex-col items-center justify-center py-1 text-amber-400 focus:outline-none">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-bold mt-1">Inicio</span>
+      </button>
+
+      <!-- Tab 2: Pedidos / Envíos -->
+      <button class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 focus:outline-none">
+        <i data-lucide="package" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Envíos</span>
+      </button>
+
+      <!-- Tab 3: Mensajes / Chat -->
+      <button class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 relative focus:outline-none">
+        <i data-lucide="message-square" class="w-5 h-5"></i>
+        <span class="absolute top-1 right-6 w-2 h-2 rounded-full bg-amber-500"></span>
+        <span class="text-[10px] font-medium mt-1">Chat</span>
+      </button>
+
+      <!-- Tab 4: Perfil -->
+      <button class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 focus:outline-none">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Perfil</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Inicialización de iconos -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Todo Delivery</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Animación de líneas de ruta vectoriales */
+    @keyframes dashMove {
+      0% { stroke-dashoffset: 600; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes pulseNode {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.6); opacity: 1; }
+    }
+    @keyframes rayStream {
+      0% { transform: translateY(-100%) scaleY(0); opacity: 0; }
+      50% { transform: translateY(0%) scaleY(1); opacity: 0.8; }
+      100% { transform: translateY(100%) scaleY(0); opacity: 0; }
+    }
+    @keyframes liquidFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(40px, -60px) rotate(10deg); }
+      66% { transform: translate(-30px, 30px) rotate(-10deg); }
+    }
+
+    .animate-dash {
+      stroke-dasharray: 40, 160;
+      animation: dashMove 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .animate-dash-fast {
+      stroke-dasharray: 60, 240;
+      animation: dashMove 2.2s linear infinite;
+    }
+    .animate-node {
+      transform-origin: center;
+      animation: pulseNode 2.2s ease-in-out infinite;
+    }
+    .ray-vertical {
+      animation: rayStream 4s ease-in-out infinite;
+    }
+    .liquid-orb {
+      animation: liquidFloat 14s ease-in-out infinite;
+    }
+
+    /* Estilo Liquid Glass para el Login final */
+    .liquid-glass-login {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 
+        0 25px 60px -15px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .liquid-input {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .liquid-input:focus {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-[#05070a] text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden relative selection:bg-amber-500/30 select-none">
+
+  <!-- ================= 1. ENTORNO DE FONDO DINÁMICO ================= -->
+  <!-- Orbes líquidos desenfocados -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-20 -left-20 w-[420px] h-[420px] rounded-full bg-amber-500/15 blur-[120px] liquid-orb"></div>
+    <div class="absolute -bottom-32 -right-20 w-[480px] h-[480px] rounded-full bg-sky-600/15 blur-[130px] liquid-orb" style="animation-delay: -5s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-orange-600/10 blur-[100px] pointer-events-none"></div>
+  </div>
+
+  <!-- Rayos de luz verticales -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden flex justify-around opacity-30">
+    <div class="w-[1px] h-full bg-gradient-to-b from-transparent via-amber-400 to-transparent ray-vertical" style="animation-delay: 0s;"></div>
+    <div class="w-[1px] h-full bg-gradient-to-b from-transparent via-cyan-400 to-transparent ray-vertical" style="animation-delay: 1.6s;"></div>
+    <div class="w-[1px] h-full bg-gradient-to-b from-transparent via-white to-transparent ray-vertical" style="animation-delay: 2.8s;"></div>
+  </div>
+
+  <!-- Red de líneas de entrega SVG activas -->
+  <svg id="route-network" class="absolute inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-1000" xmlns="http://www.w3.org/2000/svg">
+    <!-- Línea 1: Diagonal curva -->
+    <path d="M -100,100 Q 200,300 800,150" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
+    <path d="M -100,100 Q 200,300 800,150" fill="none" stroke="url(#amber-glow)" stroke-width="2.5" class="animate-dash" stroke-linecap="round" />
+    
+    <!-- Línea 2: Ruta cruzada -->
+    <path d="M 900,900 C 500,600 200,700 -50,400" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1.5" />
+    <path d="M 900,900 C 500,600 200,700 -50,400" fill="none" stroke="url(#cyan-glow)" stroke-width="2" class="animate-dash-fast" stroke-linecap="round" />
+
+    <!-- Nodos Logísticos intermitentes -->
+    <circle cx="20%" cy="35%" r="3" fill="#f59e0b" class="animate-node" />
+    <circle cx="82%" cy="60%" r="2.5" fill="#38bdf8" class="animate-node" style="animation-delay: 1s;" />
+    <circle cx="65%" cy="20%" r="2" fill="#fb923c" class="animate-node" style="animation-delay: 1.5s;" />
+
+    <defs>
+      <linearGradient id="amber-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#f59e0b" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#38bdf8" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#818cf8" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ================= 2. CONTENEDOR FLOTANTE CENTRAL ================= -->
+  <main class="w-full max-w-[390px] z-10 flex flex-col items-center justify-center transition-all duration-700">
+
+    <!-- SECCIÓN DEL LOGO (Flotando libre en el espacio) -->
+    <div id="brand-hero" class="flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+      
+      <!-- Contenedor del Logo con anillos dinámicos y cristal líquido -->
+      <div id="logo-frame" class="relative flex items-center justify-center w-36 h-36 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+        
+        <!-- Anillo exterior 1 (Rotación y pulso) -->
+        <div id="ring-outer" class="absolute inset-0 rounded-full border border-dashed border-amber-400/30 animate-[spin_18s_linear_infinite] transition-all duration-700"></div>
+        
+        <!-- Anillo exterior 2 (Línea de corte rápida) -->
+        <div id="ring-inner" class="absolute -inset-2 rounded-full border-t-2 border-r border-transparent border-t-amber-400/60 border-r-orange-400/40 animate-[spin_6s_linear_infinite] transition-all duration-700"></div>
+
+        <!-- Halo glow detrás del logo -->
+        <div id="logo-glow" class="absolute inset-2 bg-gradient-to-tr from-amber-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse transition-all duration-700"></div>
+
+        <!-- REEMPLAZA EL 'src' CON TU ARCHIVO PNG SIN FONDO -->
+        <img 
+          id="app-logo"
+          src="/LogoTD.png" 
+          alt="Todo Delivery Logo" 
+          class="relative z-10 w-28 h-28 object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] transition-all duration-700"
+        />
+      </div>
+
+      <!-- Textos de marca -->
+      <div id="brand-headers" class="text-center mt-5 transition-all duration-500">
+        <h1 class="text-2xl font-black tracking-tight text-white flex items-center justify-center gap-1">
+          <span>Todo</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500">Delivery</span>
+        </h1>
+        <p id="brand-tagline" class="text-xs font-semibold tracking-widest text-slate-400 uppercase mt-1">Plataforma Logística</p>
+      </div>
+    </div>
+
+    <!-- ================= 3. COMPONENTES CINÉTICOS DE CARGA ================= -->
+    <div id="splash-telemetry" class="w-full max-w-[280px] mt-10 flex flex-col items-center transition-all duration-500">
+      
+      <!-- Línea de escaneo láser -->
+      <div class="relative w-full h-[2px] bg-slate-800/80 rounded-full overflow-hidden">
+        <div id="progress-line" class="absolute left-0 top-0 bottom-0 w-0 bg-gradient-to-r from-transparent via-amber-400 to-orange-500 shadow-[0_0_15px_#f59e0b] transition-all duration-75"></div>
+      </div>
+
+      <!-- Telemetría y estado con tipografía monoespaciada -->
+      <div class="flex justify-between items-center w-full mt-3 text-[11px] text-slate-400">
+        <span class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+          <span id="status-label" class="tracking-wide">Sincronizando nodos...</span>
+        </span>
+        <span id="percent-label" class="font-mono text-amber-400 font-semibold">0%</span>
+      </div>
+    </div>
+
+    <!-- ================= 4. TARJETA DE LOGIN (SE REVELA TRAS LA CARGA) ================= -->
+    <div id="login-container" class="hidden w-full opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] mt-5">
+      <div class="liquid-glass-login rounded-3xl p-7 relative overflow-hidden">
+        
+        <!-- Reflejo superior -->
+        <div class="absolute top-0 inset-x-10 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>
+
+        <form class="space-y-4" onsubmit="event.preventDefault();">
+          
+          <div class="space-y-1.5">
+            <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold px-1">Teléfono o Email</label>
+            <div class="relative flex items-center">
+              <i data-lucide="smartphone" class="absolute left-3.5 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="text" 
+                placeholder="Ej. 11 2345 6789" 
+                class="liquid-input w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between px-1">
+              <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Contraseña</label>
+              <a href="#" class="text-[11px] text-amber-400/80 hover:text-amber-300 transition-colors">¿Olvidaste?</a>
+            </div>
+            <div class="relative flex items-center">
+              <i data-lucide="lock" class="absolute left-3.5 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="password" 
+                placeholder="••••••••" 
+                class="liquid-input w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full mt-2 py-3.5 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:opacity-95 active:scale-[0.98] transition-all duration-200 shadow-[0_0_25px_rgba(245,158,11,0.3)] flex items-center justify-center gap-2"
+          >
+            <span>Entrar al Sistema</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div class="relative my-5">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.08]"></div></div>
+          <div class="relative flex justify-center text-[10px] uppercase">
+            <span class="bg-[#0a0e17] px-2 text-slate-400">o continuar con</span>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          class="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-300 border border-white/[0.08] hover:bg-white/[0.04] transition-colors flex items-center justify-center gap-2"
+        >
+          <i data-lucide="user-plus" class="w-3.5 h-3.5 text-amber-400"></i>
+          Crear cuenta nueva
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= 5. LÓGICA DE TRANSICIÓN ESPACIAL ================= -->
+  <script>
+    lucide.createIcons();
+
+    const progressLine = document.getElementById('progress-line');
+    const percentLabel = document.getElementById('percent-label');
+    const statusLabel = document.getElementById('status-label');
+    const splashTelemetry = document.getElementById('splash-telemetry');
+    const loginContainer = document.getElementById('login-container');
+    const brandHero = document.getElementById('brand-hero');
+    const logoFrame = document.getElementById('logo-frame');
+    const appLogo = document.getElementById('app-logo');
+    const ringOuter = document.getElementById('ring-outer');
+    const ringInner = document.getElementById('ring-inner');
+    const brandTagline = document.getElementById('brand-tagline');
+
+    let currentVal = 0;
+    const states = [
+      { at: 25, text: "Cargando mapa en tiempo real..." },
+      { at: 60, text: "Enlazando servicios PWA..." },
+      { at: 85, text: "Optimizando rutas..." },
+      { at: 100, text: "Listo para despegar" }
+    ];
+
+    const timer = setInterval(() => {
+      currentVal += Math.floor(Math.random() * 6) + 2;
+      
+      if (currentVal >= 100) {
+        currentVal = 100;
+        clearInterval(timer);
+        renderProgress(100);
+        setTimeout(transitionToLogin, 400);
+      } else {
+        renderProgress(currentVal);
+      }
+    }, 40);
+
+    function renderProgress(val) {
+      progressLine.style.width = `${val}%`;
+      percentLabel.innerText = `${val}%`;
+
+      const match = states.find(s => val <= s.at);
+      if (match) statusLabel.innerText = match.text;
+    }
+
+    function transitionToLogin() {
+      // 1. Ocultar telemetría y barra
+      splashTelemetry.classList.add('opacity-0', 'scale-90', '-translate-y-4');
+
+      setTimeout(() => {
+        splashTelemetry.classList.add('hidden');
+
+        // 2. Compactar logo y adaptarlo hacia la cabecera
+        logoFrame.classList.remove('w-36', 'h-36');
+        logoFrame.classList.add('w-20', 'h-20');
+
+        appLogo.classList.remove('w-28', 'h-28');
+        appLogo.classList.add('w-16', 'h-16');
+
+        // Atenuar anillos exteriores decorativos para dar protagonismo al login
+        ringOuter.classList.add('opacity-30', 'scale-75');
+        ringInner.classList.add('opacity-40');
+        brandTagline.classList.add('hidden');
+
+        // 3. Materializar el formulario Liquid Glass
+        loginContainer.classList.remove('hidden');
+        void loginContainer.offsetWidth; // Forzar reflujo de render
+        
+        loginContainer.classList.remove('opacity-0', 'translate-y-8');
+        loginContainer.classList.add('opacity-100', 'translate-y-0');
+      }, 400);
+    }
+  </script>
+</body>
+</html>
